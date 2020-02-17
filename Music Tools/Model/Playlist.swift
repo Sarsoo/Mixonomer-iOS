@@ -8,7 +8,8 @@
 
 import UIKit
 
-class Playlist {
+
+class Playlist: Identifiable {
     
     //MARK: Properties
     
