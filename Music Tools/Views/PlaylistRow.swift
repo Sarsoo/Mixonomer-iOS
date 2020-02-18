@@ -2,7 +2,7 @@
 //  PlaylistRow.swift
 //  Music Tools
 //
-//  Created by Ellie McCarthy on 17/02/2020.
+//  Created by Andy Pack on 17/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
 //
 

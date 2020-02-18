@@ -2,7 +2,7 @@
 //  Music_ToolsTests.swift
 //  Music ToolsTests
 //
-//  Created by Ellie McCarthy on 16/02/2020.
+//  Created by Andy Pack on 16/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
 //
 
