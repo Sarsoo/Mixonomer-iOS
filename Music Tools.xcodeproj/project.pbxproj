@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E97AF45623FC4E7800635494 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45523FC4E7800635494 /* User.swift */; };
+		E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E97AF45823FC50EC00635494 /* SwiftyJSON */; };
+		E97AF45B23FC748D00635494 /* UserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45A23FC748D00635494 /* UserApi.swift */; };
+		E97AF45E23FC83AF00635494 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E97AF45D23FC83AF00635494 /* KeychainAccess */; };
+		E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45F23FC85D600635494 /* PlaylistApi.swift */; };
+		E97AF46223FC89CC00635494 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E97AF46123FC89CB00635494 /* Main.storyboard */; };
 		E98254BD23F9B7A90056D9D3 /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98254BC23F9B7A90056D9D3 /* Playlist.swift */; };
 		E98254C223F9FFF90056D9D3 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98254C123F9FFF90056D9D3 /* PlaylistView.swift */; };
 		E98254C823FA25D20056D9D3 /* PlaylistList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98254C723FA25D20056D9D3 /* PlaylistList.swift */; };
@@ -42,6 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E97AF45523FC4E7800635494 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E97AF45A23FC748D00635494 /* UserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApi.swift; sourceTree = "<group>"; };
+		E97AF45F23FC85D600635494 /* PlaylistApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistApi.swift; sourceTree = "<group>"; };
+		E97AF46123FC89CB00635494 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		E98254BC23F9B7A90056D9D3 /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		E98254C123F9FFF90056D9D3 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
 		E98254C723FA25D20056D9D3 /* PlaylistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistList.swift; sourceTree = "<group>"; };
@@ -69,7 +79,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */,
 				E98254D923FB53780056D9D3 /* Alamofire in Frameworks */,
+				E97AF45E23FC83AF00635494 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				E98254BC23F9B7A90056D9D3 /* Playlist.swift */,
+				E97AF45523FC4E7800635494 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -102,6 +115,8 @@
 			isa = PBXGroup;
 			children = (
 				E98254DA23FB64740056D9D3 /* Network.swift */,
+				E97AF45A23FC748D00635494 /* UserApi.swift */,
+				E97AF45F23FC85D600635494 /* PlaylistApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -124,6 +139,7 @@
 				E9EA691523F9A54B0012C3E8 /* LaunchScreen.storyboard */,
 				E9EA690A23F9A5430012C3E8 /* AppDelegate.swift */,
 				E9EA690C23F9A5430012C3E8 /* SceneDelegate.swift */,
+				E97AF46123FC89CB00635494 /* Main.storyboard */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -206,6 +222,8 @@
 			name = "Music Tools";
 			packageProductDependencies = (
 				E98254D823FB53780056D9D3 /* Alamofire */,
+				E97AF45823FC50EC00635494 /* SwiftyJSON */,
+				E97AF45D23FC83AF00635494 /* KeychainAccess */,
 			);
 			productName = "Music Tools";
 			productReference = E9EA690723F9A5430012C3E8 /* Music Tools.app */;
@@ -281,6 +299,8 @@
 			mainGroup = E9EA68FE23F9A5430012C3E8;
 			packageReferences = (
 				E98254D723FB53770056D9D3 /* XCRemoteSwiftPackageReference "alamofire" */,
+				E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */,
+				E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */,
 			);
 			productRefGroup = E9EA690823F9A5430012C3E8 /* Products */;
 			projectDirPath = "";
@@ -301,6 +321,7 @@
 				E9EA691723F9A54B0012C3E8 /* LaunchScreen.storyboard in Resources */,
 				E9EA691423F9A54B0012C3E8 /* Preview Assets.xcassets in Resources */,
 				E9EA691123F9A54A0012C3E8 /* Assets.xcassets in Resources */,
+				E97AF46223FC89CC00635494 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,11 +350,14 @@
 				E9EA690B23F9A5430012C3E8 /* AppDelegate.swift in Sources */,
 				E9EA690D23F9A5430012C3E8 /* SceneDelegate.swift in Sources */,
 				E98254DB23FB64740056D9D3 /* Network.swift in Sources */,
+				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
 				E98254C823FA25D20056D9D3 /* PlaylistList.swift in Sources */,
 				E9EA690F23F9A5430012C3E8 /* RootView.swift in Sources */,
 				E98254BD23F9B7A90056D9D3 /* Playlist.swift in Sources */,
 				E98254C223F9FFF90056D9D3 /* PlaylistView.swift in Sources */,
+				E97AF45623FC4E7800635494 /* User.swift in Sources */,
 				E98254D023FB00B60056D9D3 /* LoginScreen.swift in Sources */,
+				E97AF45B23FC748D00635494 /* UserApi.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +684,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftyjson/swiftyjson";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/keychainaccess";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.0;
+			};
+		};
 		E98254D723FB53770056D9D3 /* XCRemoteSwiftPackageReference "alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alamofire/alamofire.git";
@@ -671,6 +711,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E97AF45823FC50EC00635494 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */;
+			productName = SwiftyJSON;
+		};
+		E97AF45D23FC83AF00635494 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */;
+			productName = KeychainAccess;
+		};
 		E98254D823FB53780056D9D3 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E98254D723FB53770056D9D3 /* XCRemoteSwiftPackageReference "alamofire" */;

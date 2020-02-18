@@ -8,73 +8,63 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
+import KeychainAccess
 
-class MusicToolsNetwork {
+public enum AuthMethod {
+    case basic
     
-    var baseBath: String = "https://music.sarsoo.xyz/"
-    
-    public func request(path: String,
-                 method: Alamofire.HTTPMethod,
-                 parameters: [String:String]? ,
-                 encoder: Alamofire.ParameterEncoder?,
-                 headers: Alamofire.HTTPHeaders? ) {
+    func auth(headers: Alamofire.HTTPHeaders?) -> Alamofire.HTTPHeaders {
+        switch self {
+        case .basic:
+            var txHeaders = headers ?? HTTPHeaders()
+            
+            let keychain = Keychain(service: "xyz.sarsoo.music.login")
+            txHeaders.add(.authorization(username: keychain["username"] ?? "", password: keychain["password"] ?? ""))
+            return txHeaders
+        }
+    }
+}
+
+struct RequestBuilder {
+    static func buildRequest(apiRequest: ApiRequest) -> Alamofire.DataRequest {
         
-        guard let uwParameters = parameters else {
-           AF.request(baseBath + path,
-                       method: method,
-                       headers: headers ).validate().response { response in
-                debugPrint(response)
+        let txHeaders = apiRequest.authMethod?.auth(headers: apiRequest.headers)
+        
+        if apiRequest.parameters != nil {
+            if apiRequest.parameterType != nil {
+                
+                let txEncoder = apiRequest.parameterType ?? JSONParameterEncoder.default
+                
+                return AF.request(apiRequest.domain + apiRequest.path,
+                                  method: apiRequest.httpMethod,
+                                  parameters: apiRequest.parameters,
+                                  encoder: txEncoder,
+                                  headers: txHeaders)
+            } else {
+                return AF.request(apiRequest.domain + apiRequest.path,
+                                  method: apiRequest.httpMethod,
+                                  parameters: apiRequest.parameters,
+                                  headers: txHeaders)
             }
-            return
         }
-        
-        AF.request(baseBath + path,
-                   method: method,
-                   parameters: uwParameters,
-                   headers: headers ).response { response in
-            debugPrint(response)
-        }
-        
+        return AF.request(apiRequest.domain + apiRequest.path,
+                          method: apiRequest.httpMethod,
+                          headers: txHeaders)
     }
 }
 
-class BasicAuthNetwork: MusicToolsNetwork {
-    var username: String
-    var password: String
-    
-    init(username: String, password: String) {
-        self.username = username
-        self.password = password
-    }
-    
-    func getHeader() -> String {
-        return "\(username):\(password)".toBase64()
-    }
-    
-    public func authedRequest(path: String,
-                       method: Alamofire.HTTPMethod,
-                       parameters: [String:String]?,
-                       encoder: Alamofire.ParameterEncoder?,
-                       headers: Alamofire.HTTPHeaders? ) {
-        
-        let encoded = "\(username):\(password)".toBase64()
-        
-        var txHeaders = headers
-        
-        if headers == nil {
-            txHeaders = Alamofire.HTTPHeaders()
-        }
-        txHeaders?.add(name: "Authorization", value: "Basic \(encoded)")
-        
-        request(path: path, method: method, parameters: parameters, encoder: encoder, headers: txHeaders)
-        
-    }
+struct ApiRequestDefaults {
+    static let authMethod: AuthMethod = .basic
+    static let domain: String = "https://music.sarsoo.xyz/"
 }
 
-extension String {
-    
-    func toBase64() -> String {
-        return Data(self.utf8).base64EncodedString()
-    }
-    
+protocol ApiRequest {
+    var domain: String { get }
+    var path: String { get }
+    var httpMethod: Alamofire.HTTPMethod { get }
+    var parameters: JSON? { get }
+    var parameterType: Alamofire.ParameterEncoder? { get }
+    var headers: HTTPHeaders? { get }
+    var authMethod: AuthMethod? { get }
 }

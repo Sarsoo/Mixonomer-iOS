@@ -8,17 +8,17 @@
 
 import SwiftUI
 import Alamofire
+import SwiftyJSON
 
 struct RootView: View {
     @State private var selection = 0
+    @State private var playlists: Array<Playlist> = []
  
     var body: some View {
         TabView(selection: $selection){
             NavigationView {
-                List(/*@START_MENU_TOKEN@*/0 ..< 5/*@END_MENU_TOKEN@*/) { item in
-                    Text("Playlist")
-                        .font(.title)
-                        
+                List(playlists) { playlist in
+                    PlaylistRow(playlist: playlist)
                 }
                 .navigationBarTitle(Text("Playlists").font(.title))
             }
@@ -63,12 +63,21 @@ struct RootView: View {
     }
     
     private func fetch() {
-        let net: BasicAuthNetwork = BasicAuthNetwork(username: "", password: "")
-        net.authedRequest(path: "api/playlist",
-                   method: Alamofire.HTTPMethod.get,
-                   parameters: ["name": ""],
-                   encoder: nil,
-                   headers: nil)
+        let api = PlaylistApi.getPlaylists
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            
+            guard let data = response.data else {
+                fatalError("error getting playlists")
+            }
+            
+            guard let json = try? JSON(data: data) else {
+                fatalError("error parsing reponse")
+            }
+            
+            self.playlists = json["playlists"].arrayValue.map({ dict in
+                Playlist.fromDict(dictionary: dict)
+            }).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+        }
     }
 }
 

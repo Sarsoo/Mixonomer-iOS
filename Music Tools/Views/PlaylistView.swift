@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PlaylistView: View {
     var playlist: Playlist
+    @State private var recommendations: Bool = false
+    @State private var library_Tracks: Bool = false
     
     var body: some View {
         
@@ -25,28 +27,32 @@ struct PlaylistView: View {
                     .cornerRadius(18)
                     .padding(.bottom, 20)
             
-            Toggle(isOn: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant(true)/*@END_MENU_TOKEN@*/) {
+            Toggle(isOn: $recommendations) {
                 Text("Spotify Recommendations")
             }
             
-            Stepper(value: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant(4)/*@END_MENU_TOKEN@*/, in: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Range@*/1...10/*@END_MENU_TOKEN@*/){
-                Text("#:")
-                    .foregroundColor(Color.gray)
-                    .multilineTextAlignment(.trailing)
-                    .padding(.leading, 20)
-                Text("100")
-                    .multilineTextAlignment(.trailing)
-                
+            if $recommendations.wrappedValue {
+                Stepper(value: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant(4)/*@END_MENU_TOKEN@*/, in: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Range@*/1...10/*@END_MENU_TOKEN@*/){
+                    Text("#:")
+                        .foregroundColor(Color.gray)
+                        .multilineTextAlignment(.trailing)
+                        .padding(.leading, 20)
+                    Text("100")
+                        .multilineTextAlignment(.trailing)
+                    
+                }
             }
             
-            Toggle(isOn: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant(true)/*@END_MENU_TOKEN@*/) {
+            Toggle(isOn: $library_Tracks) {
                 Text("Library Tracks")
             }
-            
-            EditButton()
         }
         .padding()
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+        .onAppear {
+            self.$recommendations.wrappedValue = self.playlist.include_recommendations
+            self.$library_Tracks.wrappedValue = self.playlist.include_library_tracks
+        }
     }
 }
 

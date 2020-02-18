@@ -12,9 +12,11 @@ struct PlaylistRow: View {
     var playlist: Playlist
     
     var body: some View {
-        HStack {
-            Text(playlist.name)
-            Spacer()
+        NavigationLink(destination: PlaylistView(playlist: playlist)){
+            HStack {
+                Text(playlist.name)
+                Spacer()
+            }
         }
     }
 }

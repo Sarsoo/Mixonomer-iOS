@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftUI
+import KeychainAccess
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -21,6 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         let contentView = RootView()
+        
+        let keychain = Keychain(service: "xyz.sarsoo.music.login")
+        keychain["username"] = ""
+        keychain["password"] = ""
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

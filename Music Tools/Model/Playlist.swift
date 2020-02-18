@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SwiftyJSON
 
 class Playlist: Identifiable {
     
@@ -55,5 +55,19 @@ class Playlist: Identifiable {
         self.shuffle = shuffle
     }
     
+    static func fromDict(dictionary: JSON) -> Playlist {
+        return Playlist(name: dictionary["name"].stringValue,
+                    uri: dictionary["uri"].stringValue,
+                    username: dictionary["username"].stringValue,
+                    
+                    include_recommendations: dictionary["include_recommendations"].boolValue,
+                    recommendation_sample: dictionary["recommendation_sample"].intValue,
+                    include_library_tracks: dictionary["include_library_tracks"].boolValue,
+        
+                    parts: dictionary["parts"].arrayObject as! Array<String>,
+                    playlist_references: dictionary["playlist_references"].arrayObject as! Array<String>,
+            
+                    shuffle: dictionary["shuffle"].boolValue)
+    }
     
 }
