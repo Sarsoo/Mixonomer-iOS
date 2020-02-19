@@ -12,6 +12,8 @@ import SwiftyJSON
 
 public enum PlaylistApi {
     case getPlaylists
+    case runPlaylist(name: String)
+    case updatePlaylist(name: String, updates: JSON)
 }
 
 extension PlaylistApi: ApiRequest {
@@ -23,6 +25,10 @@ extension PlaylistApi: ApiRequest {
         switch self {
         case .getPlaylists:
             return "api/playlists"
+        case .runPlaylist:
+            return "api/playlist/run"
+        case .updatePlaylist:
+            return "api/playlist"
         }
     }
     
@@ -30,15 +36,36 @@ extension PlaylistApi: ApiRequest {
         switch self {
         case .getPlaylists:
             return .get
+        case .runPlaylist:
+            return .get
+        case .updatePlaylist:
+            return .post
         }
     }
     
     var parameters: JSON? {
-        return nil
+        switch self {
+        case .getPlaylists:
+            return nil
+        case .runPlaylist(let name):
+            return JSON(["name": name])
+        case .updatePlaylist(let name, let updates):
+            var txUpdates = updates
+            txUpdates["name"].string = name
+            debugPrint(txUpdates)
+            return txUpdates
+        }
     }
     
     var parameterType: ParameterEncoder? {
-        return nil
+        switch self {
+        case .getPlaylists:
+            return nil
+        case .runPlaylist:
+            return URLEncodedFormParameterEncoder()
+        case .updatePlaylist:
+            return JSONParameterEncoder.default
+        }
     }
     
     var headers: HTTPHeaders? {

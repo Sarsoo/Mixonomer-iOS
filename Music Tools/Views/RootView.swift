@@ -78,6 +78,7 @@ struct RootView: View {
                 Playlist.fromDict(dictionary: dict)
             }).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
         }
+        //TODO: do better error checking
     }
 }
 
