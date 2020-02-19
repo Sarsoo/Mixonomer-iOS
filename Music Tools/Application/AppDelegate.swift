@@ -7,14 +7,25 @@
 //
 
 import UIKit
+import SwiftyJSON
+import KeychainAccess
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    
+    var liveUser: LiveUser?
+    
+    var loading = true
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let keychain = Keychain(service: "xyz.sarsoo.music.login")
+        keychain["username"] = ""
+        keychain["password"] = ""
+        
+        liveUser = LiveUser(playlists: [])
+        
         return true
     }
 

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class Playlist: Identifiable {
+class Playlist: Identifiable, Equatable {
     
     //MARK: Properties
     
@@ -68,6 +68,16 @@ class Playlist: Identifiable {
                     playlist_references: dictionary["playlist_references"].arrayObject as! Array<String>,
             
                     shuffle: dictionary["shuffle"].boolValue)
+    }
+    
+    var link: String {
+        let uriSplit = self.uri.components(separatedBy: ":")
+        return "https://open.spotify.com/playlist/\(uriSplit.last ?? "")"
+    }
+    
+    static func == (lhs: Playlist, rhs: Playlist) -> Bool {
+        return lhs.name == rhs.name
+//            && lhs.username == rhs.username
     }
     
 }

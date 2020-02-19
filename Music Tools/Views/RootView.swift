@@ -11,16 +11,56 @@ import Alamofire
 import SwiftyJSON
 
 struct RootView: View {
+    
+    @EnvironmentObject var liveUser: LiveUser
+    
     @State private var selection = 0
     @State private var playlists: Array<Playlist> = []
+    
+    @State private var isLoading = true
+    @State private var showAdd = false
+    
+    @State private var onClose = onSheetClose
+    
+    @State private var justDeleted: Array<Playlist> = []
+        
+    func onSheetClose() {
+        self.fetch()
+        return
+    }
+    
+    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
  
     var body: some View {
-        TabView(selection: $selection){
+        TabView   {
             NavigationView {
-                List(playlists) { playlist in
-                    PlaylistRow(playlist: playlist)
+                List{
+                    ForEach(playlists) { playlist in
+                        PlaylistRow(playlist: playlist)
+                    }
+                    .onDelete { indexSet in
+                        
+                        indexSet.forEach { index in
+                            self.justDeleted.append(self.playlists[index])
+                            
+                            let api = PlaylistApi.deletePlaylist(name: self.playlists[index].name)
+                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                
+                            }
+                        }
+                        
+                        self.playlists.remove(atOffsets: indexSet)
+                    }
                 }
                 .navigationBarTitle(Text("Playlists").font(.title))
+                .navigationBarItems(trailing:
+                    Button(
+                        action: { self.showAdd = true },
+                        label: { Text("Add") }
+                    ).sheet(isPresented: $showAdd) {
+                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$playlists)
+                    }
+                )
             }
             .tabItem {
                 VStack {
@@ -57,6 +97,9 @@ struct RootView: View {
                 }
             }
             .tag(2)
+            .onReceive(timer) { _ in
+                self.fetch()
+            }
         }.onAppear {
             self.fetch()
         }
@@ -74,9 +117,23 @@ struct RootView: View {
                 fatalError("error parsing reponse")
             }
             
-            self.playlists = json["playlists"].arrayValue.map({ dict in
+            let playlists = json["playlists"].arrayValue.map({ dict in
                 Playlist.fromDict(dictionary: dict)
             }).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                .filter { (rxPlaylist) -> Bool in
+                    
+                    var deleted = false
+                    for playlist in self.justDeleted {
+                        if playlist == rxPlaylist {
+                            deleted = true
+                        }
+                    }
+                    return !deleted
+            }
+            self.justDeleted = []
+            
+            self.liveUser.playlists = playlists
+            self.playlists = self.liveUser.playlists
         }
         //TODO: do better error checking
     }

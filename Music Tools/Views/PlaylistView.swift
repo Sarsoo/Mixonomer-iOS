@@ -10,79 +10,88 @@ import SwiftUI
 import SwiftyJSON
 
 struct PlaylistView: View {
+    
+    init(playlist: Playlist) {
+        self.playlist = playlist
+        UITableView.appearance().tableFooterView = UIView()
+    }
+    
     var playlist: Playlist
-    @State private var recommendations: Bool = false
+    @State private var recommendations: Bool = true
     @State private var library_Tracks: Bool = false
     @State private var shuffle: Bool = false
     
     @State private var rec_num: Int = 0
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Text(playlist.name)
-                    .font(.largeTitle)
-                    .multilineTextAlignment(.leading)
-                    .padding(.leading)
-                Text(playlist.username)
-                    .foregroundColor(Color.gray)
-                    .padding(.leading)
-                Image("PlaylistCoverImage")
-                        .resizable()
-                        .frame(width: 200.0, height: 200.0, alignment: .trailing)
-                        .cornerRadius(18)
-                        .padding(.all, 20)
-                
+        List {
+            Section(header: Text("Options")){
                 Toggle(isOn: $recommendations) {
                     Text("Spotify Recommendations")
                 }
-                .padding()
                 
-                if recommendations {
+//                if recommendations {
                     Stepper(onIncrement: {
                         self.$rec_num.wrappedValue += 1
                         self.updatePlaylist(updates: JSON(["recommendation_sample": self.$rec_num.wrappedValue]))
                     },
                             onDecrement: {
                         self.$rec_num.wrappedValue -= 1
-                                self.updatePlaylist(updates: JSON(["recommendation_sample": self.$rec_num.wrappedValue]))
+                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.$rec_num.wrappedValue]))
                     }){
                         Text("#:")
                             .foregroundColor(Color.gray)
                             .multilineTextAlignment(.trailing)
-                            .padding(.leading, 20)
                         Text("\(rec_num)")
                             .multilineTextAlignment(.trailing)
                         
-                    }.padding()
-                }
+                    }
+//                }
                 
                 Toggle(isOn: $library_Tracks) {
                     Text("Library Tracks")
-                }.padding()
+                }
                 
                 Toggle(isOn: $shuffle) {
                     Text("Shuffle")
-                }.padding()
-                
-                HStack {
-                    Button(action: { self.runPlaylist() }) {
-                        Text("Update")
-                    }.padding().multilineTextAlignment(.center)
+                }
+            }
+            Section(header: Text("Inputs")){
+                NavigationLink(destination: PlaylistInputList(names: self.playlist.playlist_references, nameType: "Managed Playlists")) {
+                    HStack {
+                        Text("Managed Playlists")
+                        Spacer()
+                        Text("\(self.playlist.playlist_references.count)")
+                            .foregroundColor(Color.gray)
+                    }
                 }
                 
-                Spacer()
-                
+                NavigationLink(destination: PlaylistInputList(names: self.playlist.parts, nameType: "Spotify Playlists")) {
+                    HStack {
+                        Text("Spotify Playlists")
+                        Spacer()
+                        Text("\(self.playlist.parts.count)")
+                            .foregroundColor(Color.gray)
+                    }
+                }
             }
-            .padding(.vertical)
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-            .onAppear {
-                self.$recommendations.wrappedValue = self.playlist.include_recommendations
-                self.$library_Tracks.wrappedValue = self.playlist.include_library_tracks
-                self.$shuffle.wrappedValue = self.playlist.shuffle
+            Section(header: Text("Actions")){
+                Button(action: { self.runPlaylist() }) {
+                    Text("Update")
+                }
                 
-                self.$rec_num.wrappedValue = self.playlist.recommendation_sample
+                Button(action: { self.openPlaylist() }) {
+                    Text("Open")
+                }
             }
+        }
+        .navigationBarTitle(Text(playlist.name))
+        .onAppear {
+            self.$recommendations.wrappedValue = self.playlist.include_recommendations
+            self.$library_Tracks.wrappedValue = self.playlist.include_library_tracks
+            self.$shuffle.wrappedValue = self.playlist.shuffle
+
+            self.$rec_num.wrappedValue = self.playlist.recommendation_sample
         }
     }
     
@@ -90,28 +99,20 @@ struct PlaylistView: View {
         let api = PlaylistApi.runPlaylist(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            guard let data = response.data else {
-                fatalError("error getting playlists")
-            }
-            
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
         }
         //TODO: do better error checking
+    }
+    
+    func openPlaylist() {
+        if let url = URL(string: self.playlist.link) {
+            UIApplication.shared.open(url)
+        }
     }
     
     func updatePlaylist(updates: JSON) {
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            guard let data = response.data else {
-                fatalError("error getting playlists")
-            }
-            
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
         }
         //TODO: do better error checking
     }

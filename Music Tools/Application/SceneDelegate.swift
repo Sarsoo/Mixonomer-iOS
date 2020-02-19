@@ -8,12 +8,10 @@
 
 import UIKit
 import SwiftUI
-import KeychainAccess
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -23,14 +21,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         let contentView = RootView()
         
-        let keychain = Keychain(service: "xyz.sarsoo.music.login")
-        keychain["username"] = ""
-        keychain["password"] = ""
+        var liveUser: LiveUser?
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            liveUser = appDelegate.liveUser
+        }
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
+            window.rootViewController = UIHostingController(rootView: contentView.environmentObject(liveUser ?? LiveUser(playlists: [])))
             self.window = window
             window.makeKeyAndVisible()
         }

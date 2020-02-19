@@ -7,15 +7,37 @@
 //
 
 import SwiftUI
+import SwiftyJSON
 
 struct PlaylistRow: View {
+    
+    @EnvironmentObject var liveUser: LiveUser
+    
     var playlist: Playlist
     
     var body: some View {
         NavigationLink(destination: PlaylistView(playlist: playlist)){
             HStack {
                 Text(playlist.name)
-                Spacer()
+                    .contextMenu {
+                        Button(action: {
+                            let api = PlaylistApi.runPlaylist(name: self.playlist.name)
+                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                
+                            }
+                        }) {
+                            Text("Refresh")
+                            Image(systemName: "arrow.clockwise.circle")
+                        }
+                        Button(action: {
+                            if let url = URL(string: self.playlist.link) {
+                                UIApplication.shared.open(url)
+                            }
+                        }) {
+                            Text("Open")
+                            Image(systemName: "arrowshape.turn.up.right.circle")
+                        }
+                }
             }
         }
     }
