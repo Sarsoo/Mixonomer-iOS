@@ -9,9 +9,11 @@
 import Foundation
 
 class LiveUser: ObservableObject {
-    var playlists: Array<Playlist>
+    var playlists: [Playlist]
+    var tags: [Tag]
     
-    init(playlists: Array<Playlist>) {
+    init(playlists: [Playlist], tags: [Tag]) {
         self.playlists = playlists
+        self.tags = tags
     }
 }

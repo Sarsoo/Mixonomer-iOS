@@ -20,6 +20,8 @@ struct PlaylistRow: View {
             HStack {
                 Text(playlist.name)
                     .contextMenu {
+                        
+                        // run force touch
                         Button(action: {
                             let api = PlaylistApi.runPlaylist(name: self.playlist.name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
@@ -29,6 +31,8 @@ struct PlaylistRow: View {
                             Text("Refresh")
                             Image(systemName: "arrow.clockwise.circle")
                         }
+                        
+                        // open force touch
                         Button(action: {
                             if let url = URL(string: self.playlist.link) {
                                 UIApplication.shared.open(url)

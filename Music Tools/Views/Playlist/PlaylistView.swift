@@ -13,6 +13,8 @@ struct PlaylistView: View {
     
     init(playlist: Playlist) {
         self.playlist = playlist
+        
+        // hide empty items below list
         UITableView.appearance().tableFooterView = UIView()
     }
     

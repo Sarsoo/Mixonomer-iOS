@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         keychain["username"] = ""
         keychain["password"] = ""
         
-        liveUser = LiveUser(playlists: [])
+        liveUser = LiveUser(playlists: [], tags: [])
         
         return true
     }
