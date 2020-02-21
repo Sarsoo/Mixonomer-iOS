@@ -112,9 +112,10 @@ struct RootView: View {
             .tag(1)
             
             // SETTINGS
-            Text("Settings")
-            .font(.title)
-            .tabItem {
+            NavigationView {
+                SettingsList()
+                .navigationBarTitle(Text("Settings").font(.title))
+            }.tabItem {
                 VStack {
                     Image(systemName: "slider.horizontal.3")
                     Text("Settings")
