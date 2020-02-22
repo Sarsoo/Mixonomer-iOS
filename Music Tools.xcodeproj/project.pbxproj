@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E92F94822401412100B6B721 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = E92F94812401412100B6B721 /* SwiftUIRefresh */; };
 		E97AF45623FC4E7800635494 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45523FC4E7800635494 /* User.swift */; };
 		E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E97AF45823FC50EC00635494 /* SwiftyJSON */; };
 		E97AF45B23FC748D00635494 /* UserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45A23FC748D00635494 /* UserApi.swift */; };
@@ -97,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E92F94822401412100B6B721 /* SwiftUIRefresh in Frameworks */,
 				E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */,
 				E98254D923FB53780056D9D3 /* Alamofire in Frameworks */,
 				E97AF45E23FC83AF00635494 /* KeychainAccess in Frameworks */,
@@ -225,14 +227,14 @@
 		E9EA690923F9A5430012C3E8 /* Music Tools */ = {
 			isa = PBXGroup;
 			children = (
-				E97AF46A23FDA8ED00635494 /* Controller */,
 				E98254C623FA25280056D9D3 /* Application */,
-				E98254C023F9FFDD0056D9D3 /* Views */,
-				E98254BF23F9BE040056D9D3 /* Network */,
-				E98254BE23F9BD540056D9D3 /* Model */,
 				E9EA691023F9A54A0012C3E8 /* Assets.xcassets */,
+				E97AF46A23FDA8ED00635494 /* Controller */,
 				E9EA691823F9A54B0012C3E8 /* Info.plist */,
+				E98254BE23F9BD540056D9D3 /* Model */,
+				E98254BF23F9BE040056D9D3 /* Network */,
 				E9EA691223F9A54B0012C3E8 /* Preview Content */,
+				E98254C023F9FFDD0056D9D3 /* Views */,
 			);
 			path = "Music Tools";
 			sourceTree = "<group>";
@@ -283,6 +285,7 @@
 				E98254D823FB53780056D9D3 /* Alamofire */,
 				E97AF45823FC50EC00635494 /* SwiftyJSON */,
 				E97AF45D23FC83AF00635494 /* KeychainAccess */,
+				E92F94812401412100B6B721 /* SwiftUIRefresh */,
 			);
 			productName = "Music Tools";
 			productReference = E9EA690723F9A5430012C3E8 /* Music Tools.app */;
@@ -360,6 +363,7 @@
 				E98254D723FB53770056D9D3 /* XCRemoteSwiftPackageReference "alamofire" */,
 				E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */,
 				E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */,
+				E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */,
 			);
 			productRefGroup = E9EA690823F9A5430012C3E8 /* Products */;
 			projectDirPath = "";
@@ -752,6 +756,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftuirefresh";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.2;
+			};
+		};
 		E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/swiftyjson/swiftyjson";
@@ -779,6 +791,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E92F94812401412100B6B721 /* SwiftUIRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */;
+			productName = SwiftUIRefresh;
+		};
 		E97AF45823FC50EC00635494 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */;

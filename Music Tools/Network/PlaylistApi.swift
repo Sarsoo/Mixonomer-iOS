@@ -24,6 +24,7 @@ public enum PlaylistApi {
     case updatePlaylist(name: String, updates: JSON)
     case deletePlaylist(name: String)
     case newPlaylist(name: String, type: PlaylistType)
+    case getPlaylist(name: String)
 }
 
 extension PlaylistApi: ApiRequest {
@@ -43,6 +44,8 @@ extension PlaylistApi: ApiRequest {
             return "api/playlist"
         case .newPlaylist:
             return "api/playlist"
+        case .getPlaylist:
+            return "api/playlist"
         }
     }
     
@@ -58,6 +61,8 @@ extension PlaylistApi: ApiRequest {
             return .delete
         case .newPlaylist:
             return .put
+        case .getPlaylist:
+            return .get
         }
     }
     
@@ -75,6 +80,8 @@ extension PlaylistApi: ApiRequest {
             return JSON(["name": name])
         case .newPlaylist(let name, let type):
             return JSON(["name": name, "type": txTypeHeaders[type.rawValue]])
+        case .getPlaylist(let name):
+            return JSON(["name": name])
         }
     }
     
@@ -90,6 +97,8 @@ extension PlaylistApi: ApiRequest {
             return URLEncodedFormParameterEncoder()
         case .newPlaylist:
             return JSONParameterEncoder.default
+        case .getPlaylist:
+            return URLEncodedFormParameterEncoder()
         }
     }
     

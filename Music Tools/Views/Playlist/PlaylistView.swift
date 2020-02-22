@@ -7,9 +7,27 @@
 //
 
 import SwiftUI
+//import SwiftUIRefresh
 import SwiftyJSON
 
+final class ChangeableBool: ObservableObject {
+    
+    var onClick: () -> ()
+    
+    init(onClick: @escaping () -> ()) {
+        self.onClick = onClick
+    }
+    
+    @Published var state: Bool = false {
+        didSet {
+            self.onClick()
+        }
+    }
+}
+
 struct PlaylistView: View {
+    
+    @EnvironmentObject var liveUser: LiveUser
     
     init(playlist: Playlist) {
         self.playlist = playlist
@@ -24,6 +42,8 @@ struct PlaylistView: View {
     @State private var shuffle: Bool = false
     
     @State private var rec_num: Int = 0
+    
+    @State private var isRefreshing = false
     
     var body: some View {
         List {
@@ -87,6 +107,9 @@ struct PlaylistView: View {
                 }
             }
         }
+//        .pullToRefresh(isShowing: $isRefreshing) {
+//            self.refreshPlaylist()
+//        }
         .navigationBarTitle(Text(playlist.name))
         .onAppear {
             self.$recommendations.wrappedValue = self.playlist.include_recommendations
@@ -114,7 +137,31 @@ struct PlaylistView: View {
     func updatePlaylist(updates: JSON) {
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            switch response.result {
+            case .success:
+                debugPrint("success")
+            case .failure:
+                debugPrint("error")
+            }
+        }
+        //TODO: do better error checking
+    }
+    
+    func refreshPlaylist(updates: JSON) {
+        let api = PlaylistApi.getPlaylist(name: self.playlist.name)
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            guard let data = response.data else {
+                fatalError("error getting playlist")
+            }
             
+            guard let json = try? JSON(data: data) else {
+                fatalError("error parsing reponse")
+            }
+            
+//            let playlist = Playlist.fromDict(json["playlist"])
+//
+//            self.playlist = playlist
+//            self.isRefreshing = false
         }
         //TODO: do better error checking
     }

@@ -9,11 +9,19 @@
 import Foundation
 
 class LiveUser: ObservableObject {
-    var playlists: [Playlist]
-    var tags: [Tag]
+    
+    @Published var playlists: [Playlist]
+    @Published var tags: [Tag]
     
     init(playlists: [Playlist], tags: [Tag]) {
         self.playlists = playlists
         self.tags = tags
+    }
+    
+    func updatePlaylist(playlistIn: Playlist) {
+        guard let index = self.playlists.firstIndex(of: playlistIn) else {
+            fatalError("\(playlistIn) not found")
+        }
+        self.playlists[index] = playlistIn
     }
 }

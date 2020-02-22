@@ -33,6 +33,9 @@
                                         <rect key="frame" x="196" y="633" width="120" height="53"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                         <state key="normal" title="Register"/>
+                                        <connections>
+                                            <segue destination="TND-IP-OdM" kind="show" id="96d-mV-baq"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -57,11 +60,12 @@
             <objects>
                 <viewController id="TND-IP-OdM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MhD-yZ-pD8">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="VLy-9d-bfF"/>
                     </view>
+                    <navigationItem key="navigationItem" id="ols-n0-cLe"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dgg-BJ-VHU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -102,7 +106,7 @@
                                     <constraint firstAttribute="height" constant="34" id="ynd-9a-coG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="go" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6YH-OC-12B">
                                 <rect key="frame" x="185.5" y="712" width="43" height="53"/>

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftUIRefresh
 import Alamofire
 import SwiftyJSON
 
@@ -15,16 +16,17 @@ struct RootView: View {
     @EnvironmentObject var liveUser: LiveUser
     
     @State private var selection = 0 // Tab view selection
-    @State private var playlists: Array<Playlist> = [] // Network pulled playlists
-    @State private var tags: Array<Tag> = [] // Network pulled tags
     
     @State private var showAdd = false // State for showing add modal view
     
     @State private var justDeletedPlaylists: Array<Playlist> = [] // Cache of recently deleted playlists for removing from next net request
     @State private var justDeletedTags: Array<Tag> = []
     
+    @State private var isRefreshingPlaylists = false
+    @State private var isRefreshingTags = false
+    
     // refresh playlist list on interval
-    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+//    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
  
     var body: some View {
         TabView   {
@@ -32,23 +34,26 @@ struct RootView: View {
             // PLAYLISTS
             NavigationView {
                 List{
-                    ForEach(playlists) { playlist in
+                    ForEach(liveUser.playlists) { playlist in
                         PlaylistRow(playlist: playlist)
                     }
                     .onDelete { indexSet in
                         
                         indexSet.forEach { index in
                             // add to recently deleted playlist cache
-                            self.justDeletedPlaylists.append(self.playlists[index])
+                            self.justDeletedPlaylists.append(self.liveUser.playlists[index])
                             
-                            let api = PlaylistApi.deletePlaylist(name: self.playlists[index].name)
+                            let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
                             }
                         }
                         
-                        self.playlists.remove(atOffsets: indexSet)
+                        self.liveUser.playlists.remove(atOffsets: indexSet)
                     }
+                }
+                .pullToRefresh(isShowing: $isRefreshingPlaylists) {
+                    self.refreshPlaylists()
                 }
                 .navigationBarTitle(Text("Playlists").font(.title))
                     
@@ -58,7 +63,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$playlists)
+                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists)
                     }
                 )
             }
@@ -73,23 +78,26 @@ struct RootView: View {
             // TAGS
             NavigationView {
                 List{
-                    ForEach(tags) { tag in
+                    ForEach(liveUser.tags) { tag in
                         TagRow(tag: tag)
                     }
                     .onDelete { indexSet in
                         
                         indexSet.forEach { index in
                             // add to recently deleted playlist cache
-                            self.justDeletedTags.append(self.tags[index])
+                            self.justDeletedTags.append(self.liveUser.tags[index])
                             
-                            let api = TagApi.deleteTag(tag_id: self.tags[index].tag_id)
+                            let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
                             }
                         }
                         
-                        self.tags.remove(atOffsets: indexSet)
+                        self.liveUser.tags.remove(atOffsets: indexSet)
                     }
+                }
+                .pullToRefresh(isShowing: $isRefreshingTags) {
+                    self.refreshTags()
                 }
                 .navigationBarTitle(Text("Tags").font(.title))
                     
@@ -99,7 +107,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$playlists)
+                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists)
                     }
                 )
             }
@@ -122,15 +130,20 @@ struct RootView: View {
                 }
             }
             .tag(2)
-            .onReceive(timer) { _ in
-                self.fetch()
-            }
+//            .onReceive(timer) { _ in
+//                self.fetch()
+//            }
         }.onAppear {
-            self.fetch()
+            self.fetchAll()
         }
     }
     
-    private func fetch() {
+    private func fetchAll() {
+        refreshPlaylists()
+        refreshTags()
+    }
+    
+    func refreshPlaylists() {
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
@@ -165,10 +178,12 @@ struct RootView: View {
             
             // update state
             self.liveUser.playlists = playlists
-            self.playlists = self.liveUser.playlists
+            self.isRefreshingPlaylists = false
         }
         //TODO: do better error checking
-        
+    }
+    
+    func refreshTags() {
         let tagApi = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: tagApi).responseJSON{ response in
             
@@ -203,7 +218,7 @@ struct RootView: View {
             
             // update state
             self.liveUser.tags = tags
-            self.tags = self.liveUser.tags
+            self.isRefreshingTags = false
         }
     }
 }
