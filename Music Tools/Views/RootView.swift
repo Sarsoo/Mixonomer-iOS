@@ -158,7 +158,7 @@ struct RootView: View {
             let playlists = json["playlists"].arrayValue
                     // parse playlists
                 .map({ dict in
-                    Playlist.fromDict(dictionary: dict)
+                    Playlist.fromDict(dictionary: dict)!
                 })
                     // sort
                 .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })

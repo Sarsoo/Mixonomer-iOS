@@ -43,6 +43,13 @@ struct PlaylistView: View {
     
     @State private var rec_num: Int = 0
     
+    @State private var this_month: Bool = false
+    @State private var last_month: Bool = false
+    @State private var chart_range: LastFmRange = .overall
+    @State private var chart_limit: Int = 0
+    
+    @State private var showingSheet = false
+    
     @State private var isRefreshing = false
     
     var body: some View {
@@ -76,6 +83,39 @@ struct PlaylistView: View {
                 
                 Toggle(isOn: $shuffle) {
                     Text("Shuffle")
+                }
+                
+                if playlist is RecentsPlaylist {
+                    Toggle(isOn: $this_month) {
+                        Text("This Month")
+                    }
+                    
+                    Toggle(isOn: $last_month) {
+                        Text("Last Month")
+                    }
+                }
+                
+                if playlist is LastFMChartPlaylist {
+                    HStack {
+                        Text("Chart Range")
+                        Spacer()
+                        Button(action: {
+                            self.showingSheet = true
+                            }) {
+                                Text("\(self.chart_range.rawValue)")
+                                .foregroundColor(Color.gray)
+                        }.actionSheet(isPresented: $showingSheet) {
+                            ActionSheet(title: Text("Chart range"),
+                                        message: Text("Select time range for Last.fm chart"),
+                                        buttons: [.default(Text("7 Days")),
+                                                  .default(Text("1 Month")),
+                                                  .default(Text("3 Months")),
+                                                  .default(Text("6 Months")),
+                                                  .default(Text("Year")),
+                                                  .default(Text("Overall")),
+                                                  .default(Text("Dismiss"))])
+                        }
+                    }
                 }
             }
             Section(header: Text("Inputs")){
@@ -117,7 +157,24 @@ struct PlaylistView: View {
             self.$shuffle.wrappedValue = self.playlist.shuffle
 
             self.$rec_num.wrappedValue = self.playlist.recommendation_sample
+            
+            if let playlist = self.playlist as? RecentsPlaylist {
+                self.$this_month.wrappedValue = playlist.add_this_month
+                self.$last_month.wrappedValue = playlist.add_last_month
+            }
+            
+            if let playlist = self.playlist as? LastFMChartPlaylist {
+                self.$chart_range.wrappedValue = playlist.chart_range
+                self.$chart_limit.wrappedValue = playlist.chart_limit
+            }
         }
+    }
+    
+    func changeChartRange(newRange: LastFmRange) {
+        self.chart_range = newRange
+//        self.updatePlaylist(["chart_range": newRange.rawValue])
+        //TODO: are enums wrong by the time they're here? not sure api will accept it now
+        //TODO: fix downcasting local playlist object to change state
     }
     
     func runPlaylist() {
