@@ -22,12 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Create the SwiftUI view that provides the window contents.
         let contentView = RootView()
         
-        let liveUser = LiveUser(playlists: [], tags: [])
-        
         let keychain = Keychain(service: "xyz.sarsoo.music.login")
-        
-//        debugPrint(keychain["username"] ?? "no username")
-//        debugPrint(keychain["password"] ?? "no password")
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -35,6 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             var controller: UIViewController
             if keychain["username"] != nil && keychain["password"] != nil {
+                let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"]!)
                 controller = UIHostingController(rootView: contentView.environmentObject(liveUser))
             } else {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)

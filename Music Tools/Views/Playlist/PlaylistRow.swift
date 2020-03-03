@@ -10,13 +10,10 @@ import SwiftUI
 import SwiftyJSON
 
 struct PlaylistRow: View {
-    
-    @EnvironmentObject var liveUser: LiveUser
-    
-    var playlist: Playlist
+    @Binding var playlist: Playlist
     
     var body: some View {
-        NavigationLink(destination: PlaylistView(playlist: playlist)){
+        NavigationLink(destination: PlaylistView(playlist: $playlist)){
             HStack {
                 Text(playlist.name)
                     .contextMenu {
@@ -50,18 +47,7 @@ struct PlaylistRow: View {
 struct PlaylistRow_Previews: PreviewProvider {
     static var previews: some View {
         PlaylistRow(playlist:
-            Playlist(name: "playlist name",
-            uri: "uri",
-            username: "username",
-            
-            include_recommendations: true,
-            recommendation_sample: 5,
-            include_library_tracks: true,
-            
-            parts: ["name"],
-            playlist_references: ["ref name"],
-            
-            shuffle: true)
+            .constant(Playlist(name: "", uri: "", username: "", include_recommendations: true, recommendation_sample: 1, include_library_tracks: true, parts: [], playlist_references: [], shuffle: true))
         )
     }
 }

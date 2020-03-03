@@ -18,6 +18,7 @@ struct AddPlaylistSheet: View {
     
     @Binding var state: Bool
     @Binding var playlists: Array<Playlist>
+    @Binding var username: String
     
     var body: some View {
         VStack {
@@ -73,10 +74,26 @@ struct AddPlaylistSheet: View {
             return
         }
         
+        var playlist: Playlist? = nil
+        switch PlaylistType(rawValue: selectedType) ?? .defaultPlaylist {
+        case .defaultPlaylist:
+            playlist = Playlist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false)
+            break
+        case .recents:
+            playlist = RecentsPlaylist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false, add_last_month: false, add_this_month: false, day_boundary: 14)
+            break
+        case .fmchart:
+            playlist = LastFMChartPlaylist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false, chart_range: .month, chart_limit: 10)
+            break
+        }
+        
         isLoading = true
         let api = PlaylistApi.newPlaylist(name: self.name,
                                           type: PlaylistType(rawValue: selectedType) ?? .defaultPlaylist)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            self.playlists.append(playlist!)
+            self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            
             self.isLoading = false
             self.state = false
         }
@@ -85,6 +102,6 @@ struct AddPlaylistSheet: View {
 
 struct AddPlaylistSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddPlaylistSheet(state: .constant(true), playlists: .constant([]))
+        AddPlaylistSheet(state: .constant(true), playlists: .constant([]), username: .constant("username"))
     }
 }

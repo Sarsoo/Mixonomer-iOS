@@ -27,7 +27,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
     
     // MARK: Actions
     @IBSegueAction func returnUIView(_ coder: NSCoder) -> UIViewController? {
-        let liveUser = LiveUser(playlists: [], tags: [])
+        // TODO add right username
+        let liveUser = LiveUser(playlists: [], tags: [], username: "")
         return UIHostingController(coder: coder, rootView: RootView().environmentObject(liveUser))
     }
     

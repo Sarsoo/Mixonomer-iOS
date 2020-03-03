@@ -12,10 +12,12 @@ class LiveUser: ObservableObject {
     
     @Published var playlists: [Playlist]
     @Published var tags: [Tag]
+    @Published var username: String
     
-    init(playlists: [Playlist], tags: [Tag]) {
+    init(playlists: [Playlist], tags: [Tag], username: String) {
         self.playlists = playlists
         self.tags = tags
+        self.username = username
     }
     
     func updatePlaylist(playlistIn: Playlist) {

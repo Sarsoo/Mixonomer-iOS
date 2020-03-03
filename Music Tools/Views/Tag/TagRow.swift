@@ -11,12 +11,10 @@ import SwiftyJSON
 
 struct TagRow: View {
     
-    @EnvironmentObject var liveUser: LiveUser
-    
-    var tag: Tag
+    @Binding var tag: Tag
     
     var body: some View {
-        NavigationLink(destination: TagView(tag: tag)){
+        NavigationLink(destination: TagView(tag: $tag)){
             HStack {
                 Text(tag.name)
                     .contextMenu {
@@ -39,7 +37,7 @@ struct TagRow: View {
 
 struct TagRow_Previews: PreviewProvider {
     static var previews: some View {
-        TagRow(tag:
+        TagRow(tag: .constant(
             Tag(tag_id: "tag_id",
             name: "tag name",
             username: "andy",
@@ -53,6 +51,6 @@ struct TagRow_Previews: PreviewProvider {
             total_user_scrobbles: 2000,
             
             last_updated: "10th Feb")
-        )
+        ))
     }
 }

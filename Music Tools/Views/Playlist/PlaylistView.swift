@@ -7,41 +7,14 @@
 //
 
 import SwiftUI
-//import SwiftUIRefresh
+import SwiftUIRefresh
 import SwiftyJSON
-
-final class ChangeableBool: ObservableObject {
-    
-    var onClick: () -> ()
-    
-    init(onClick: @escaping () -> ()) {
-        self.onClick = onClick
-    }
-    
-    @Published var state: Bool = false {
-        didSet {
-            self.onClick()
-        }
-    }
-}
 
 struct PlaylistView: View {
     
     @EnvironmentObject var liveUser: LiveUser
     
-    init(playlist: Playlist) {
-        self.playlist = playlist
-        
-        // hide empty items below list
-        UITableView.appearance().tableFooterView = UIView()
-    }
-    
-    var playlist: Playlist
-    @State private var recommendations: Bool = true
-    @State private var library_Tracks: Bool = false
-    @State private var shuffle: Bool = false
-    
-    @State private var rec_num: Int = 0
+    @Binding var playlist: Playlist
     
     @State private var this_month: Bool = false
     @State private var last_month: Bool = false
@@ -55,33 +28,33 @@ struct PlaylistView: View {
     var body: some View {
         List {
             Section(header: Text("Options")){
-                Toggle(isOn: $recommendations) {
+                Toggle(isOn: self.$playlist.include_recommendations) {
                     Text("Spotify Recommendations")
                 }
                 
-//                if recommendations {
+                if self.playlist.include_recommendations {
                     Stepper(onIncrement: {
-                        self.$rec_num.wrappedValue += 1
-                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.$rec_num.wrappedValue]))
+                        self.$playlist.recommendation_sample.wrappedValue += 1
+                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.playlist.recommendation_sample]))
                     },
                             onDecrement: {
-                        self.$rec_num.wrappedValue -= 1
-                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.$rec_num.wrappedValue]))
+                        self.$playlist.recommendation_sample.wrappedValue -= 1
+                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.playlist.recommendation_sample]))
                     }){
                         Text("#:")
                             .foregroundColor(Color.gray)
                             .multilineTextAlignment(.trailing)
-                        Text("\(rec_num)")
+                        Text("\(self.playlist.recommendation_sample)")
                             .multilineTextAlignment(.trailing)
                         
                     }
-//                }
+                }
                 
-                Toggle(isOn: $library_Tracks) {
+                Toggle(isOn: self.$playlist.include_library_tracks) {
                     Text("Library Tracks")
                 }
                 
-                Toggle(isOn: $shuffle) {
+                Toggle(isOn: self.$playlist.shuffle) {
                     Text("Shuffle")
                 }
                 
@@ -147,17 +120,13 @@ struct PlaylistView: View {
                 }
             }
         }
-//        .pullToRefresh(isShowing: $isRefreshing) {
-//            self.refreshPlaylist()
-//        }
+        .pullToRefresh(isShowing: $isRefreshing) {
+            self.refreshPlaylist()
+        }
         .navigationBarTitle(Text(playlist.name))
         .onAppear {
-            self.$recommendations.wrappedValue = self.playlist.include_recommendations
-            self.$library_Tracks.wrappedValue = self.playlist.include_library_tracks
-            self.$shuffle.wrappedValue = self.playlist.shuffle
-
-            self.$rec_num.wrappedValue = self.playlist.recommendation_sample
             
+            // TODO are these binding properly?
             if let playlist = self.playlist as? RecentsPlaylist {
                 self.$this_month.wrappedValue = playlist.add_this_month
                 self.$last_month.wrappedValue = playlist.add_last_month
@@ -204,7 +173,7 @@ struct PlaylistView: View {
         //TODO: do better error checking
     }
     
-    func refreshPlaylist(updates: JSON) {
+    func refreshPlaylist() {
         let api = PlaylistApi.getPlaylist(name: self.playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             guard let data = response.data else {
@@ -214,11 +183,8 @@ struct PlaylistView: View {
             guard let json = try? JSON(data: data) else {
                 fatalError("error parsing reponse")
             }
-            
-//            let playlist = Playlist.fromDict(json["playlist"])
-//
-//            self.playlist = playlist
-//            self.isRefreshing = false
+            self.playlist = Playlist.fromDict(dictionary: json)!
+            self.isRefreshing = false
         }
         //TODO: do better error checking
     }
@@ -226,7 +192,7 @@ struct PlaylistView: View {
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(playlist:
+        PlaylistView(playlist: .constant(
             Playlist(name: "playlist name",
                      uri: "uri",
                      username: "username",
@@ -239,6 +205,6 @@ struct PlaylistView_Previews: PreviewProvider {
                      playlist_references: ["ref name"],
                      
                      shuffle: true)
-        )
+        ))
     }
 }

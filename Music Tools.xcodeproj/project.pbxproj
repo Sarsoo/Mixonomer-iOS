@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E92F94822401412100B6B721 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = E92F94812401412100B6B721 /* SwiftUIRefresh */; };
+		E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E934AC98240DD0E4009869F4 /* AddTagSheet.swift */; };
 		E97AF45623FC4E7800635494 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45523FC4E7800635494 /* User.swift */; };
 		E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E97AF45823FC50EC00635494 /* SwiftyJSON */; };
 		E97AF45B23FC748D00635494 /* UserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45A23FC748D00635494 /* UserApi.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E934AC98240DD0E4009869F4 /* AddTagSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagSheet.swift; sourceTree = "<group>"; };
 		E97AF45523FC4E7800635494 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E97AF45A23FC748D00635494 /* UserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApi.swift; sourceTree = "<group>"; };
 		E97AF45F23FC85D600635494 /* PlaylistApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistApi.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				E9E30C2923FEAA3A00574EEF /* TagRow.swift */,
 				E9E30C2C23FEAB0200574EEF /* TagView.swift */,
 				E9E30C3023FEAF2B00574EEF /* TagObjList.swift */,
+				E934AC98240DD0E4009869F4 /* AddTagSheet.swift */,
 			);
 			path = Tag;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */,
 				E9E30C2D23FEAB0200574EEF /* TagView.swift in Sources */,
 				E9E30C2823FEA6BD00574EEF /* Tag.swift in Sources */,
 				E9E30C3123FEAF2B00574EEF /* TagObjList.swift in Sources */,

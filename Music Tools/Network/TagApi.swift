@@ -16,6 +16,7 @@ public enum TagApi {
     case updateTag(tag_id: String, updates: JSON)
     case deleteTag(tag_id: String)
     case newTag(tag_id: String)
+    case getTag(tag_id: String)
 }
 
 extension TagApi: ApiRequest {
@@ -35,6 +36,8 @@ extension TagApi: ApiRequest {
             return "api/tag/\(tag_id)"
         case .newTag(let tag_id):
             return "api/tag/\(tag_id)"
+        case .getTag(let tag_id):
+            return "api/tag/\(tag_id)"
         }
     }
     
@@ -50,6 +53,8 @@ extension TagApi: ApiRequest {
             return .delete
         case .newTag:
             return .post
+        case .getTag:
+            return .get
         }
     }
     
@@ -59,11 +64,13 @@ extension TagApi: ApiRequest {
             return nil
         case .runTag:
             return nil
-        case .updateTag(let tag_id, let updates):
+        case .updateTag(let _, let updates):
             return updates
         case .deleteTag:
             return nil
         case .newTag:
+            return nil
+        case .getTag:
             return nil
         }
     }
@@ -79,6 +86,8 @@ extension TagApi: ApiRequest {
         case .deleteTag:
             return nil
         case .newTag:
+            return nil
+        case .getTag:
             return nil
         }
     }

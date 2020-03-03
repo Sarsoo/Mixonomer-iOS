@@ -19,14 +19,8 @@ struct RootView: View {
     
     @State private var showAdd = false // State for showing add modal view
     
-    @State private var justDeletedPlaylists: Array<Playlist> = [] // Cache of recently deleted playlists for removing from next net request
-    @State private var justDeletedTags: Array<Tag> = []
-    
     @State private var isRefreshingPlaylists = false
     @State private var isRefreshingTags = false
-    
-    // refresh playlist list on interval
-//    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
  
     var body: some View {
         TabView   {
@@ -34,15 +28,12 @@ struct RootView: View {
             // PLAYLISTS
             NavigationView {
                 List{
-                    ForEach(liveUser.playlists) { playlist in
-                        PlaylistRow(playlist: playlist)
+                    ForEach(liveUser.playlists.indices, id:\.self) { idx in
+                        PlaylistRow(playlist: self.$liveUser.playlists[idx])
                     }
                     .onDelete { indexSet in
                         
                         indexSet.forEach { index in
-                            // add to recently deleted playlist cache
-                            self.justDeletedPlaylists.append(self.liveUser.playlists[index])
-                            
                             let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
@@ -63,7 +54,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists)
+                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists, username: self.$liveUser.username)
                     }
                 )
             }
@@ -78,15 +69,12 @@ struct RootView: View {
             // TAGS
             NavigationView {
                 List{
-                    ForEach(liveUser.tags) { tag in
-                        TagRow(tag: tag)
+                    ForEach(liveUser.tags.indices, id:\.self) { idx in
+                        TagRow(tag: self.$liveUser.tags[idx])
                     }
                     .onDelete { indexSet in
                         
                         indexSet.forEach { index in
-                            // add to recently deleted playlist cache
-                            self.justDeletedTags.append(self.liveUser.tags[index])
-                            
                             let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
@@ -107,7 +95,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists)
+                        AddTagSheet(state: self.$showAdd, tags: self.$liveUser.tags, username: self.$liveUser.username)
                     }
                 )
             }
@@ -130,9 +118,6 @@ struct RootView: View {
                 }
             }
             .tag(2)
-//            .onReceive(timer) { _ in
-//                self.fetch()
-//            }
         }.onAppear {
             self.fetchAll()
         }
@@ -143,7 +128,7 @@ struct RootView: View {
         refreshTags()
     }
     
-    func refreshPlaylists() {
+    public func refreshPlaylists() {
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
@@ -162,19 +147,6 @@ struct RootView: View {
                 })
                     // sort
                 .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-                    // filter playlists for those recently deleted
-                .filter { (rxPlaylist) -> Bool in
-                    
-                    var deleted = false
-                    for playlist in self.justDeletedPlaylists {
-                        if playlist == rxPlaylist {
-                            deleted = true
-                        }
-                    }
-                    return !deleted
-            }
-            // clear cache of recently deleted playlists
-            self.justDeletedPlaylists = []
             
             // update state
             self.liveUser.playlists = playlists
@@ -183,7 +155,7 @@ struct RootView: View {
         //TODO: do better error checking
     }
     
-    func refreshTags() {
+    public func refreshTags() {
         let tagApi = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: tagApi).responseJSON{ response in
             
@@ -202,19 +174,6 @@ struct RootView: View {
                 })
                     // sort
                 .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-                    // filter playlists for those recently deleted
-                .filter { (rxTag) -> Bool in
-                    
-                    var deleted = false
-                    for tag in self.justDeletedTags {
-                        if tag == rxTag {
-                            deleted = true
-                        }
-                    }
-                    return !deleted
-            }
-            // clear cache of recently deleted playlists
-            self.justDeletedTags = []
             
             // update state
             self.liveUser.tags = tags

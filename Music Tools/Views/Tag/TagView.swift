@@ -7,18 +7,14 @@
 //
 
 import SwiftUI
+import SwiftUIRefresh
 import SwiftyJSON
 
 struct TagView: View {
     
-    init(tag: Tag) {
-        self.tag = tag
-        
-        // hide empty items below list
-        UITableView.appearance().tableFooterView = UIView()
-    }
+    @Binding var tag: Tag
     
-    var tag: Tag
+    @State private var isRefreshing = false
     
     var body: some View {
         List {
@@ -82,6 +78,9 @@ struct TagView: View {
                 }
             }
         }
+        .pullToRefresh(isShowing: $isRefreshing) {
+            self.refreshTag()
+        }
         .navigationBarTitle(Text(tag.name))
         .onAppear {
             
@@ -103,11 +102,27 @@ struct TagView: View {
         }
         //TODO: do better error checking
     }
+    
+    func refreshTag() {
+        let api = TagApi.getTag(tag_id: self.tag.tag_id)
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            guard let data = response.data else {
+                fatalError("error getting tag")
+            }
+            
+            guard let json = try? JSON(data: data) else {
+                fatalError("error parsing reponse")
+            }
+            self.tag = Tag.fromDict(dictionary: json["tag"])
+            self.isRefreshing = false
+        }
+        //TODO: do better error checking
+    }
 }
 
 struct TagView_Previews: PreviewProvider {
     static var previews: some View {
-        TagView(tag:
+        TagView(tag: .constant(
             Tag(tag_id: "tag_id",
             name: "tag name",
             username: "andy",
@@ -121,6 +136,6 @@ struct TagView_Previews: PreviewProvider {
             total_user_scrobbles: 2000,
             
             last_updated: "10th Feb")
-        )
+        ))
     }
 }
