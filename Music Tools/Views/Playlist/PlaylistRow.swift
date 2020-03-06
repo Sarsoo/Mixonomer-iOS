@@ -46,8 +46,8 @@ struct PlaylistRow: View {
 
 struct PlaylistRow_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistRow(playlist:
-            .constant(Playlist(name: "", uri: "", username: "", include_recommendations: true, recommendation_sample: 1, include_library_tracks: true, parts: [], playlist_references: [], shuffle: true))
-        )
+        PlaylistView(playlist: .constant(
+            Playlist(name: "playlist name", username: "username")
+        ))
     }
 }

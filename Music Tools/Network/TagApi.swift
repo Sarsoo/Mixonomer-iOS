@@ -100,6 +100,32 @@ extension TagApi: ApiRequest {
         return ApiRequestDefaults.authMethod
     }
     
+    static func fromJSON(tag: JSON) -> Tag? {
+        
+        let _json = tag.rawString()?.data(using: .utf8)
+        
+        if let data = _json {
+            let decoder = JSONDecoder()
+            do {
+                let _tag = try decoder.decode(Tag.self, from: data)
+                return _tag
+            } catch {
+                print(error)
+            }
+        }
+        return nil
+    }
     
+    // TODO this loop could be condensed
+    static func fromJSON(tag: [JSON]) -> [Tag] {
+        var _tags: [Tag] = []
+        for dict in tag {
+            let _iter = self.fromJSON(tag: dict)
+            if let returned = _iter {
+                _tags.append(returned)
+            }
+        }
+        return _tags
+    }
 }
 

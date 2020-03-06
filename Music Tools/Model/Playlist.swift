@@ -6,16 +6,17 @@
 //  Copyright © 2020 Sarsoo. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import SwiftyJSON
 
-class Playlist: Identifiable, Equatable {
+class Playlist: Identifiable, Equatable, Codable {
     
     //MARK: Properties
     
     var name: String
     var uri: String
-    var username: String
+    var username: String?
     
     var include_recommendations: Bool
     var recommendation_sample: Int
@@ -23,89 +24,111 @@ class Playlist: Identifiable, Equatable {
     
     var parts: Array<String>
     var playlist_references: Array<String>
-    
     var shuffle: Bool
+    
+    var sort: String
+    var description_overwrite: String?
+    var description_suffix: String?
+    
+    var last_updated: String
+    
+    var lastfm_stat_count: Int
+    var lastfm_stat_album_count: Int
+    var lastfm_stat_artist_count: Int
+    
+    var lastfm_stat_percent: Float
+    var lastfm_stat_album_percent: Float
+    var lastfm_stat_artist_percent: Float
+    
+    var lastfm_stat_last_refresh: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case uri
+        case username
+        
+        case include_recommendations
+        case recommendation_sample
+        case include_library_tracks
+        
+        case parts
+        case playlist_references
+        case shuffle
+        
+        case sort
+        case description_overwrite
+        case description_suffix
+        
+        case last_updated
+        
+        case lastfm_stat_count
+        case lastfm_stat_album_count
+        case lastfm_stat_artist_count
+        
+        case lastfm_stat_percent
+        case lastfm_stat_album_percent
+        case lastfm_stat_artist_percent
+        
+        case lastfm_stat_last_refresh
+    }
     
     //MARK: Initialization
     
     init(name: String,
-         uri: String,
-         username: String,
+         uri: String = "spotify::",
+         username: String = "NO USER",
+
+         include_recommendations: Bool = false,
+         recommendation_sample: Int = 0,
+         include_library_tracks: Bool = false,
+
+         parts: Array<String> = [],
+         playlist_references: Array<String> = [],
+         shuffle: Bool = false,
          
-         include_recommendations: Bool,
-         recommendation_sample: Int,
-         include_library_tracks: Bool,
+         sort: String = "NO SORT",
+         description_overwrite: String? = nil,
+         description_suffix: String? = nil,
          
-         parts: Array<String>,
-         playlist_references: Array<String>,
+         last_updated: String = "",
          
-         shuffle: Bool){
-        
+         lastfm_stat_count: Int = 0,
+         lastfm_stat_album_count: Int = 0,
+         lastfm_stat_artist_count: Int = 0,
+         
+         lastfm_stat_percent: Float = 0,
+         lastfm_stat_album_percent: Float = 0,
+         lastfm_stat_artist_percent: Float = 0,
+         
+         lastfm_stat_last_refresh: String = ""){
+
         self.name = name
         self.uri = uri
         self.username = username
-        
+
         self.include_recommendations = include_recommendations
         self.recommendation_sample = recommendation_sample
         self.include_library_tracks = include_library_tracks
-        
+
         self.parts = parts
         self.playlist_references = playlist_references
-        
         self.shuffle = shuffle
-    }
-    
-    static func fromDict(dictionary: JSON) -> Playlist? {
-        switch dictionary["type"].string {
-        case "default":
-            return Playlist(name: dictionary["name"].stringValue,
-                    uri: dictionary["uri"].stringValue,
-                    username: dictionary["username"].stringValue,
-                    
-                    include_recommendations: dictionary["include_recommendations"].boolValue,
-                    recommendation_sample: dictionary["recommendation_sample"].intValue,
-                    include_library_tracks: dictionary["include_library_tracks"].boolValue,
         
-                    parts: dictionary["parts"].arrayObject as! Array<String>,
-                    playlist_references: dictionary["playlist_references"].arrayObject as! Array<String>,
-            
-                    shuffle: dictionary["shuffle"].boolValue)
-        case "recents":
-            return RecentsPlaylist(name: dictionary["name"].stringValue,
-                    uri: dictionary["uri"].stringValue,
-                    username: dictionary["username"].stringValue,
-                    
-                    include_recommendations: dictionary["include_recommendations"].boolValue,
-                    recommendation_sample: dictionary["recommendation_sample"].intValue,
-                    include_library_tracks: dictionary["include_library_tracks"].boolValue,
+        self.sort = sort
+        self.description_overwrite = description_overwrite
+        self.description_suffix = description_suffix
         
-                    parts: dictionary["parts"].arrayObject as! Array<String>,
-                    playlist_references: dictionary["playlist_references"].arrayObject as! Array<String>,
-            
-                    shuffle: dictionary["shuffle"].boolValue,
-                    
-                    add_last_month: dictionary["add_last_month"].boolValue,
-                    add_this_month: dictionary["add_this_month"].boolValue,
-                    day_boundary: dictionary["day_boundary"].intValue)
-        case "fmchart":
-            return LastFMChartPlaylist(name: dictionary["name"].stringValue,
-                    uri: dictionary["uri"].stringValue,
-                    username: dictionary["username"].stringValue,
-                    
-                    include_recommendations: dictionary["include_recommendations"].boolValue,
-                    recommendation_sample: dictionary["recommendation_sample"].intValue,
-                    include_library_tracks: dictionary["include_library_tracks"].boolValue,
+        self.last_updated = last_updated
         
-                    parts: dictionary["parts"].arrayObject as! Array<String>,
-                    playlist_references: dictionary["playlist_references"].arrayObject as! Array<String>,
-            
-                    shuffle: dictionary["shuffle"].boolValue,
-                    
-                    chart_range: LastFmRange(rawValue: dictionary["chart_range"].stringValue)!,
-                    chart_limit: dictionary["chart_limit"].intValue)
-        default:
-            return nil
-        }
+        self.lastfm_stat_count = lastfm_stat_count
+        self.lastfm_stat_album_count = lastfm_stat_album_count
+        self.lastfm_stat_artist_count = lastfm_stat_artist_count
+        
+        self.lastfm_stat_percent = lastfm_stat_percent
+        self.lastfm_stat_album_percent = lastfm_stat_album_percent
+        self.lastfm_stat_artist_percent = lastfm_stat_artist_percent
+        
+        self.lastfm_stat_last_refresh = lastfm_stat_last_refresh
     }
     
     var link: String {
@@ -116,6 +139,38 @@ class Playlist: Identifiable, Equatable {
     static func == (lhs: Playlist, rhs: Playlist) -> Bool {
         return lhs.name == rhs.name
 //            && lhs.username == rhs.username
+    }
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        name = try container.decode(String.self, forKey: .name)
+        uri = try container.decode(String.self, forKey: .uri)
+//        username = try container.decode(String.self, forKey: .username)
+        
+        include_recommendations = try container.decode(Bool.self, forKey: .include_recommendations)
+        recommendation_sample = try container.decode(Int.self, forKey: .recommendation_sample)
+        include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
+        
+        parts = try container.decode([String].self, forKey: .parts)
+        playlist_references = try container.decode([String].self, forKey: .playlist_references)
+        shuffle = try container.decode(Bool.self, forKey: .shuffle)
+        
+        sort = try container.decode(String.self, forKey: .sort)
+//        description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
+//        description_suffix = try container.decode(String.self, forKey: .description_suffix)
+        
+        last_updated = try container.decode(String.self, forKey: .last_updated)
+        
+        lastfm_stat_count = try container.decode(Int.self, forKey: .lastfm_stat_count)
+        lastfm_stat_album_count = try container.decode(Int.self, forKey: .lastfm_stat_album_count)
+        lastfm_stat_artist_count = try container.decode(Int.self, forKey: .lastfm_stat_artist_count)
+        
+        lastfm_stat_percent = try container.decode(Float.self, forKey: .lastfm_stat_percent)
+        lastfm_stat_album_percent = try container.decode(Float.self, forKey: .lastfm_stat_album_percent)
+        lastfm_stat_artist_percent = try container.decode(Float.self, forKey: .lastfm_stat_artist_percent)
+        
+        lastfm_stat_last_refresh = try container.decode(String.self, forKey: .lastfm_stat_last_refresh)
+        
     }
     
 }
@@ -128,34 +183,36 @@ class RecentsPlaylist: Playlist {
     var add_this_month: Bool
     var day_boundary: Int
     
+    private enum CodingKeys: String, CodingKey { case add_last_month; case add_this_month; case day_boundary }
+    
     //MARK: Initialization
     
     init(name: String,
-         uri: String,
-         username: String,
+         username: String = "NO USER",
          
-         include_recommendations: Bool,
-         recommendation_sample: Int,
-         include_library_tracks: Bool,
-         
-         parts: Array<String>,
-         playlist_references: Array<String>,
-         
-         shuffle: Bool,
-         
-         add_last_month: Bool,
-         add_this_month: Bool,
-         day_boundary: Int){
-        
+         add_last_month: Bool = false,
+         add_this_month: Bool = false,
+         day_boundary: Int = 14){
+
         self.add_last_month = add_last_month
         self.add_this_month = add_this_month
         self.day_boundary = day_boundary
         
-        super.init(name: name, uri: uri, username: username, include_recommendations: include_recommendations, recommendation_sample: recommendation_sample, include_library_tracks: include_library_tracks, parts: parts, playlist_references: playlist_references, shuffle: shuffle)
+        super.init(name: name, username: username)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        add_last_month = try container.decode(Bool.self, forKey: .add_last_month)
+        add_this_month = try container.decode(Bool.self, forKey: .add_this_month)
+        day_boundary = try container.decode(Int.self, forKey: .day_boundary)
+        
+        try super.init(from: decoder)
     }
 }
 
-enum LastFmRange: String {
+enum LastFmRange: String, Decodable {
     case overall = "OVERALL"
     case week = "WEEK"
     case month = "MONTH"
@@ -171,27 +228,28 @@ class LastFMChartPlaylist: Playlist {
     var chart_range: LastFmRange
     var chart_limit: Int
     
+    private enum CodingKeys: String, CodingKey { case chart_range; case chart_limit }
+    
     //MARK: Initialization
     
     init(name: String,
-         uri: String,
-         username: String,
+         username: String = "NO USER",
          
-         include_recommendations: Bool,
-         recommendation_sample: Int,
-         include_library_tracks: Bool,
-         
-         parts: Array<String>,
-         playlist_references: Array<String>,
-         
-         shuffle: Bool,
-         
-         chart_range: LastFmRange,
-         chart_limit: Int){
-        
+         chart_range: LastFmRange = .overall,
+         chart_limit: Int = 10){
+
         self.chart_range = chart_range
         self.chart_limit = chart_limit
         
-        super.init(name: name, uri: uri, username: username, include_recommendations: include_recommendations, recommendation_sample: recommendation_sample, include_library_tracks: include_library_tracks, parts: parts, playlist_references: playlist_references, shuffle: shuffle)
+        super.init(name: name, username: username)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        chart_range = try LastFmRange(rawValue: container.decode(String.self, forKey: .chart_range))!
+        chart_limit = try container.decode(Int.self, forKey: .chart_limit)
+        
+        try super.init(from: decoder)
     }
 }

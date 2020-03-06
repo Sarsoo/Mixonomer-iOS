@@ -77,13 +77,13 @@ struct AddPlaylistSheet: View {
         var playlist: Playlist? = nil
         switch PlaylistType(rawValue: selectedType) ?? .defaultPlaylist {
         case .defaultPlaylist:
-            playlist = Playlist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false)
+            playlist = Playlist(name: name, username: username)
             break
         case .recents:
-            playlist = RecentsPlaylist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false, add_last_month: false, add_this_month: false, day_boundary: 14)
+            playlist = RecentsPlaylist(name: name, username: username)
             break
         case .fmchart:
-            playlist = LastFMChartPlaylist(name: name, uri: "", username: username, include_recommendations: false, recommendation_sample: 10, include_library_tracks: false, parts: [], playlist_references: [], shuffle: false, chart_range: .month, chart_limit: 10)
+            playlist = LastFMChartPlaylist(name: name, username: username)
             break
         }
         

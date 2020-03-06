@@ -9,12 +9,12 @@
 import UIKit
 import SwiftyJSON
 
-enum UserType: String {
+enum UserType: String, Decodable {
     case user = "user"
     case admin = "admin"
 }
 
-class User: Identifiable {
+class User: Identifiable, Decodable {
     
     //MARK: Properties
     
@@ -43,16 +43,6 @@ class User: Identifiable {
         self.last_login = last_login
         self.spotify_linked = spotify_linked
         self.lastfm_username = lastfm_username
-    }
-    
-    static func fromDict(dictionary: JSON) -> User {
-        return User(username: dictionary["username"].stringValue,
-                    email: dictionary["username"].stringValue,
-                    type: UserType(rawValue: dictionary["type"].stringValue) ?? .user,
-                    last_login: dictionary["last_login"].stringValue,
-                    spotify_linked: dictionary["spotify_linked"].boolValue,
-                    lastfm_username: dictionary["lastfm_username"].stringValue)
-    }
-    
+    }    
 }
 

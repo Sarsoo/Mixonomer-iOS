@@ -113,7 +113,10 @@ struct TagView: View {
             guard let json = try? JSON(data: data) else {
                 fatalError("error parsing reponse")
             }
-            self.tag = Tag.fromDict(dictionary: json["tag"])
+            let _tag = TagApi.fromJSON(tag: json["tag"])
+            if let tag = _tag {
+                self.tag = tag
+            }
             self.isRefreshing = false
         }
         //TODO: do better error checking

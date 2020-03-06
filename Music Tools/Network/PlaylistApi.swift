@@ -110,6 +110,68 @@ extension PlaylistApi: ApiRequest {
         return ApiRequestDefaults.authMethod
     }
     
+    static func fromJSON(playlist: Data) -> Playlist? {
+        
+        let decoder = JSONDecoder()
+        do {
+            let json = try JSON(data: playlist)
+            switch json["type"].string {
+            case "default":
+                let playlist = try decoder.decode(Playlist.self, from: playlist)
+                return playlist
+            case "recents":
+                let playlist = try decoder.decode(RecentsPlaylist.self, from: playlist)
+                return playlist
+            case "fmchart":
+                let playlist = try decoder.decode(LastFMChartPlaylist.self, from: playlist)
+                return playlist
+            default:
+                return nil
+            }
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+    
+    static func fromJSON(playlist: JSON) -> Playlist? {
+        
+        let _json = playlist.rawString()?.data(using: .utf8)
+        
+        if let data = _json {
+            let decoder = JSONDecoder()
+            do {
+                switch playlist["type"].string {
+                case "default":
+                    let playlist = try decoder.decode(Playlist.self, from: data)
+                    return playlist
+                case "recents":
+                    let playlist = try decoder.decode(RecentsPlaylist.self, from: data)
+                    return playlist
+                case "fmchart":
+                    let playlist = try decoder.decode(LastFMChartPlaylist.self, from: data)
+                    return playlist
+                default:
+                    return nil
+                }
+            } catch {
+                print(error)
+            }
+        }
+        print(playlist)
+        return nil
+    }
+    
+    static func fromJSON(playlist: [JSON]) -> [Playlist] {
+        var _playlists: [Playlist] = []
+        for dict in playlist {
+            let _iter = self.fromJSON(playlist: dict)
+            if let returned = _iter {
+                _playlists.append(returned)
+            }
+        }
+        return _playlists
+    }
     
 }
 

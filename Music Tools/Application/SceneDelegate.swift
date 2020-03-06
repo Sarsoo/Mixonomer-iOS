@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             var controller: UIViewController
             if keychain["username"] != nil && keychain["password"] != nil {
-                let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"]!)
+                let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"]!).loadUserDefaults()
                 controller = UIHostingController(rootView: contentView.environmentObject(liveUser))
             } else {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)

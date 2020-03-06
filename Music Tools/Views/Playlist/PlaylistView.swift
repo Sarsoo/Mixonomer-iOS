@@ -180,10 +180,7 @@ struct PlaylistView: View {
                 fatalError("error getting playlist")
             }
             
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
-            self.playlist = Playlist.fromDict(dictionary: json)!
+            self.playlist = PlaylistApi.fromJSON(playlist: data)!
             self.isRefreshing = false
         }
         //TODO: do better error checking
@@ -193,18 +190,7 @@ struct PlaylistView: View {
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         PlaylistView(playlist: .constant(
-            Playlist(name: "playlist name",
-                     uri: "uri",
-                     username: "username",
-                     
-                     include_recommendations: true,
-                     recommendation_sample: 5,
-                     include_library_tracks: true,
-                     
-                     parts: ["name"],
-                     playlist_references: ["ref name"],
-                     
-                     shuffle: true)
+            Playlist(name: "playlist name", username: "username")
         ))
     }
 }

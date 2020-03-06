@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Alamofire
+import SwiftyJSON
 
 class LiveUser: ObservableObject {
     
@@ -25,5 +27,81 @@ class LiveUser: ObservableObject {
             fatalError("\(playlistIn) not found")
         }
         self.playlists[index] = playlistIn
+    }
+    
+    func refreshPlaylists() {
+        let api = PlaylistApi.getPlaylists
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        
+            guard let data = response.data else {
+                fatalError("error getting playlists")
+            }
+
+            guard let json = try? JSON(data: data) else {
+                fatalError("error parsing reponse")
+            }
+                
+            let playlists = json["playlists"].arrayValue
+            
+            // update state
+            self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            
+            let encoder = JSONEncoder()
+            let defaults = UserDefaults.standard
+            do {
+                defaults.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
+            } catch {
+               print("error encoding playlists: \(error)")
+            }
+        }
+    }
+    
+    func refreshTags() {
+        let api = TagApi.getTags
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        
+            guard let data = response.data else {
+                fatalError("error getting tags")
+            }
+
+            guard let json = try? JSON(data: data) else {
+                fatalError("error parsing reponse")
+            }
+                
+            let tags = json["tags"].arrayValue
+            
+            // update state
+            self.tags = TagApi.fromJSON(tag: tags).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            
+            let encoder = JSONEncoder()
+            let defaults = UserDefaults.standard
+            do {
+                defaults.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
+            } catch {
+               print("error encoding tags: \(error)")
+            }
+        }
+    }
+    
+    func loadUserDefaults() -> LiveUser {
+        let defaults = UserDefaults.standard
+        let decoder = JSONDecoder()
+        
+        let _strPlaylists = defaults.string(forKey: "playlists")
+        let _strTags = defaults.string(forKey: "tags")
+        
+        do {
+            if let _strPlaylists = _strPlaylists {
+                self.playlists = (try decoder.decode([Playlist].self, from: _strPlaylists.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            }
+            
+            if let _strTags = _strTags {
+                self.tags = (try decoder.decode([Tag].self, from: _strTags.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            }
+        } catch {
+          print("error decoding: \(error)")
+        }
+        
+        return self
     }
 }

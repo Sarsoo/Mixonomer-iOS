@@ -44,7 +44,8 @@ struct RootView: View {
                     }
                 }
                 .pullToRefresh(isShowing: $isRefreshingPlaylists) {
-                    self.refreshPlaylists()
+                    self.liveUser.refreshPlaylists()
+                    self.isRefreshingPlaylists = false
                 }
                 .navigationBarTitle(Text("Playlists").font(.title))
                     
@@ -85,7 +86,8 @@ struct RootView: View {
                     }
                 }
                 .pullToRefresh(isShowing: $isRefreshingTags) {
-                    self.refreshTags()
+                    self.liveUser.refreshTags()
+                    self.isRefreshingTags = false
                 }
                 .navigationBarTitle(Text("Tags").font(.title))
                     
@@ -124,61 +126,8 @@ struct RootView: View {
     }
     
     private func fetchAll() {
-        refreshPlaylists()
-        refreshTags()
-    }
-    
-    public func refreshPlaylists() {
-        let api = PlaylistApi.getPlaylists
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            
-            guard let data = response.data else {
-                fatalError("error getting playlists")
-            }
-            
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
-            
-            let playlists = json["playlists"].arrayValue
-                    // parse playlists
-                .map({ dict in
-                    Playlist.fromDict(dictionary: dict)!
-                })
-                    // sort
-                .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-            
-            // update state
-            self.liveUser.playlists = playlists
-            self.isRefreshingPlaylists = false
-        }
-        //TODO: do better error checking
-    }
-    
-    public func refreshTags() {
-        let tagApi = TagApi.getTags
-        RequestBuilder.buildRequest(apiRequest: tagApi).responseJSON{ response in
-            
-            guard let data = response.data else {
-                fatalError("error getting playlists")
-            }
-            
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
-            
-            let tags = json["tags"].arrayValue
-                    // parse playlists
-                .map({ dict in
-                    Tag.fromDict(dictionary: dict)
-                })
-                    // sort
-                .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-            
-            // update state
-            self.liveUser.tags = tags
-            self.isRefreshingTags = false
-        }
+        self.liveUser.refreshPlaylists()
+        self.liveUser.refreshTags()
     }
 }
 
