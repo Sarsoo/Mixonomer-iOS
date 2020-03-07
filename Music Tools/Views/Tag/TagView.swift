@@ -77,7 +77,7 @@ struct TagView: View {
                     Text("Update")
                 }
             }
-        }
+        }.listStyle(GroupedListStyle())
         .pullToRefresh(isShowing: $isRefreshing) {
             self.refreshTag()
         }

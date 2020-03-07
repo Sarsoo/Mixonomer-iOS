@@ -37,20 +37,30 @@ struct TagObjList: View {
     }
     
     var body: some View {
-        return List(objs) { obj in
-            HStack {
-                VStack(alignment: .leading){
-                    Text(obj.name)
-//                        .multilineTextAlignment(.leading)
-                    if obj.artist.count > 0 {
-                        Text(obj.artist)
-//                            .multilineTextAlignment(.leading)
-                            .foregroundColor(Color.gray)
+        List {
+            Section(header: Image(systemName: "music.note")) {
+                if self.objs.count > 0 {
+                    ForEach(objs) { obj in
+                        HStack {
+                            VStack(alignment: .leading){
+                                Text(obj.name)
+                                if obj.artist.count > 0 {
+                                    Text(obj.artist)
+                                        .foregroundColor(Color.gray)
+                                }
+                            }
+                            Spacer()
+                            Text("\(obj.count)")
+                                .foregroundColor(Color.gray)
+                        }
+                    }
+                }else {
+                    HStack {
+                        Text("No Entries")
+                            .multilineTextAlignment(.center)
+                        Spacer()
                     }
                 }
-                Spacer()
-                Text("\(obj.count)")
-                    .foregroundColor(Color.gray)
             }
         }
         .navigationBarTitle(Text(objType))

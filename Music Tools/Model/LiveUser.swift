@@ -16,6 +16,9 @@ class LiveUser: ObservableObject {
     @Published var tags: [Tag]
     @Published var username: String
     
+    @Published var isRefreshingPlaylists = false
+    @Published var isRefreshingTags = false
+    
     init(playlists: [Playlist], tags: [Tag], username: String) {
         self.playlists = playlists
         self.tags = tags
@@ -30,6 +33,8 @@ class LiveUser: ObservableObject {
     }
     
     func refreshPlaylists() {
+        self.isRefreshingPlaylists = true
+        
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
         
@@ -46,6 +51,8 @@ class LiveUser: ObservableObject {
             // update state
             self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
+            self.isRefreshingPlaylists = false
+            
             let encoder = JSONEncoder()
             let defaults = UserDefaults.standard
             do {
@@ -57,6 +64,8 @@ class LiveUser: ObservableObject {
     }
     
     func refreshTags() {
+        self.isRefreshingTags = true
+        
         let api = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
         
@@ -72,6 +81,8 @@ class LiveUser: ObservableObject {
             
             // update state
             self.tags = TagApi.fromJSON(tag: tags).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+            
+            self.isRefreshingTags = false
             
             let encoder = JSONEncoder()
             let defaults = UserDefaults.standard

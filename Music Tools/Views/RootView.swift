@@ -19,33 +19,37 @@ struct RootView: View {
     
     @State private var showAdd = false // State for showing add modal view
     
-    @State private var isRefreshingPlaylists = false
-    @State private var isRefreshingTags = false
- 
     var body: some View {
         TabView   {
             
             // PLAYLISTS
             NavigationView {
                 List{
-                    ForEach(liveUser.playlists.indices, id:\.self) { idx in
-                        PlaylistRow(playlist: self.$liveUser.playlists[idx])
-                    }
-                    .onDelete { indexSet in
-                        
-                        indexSet.forEach { index in
-                            let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
-                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-                                
-                            }
+                    if(liveUser.playlists.count > 0){
+                        ForEach(liveUser.playlists.indices, id:\.self) { idx in
+                            PlaylistRow(playlist: self.$liveUser.playlists[idx])
                         }
-                        
-                        self.liveUser.playlists.remove(atOffsets: indexSet)
+                        .onDelete { indexSet in
+                            
+                            indexSet.forEach { index in
+                                let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
+                                RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                    
+                                }
+                            }
+                            
+                            self.liveUser.playlists.remove(atOffsets: indexSet)
+                        }
+                    }else {
+                        HStack {
+                            Text("No Playlists")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
                     }
                 }
-                .pullToRefresh(isShowing: $isRefreshingPlaylists) {
+                .pullToRefresh(isShowing: self.$liveUser.isRefreshingPlaylists) {
                     self.liveUser.refreshPlaylists()
-                    self.isRefreshingPlaylists = false
                 }
                 .navigationBarTitle(Text("Playlists").font(.title))
                     
@@ -70,24 +74,31 @@ struct RootView: View {
             // TAGS
             NavigationView {
                 List{
-                    ForEach(liveUser.tags.indices, id:\.self) { idx in
-                        TagRow(tag: self.$liveUser.tags[idx])
-                    }
-                    .onDelete { indexSet in
-                        
-                        indexSet.forEach { index in
-                            let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
-                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-                                
-                            }
+                    if(liveUser.tags.count > 0) {
+                        ForEach(liveUser.tags.indices, id:\.self) { idx in
+                            TagRow(tag: self.$liveUser.tags[idx])
                         }
-                        
-                        self.liveUser.tags.remove(atOffsets: indexSet)
+                        .onDelete { indexSet in
+                            
+                            indexSet.forEach { index in
+                                let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
+                                RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                    
+                                }
+                            }
+                            
+                            self.liveUser.tags.remove(atOffsets: indexSet)
+                        }
+                    } else {
+                        HStack {
+                            Text("No Tags")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
                     }
                 }
-                .pullToRefresh(isShowing: $isRefreshingTags) {
+                .pullToRefresh(isShowing: self.$liveUser.isRefreshingTags) {
                     self.liveUser.refreshTags()
-                    self.isRefreshingTags = false
                 }
                 .navigationBarTitle(Text("Tags").font(.title))
                     

@@ -8,29 +8,39 @@
 
 import SwiftUI
 
-struct Name: Identifiable {
+struct Name: Identifiable, Hashable {
     var id = UUID()
     var name: String
 }
 
 struct PlaylistInputList: View {
     
-    var names: Array<Name> = []
+    var names: Array<String> = []
     var nameType: String
     
     init(names: Array<String>, nameType: String){
         self.nameType = nameType
-        self.names = names.map { (name) -> Name in
-            return Name(name: name)
-        }.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-        
+        self.names = names.sorted(by: { $0.lowercased() < $1.lowercased() })
     }
     
     var body: some View {
-        return List(names) { name in
-            Text(name.name)
+        List{
+            Section(header: Image(systemName: "music.note")){ // Weird? added empty header as list renders with space for header then jumps up, not nice
+                if self.names.count > 0 {
+                    ForEach(self.names, id: \.self){ name in
+                        Text(name)
+                    }
+                }else {
+                    HStack {
+                        Text("No Playlists")
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                    }
+                }
+            }
         }
-        .navigationBarTitle(Text(nameType))
+//        .id(UUID())
+        .navigationBarTitle(nameType)
         .navigationBarItems(trailing:
             Button(
                 action: {  },

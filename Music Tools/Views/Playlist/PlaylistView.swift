@@ -27,6 +27,38 @@ struct PlaylistView: View {
     
     var body: some View {
         List {
+            Section(header: Text("Stats")){
+                HStack {
+                    Text("Track Count")
+                    Spacer()
+                    Text("\(self.playlist.lastfm_stat_count)")
+                        .font(.title)
+                        .foregroundColor(Color.gray)
+                    Text("\(self.playlist.lastfm_stat_percent_str)")
+                        .font(.body)
+                        .foregroundColor(Color.gray)
+                }
+                HStack {
+                    Text("Album Count")
+                    Spacer()
+                    Text("\(self.playlist.lastfm_stat_album_count)")
+                        .font(.title)
+                        .foregroundColor(Color.gray)
+                    Text("\(self.playlist.lastfm_stat_album_percent_str)")
+                        .font(.body)
+                        .foregroundColor(Color.gray)
+                }
+                HStack {
+                    Text("Artist Count")
+                    Spacer()
+                    Text("\(self.playlist.lastfm_stat_artist_count)")
+                        .font(.title)
+                        .foregroundColor(Color.gray)
+                    Text("\(self.playlist.lastfm_stat_artist_percent_str)")
+                        .font(.body)
+                        .foregroundColor(Color.gray)
+                }
+            }
             Section(header: Text("Options")){
                 Toggle(isOn: self.$playlist.include_recommendations) {
                     Text("Spotify Recommendations")
@@ -110,7 +142,11 @@ struct PlaylistView: View {
                     }
                 }
             }
-            Section(header: Text("Actions")){
+            Section(header: Text("Actions"),
+                    footer: VStack(alignment: .leading) {
+                        Text("Last Updated \(self.playlist.last_updated)")
+                        Text("Stats Updated \(self.playlist.lastfm_stat_last_refresh)")
+            }){
                 Button(action: { self.runPlaylist() }) {
                     Text("Update")
                 }
@@ -119,11 +155,11 @@ struct PlaylistView: View {
                     Text("Open")
                 }
             }
-        }
+            }.listStyle(GroupedListStyle())
         .pullToRefresh(isShowing: $isRefreshing) {
             self.refreshPlaylist()
         }
-        .navigationBarTitle(Text(playlist.name))
+        .navigationBarTitle(playlist.name)
         .onAppear {
             
             // TODO are these binding properly?

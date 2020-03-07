@@ -37,8 +37,23 @@ class Playlist: Identifiable, Equatable, Codable {
     var lastfm_stat_artist_count: Int
     
     var lastfm_stat_percent: Float
+    var lastfm_stat_percent_str: String {
+        get {
+            return String(format: "%.2f%%", lastfm_stat_percent)
+        }
+    }
     var lastfm_stat_album_percent: Float
+    var lastfm_stat_album_percent_str: String {
+        get {
+            return String(format: "%.2f%%", lastfm_stat_album_percent)
+        }
+    }
     var lastfm_stat_artist_percent: Float
+    var lastfm_stat_artist_percent_str: String {
+        get {
+            return String(format: "%.2f%%", lastfm_stat_artist_percent)
+        }
+    }
     
     var lastfm_stat_last_refresh: String
     
