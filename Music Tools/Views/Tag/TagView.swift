@@ -9,12 +9,21 @@
 import SwiftUI
 import SwiftUIRefresh
 import SwiftyJSON
+import SwiftUICharts
 
 struct TagView: View {
     
     @Binding var tag: Tag
     
     @State private var isRefreshing = false
+    
+    var chartStyle: ChartStyle {
+        get {
+            let _style = Styles.barChartStyleNeonBlueLight
+            _style.darkModeStyle = Styles.barChartStyleNeonBlueDark
+            return _style
+        }
+    }
     
     var body: some View {
         List {
@@ -72,7 +81,28 @@ struct TagView: View {
                     }
                 }
             }
-            Section(header: Text("Actions")){
+            HStack {
+                Spacer()
+                BarChartView(
+                    data: ChartData(values:
+                        self.tag.all
+                            .filter {
+                                $0["count"].intValue > 0
+                        }
+                            .map {
+                    ($0["name"].stringValue, $0["count"].intValue)
+                }),
+                    title: "Scrobbles",
+                    style: chartStyle,
+                    form: ChartForm.medium,
+                    cornerImage: Image(systemName: "music.note")
+                )
+                .padding()
+//                .frame(width: 100, height: 400)
+                Spacer()
+            }
+            Section(header: Text("Actions"),
+                    footer: Text("Last Updated \(self.tag.last_updated)")){
                 Button(action: { self.runTag() }) {
                     Text("Update")
                 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = E906F7F32414019C004E1E31 /* NetworkPersister.swift */; };
+		E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E906F7F624143AA7004E1E31 /* SwiftUICharts */; };
 		E92F94822401412100B6B721 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = E92F94812401412100B6B721 /* SwiftUIRefresh */; };
 		E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E934AC98240DD0E4009869F4 /* AddTagSheet.swift */; };
 		E97AF45623FC4E7800635494 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97AF45523FC4E7800635494 /* User.swift */; };
@@ -106,6 +107,7 @@
 				E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */,
 				E98254D923FB53780056D9D3 /* Alamofire in Frameworks */,
 				E97AF45E23FC83AF00635494 /* KeychainAccess in Frameworks */,
+				E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +294,7 @@
 				E97AF45823FC50EC00635494 /* SwiftyJSON */,
 				E97AF45D23FC83AF00635494 /* KeychainAccess */,
 				E92F94812401412100B6B721 /* SwiftUIRefresh */,
+				E906F7F624143AA7004E1E31 /* SwiftUICharts */,
 			);
 			productName = "Music Tools";
 			productReference = E9EA690723F9A5430012C3E8 /* Music Tools.app */;
@@ -370,6 +373,7 @@
 				E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */,
 				E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */,
 				E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */,
+				E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */,
 			);
 			productRefGroup = E9EA690823F9A5430012C3E8 /* Products */;
 			projectDirPath = "";
@@ -764,6 +768,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apppear/chartview";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.9;
+			};
+		};
 		E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/swiftuirefresh";
@@ -799,6 +811,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E906F7F624143AA7004E1E31 /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */;
+			productName = SwiftUICharts;
+		};
 		E92F94812401412100B6B721 /* SwiftUIRefresh */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E92F94802401412100B6B721 /* XCRemoteSwiftPackageReference "swiftuirefresh" */;

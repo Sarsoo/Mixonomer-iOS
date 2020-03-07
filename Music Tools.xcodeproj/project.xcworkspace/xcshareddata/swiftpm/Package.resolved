@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "SwiftUICharts",
+        "repositoryURL": "https://github.com/apppear/chartview",
+        "state": {
+          "branch": null,
+          "revision": "04989ad159380290a74729dbce1d39d64b893ab2",
+          "version": "1.4.9"
+        }
+      },
+      {
         "package": "KeychainAccess",
         "repositoryURL": "https://github.com/kishikawakatsumi/keychainaccess",
         "state": {

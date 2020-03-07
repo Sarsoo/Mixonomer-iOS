@@ -21,6 +21,12 @@ class Tag: Identifiable, Equatable, Decodable {
     var albums: [JSON]
     var artists: [JSON]
     
+    var all: [JSON] {
+        get {
+            return tracks + albums + artists
+        }
+    }
+    
     var count: Int
     var proportion: Double
     var total_user_scrobbles: Int
