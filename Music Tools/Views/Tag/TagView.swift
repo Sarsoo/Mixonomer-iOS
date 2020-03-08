@@ -89,11 +89,13 @@ struct TagView: View {
                             .filter {
                                 $0["count"].intValue > 0
                         }
-                            .map {
+                        .sorted {
+                            $0["name"].stringValue.lowercased() < $1["name"].stringValue.lowercased()
+                        }.map {
                     ($0["name"].stringValue, $0["count"].intValue)
                 }),
-                    title: "Scrobbles",
-                    style: chartStyle,
+                    title: self.tag.name,
+                    legend: "Scrobbles", style: chartStyle,
                     form: ChartForm.medium,
                     cornerImage: Image(systemName: "music.note")
                 )

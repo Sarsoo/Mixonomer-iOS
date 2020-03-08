@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftUIRefresh
 import SwiftyJSON
+import SwiftUICharts
 
 struct PlaylistView: View {
     
@@ -24,6 +25,13 @@ struct PlaylistView: View {
     @State private var showingSheet = false
     
     @State private var isRefreshing = false
+    
+    var chartStyle: ChartStyle {
+        get {
+            let _style = ChartStyle(backgroundColor: .white, accentColor: .red, gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            return _style
+        }
+    }
     
     var body: some View {
         List {
@@ -58,7 +66,38 @@ struct PlaylistView: View {
                         .font(.body)
                         .foregroundColor(Color.gray)
                 }
+                Button(action: {
+                    self.refreshStats()
+                }){
+                    Text("Refresh")
+                }
             }
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    PieChartView(
+                        data: [Double(self.playlist.lastfm_stat_percent), Double(100 - self.playlist.lastfm_stat_percent)],
+                        title: "Tracks",
+                        legend:"Listening",
+                        style: chartStyle,
+                        form: ChartForm.medium)
+                    PieChartView(
+                        data: [Double(self.playlist.lastfm_stat_album_percent), Double(100 - self.playlist.lastfm_stat_album_percent)],
+                        title: "Albums",
+                        legend:"Listening",
+                        style: chartStyle,
+                        form: ChartForm.medium)
+                    Spacer()
+                }
+                PieChartView(
+                    data: [Double(self.playlist.lastfm_stat_artist_percent), Double(100 - self.playlist.lastfm_stat_artist_percent)],
+                    title: "Artists",
+                    legend:"Listening",
+                    style: chartStyle,
+                    form: ChartForm.medium)
+            }
+            
             Section(header: Text("Options")){
                 Toggle(isOn: self.$playlist.include_recommendations) {
                     Text("Spotify Recommendations")
@@ -184,6 +223,14 @@ struct PlaylistView: View {
     
     func runPlaylist() {
         let api = PlaylistApi.runPlaylist(name: playlist.name)
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            
+        }
+        //TODO: do better error checking
+    }
+    
+    func refreshStats() {
+        let api = PlaylistApi.refreshStats(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
         }
