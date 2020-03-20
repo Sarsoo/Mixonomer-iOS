@@ -16,7 +16,8 @@ struct AddPlaylistSheet: View {
     @State private var errorMessage = ""
     @State private var isLoading = false
     
-    @Binding var state: Bool
+    @Environment(\.presentationMode) var presentationMode
+    
     @Binding var playlists: Array<Playlist>
     @Binding var username: String
     
@@ -95,13 +96,13 @@ struct AddPlaylistSheet: View {
             self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
             self.isLoading = false
-            self.state = false
+            self.presentationMode.wrappedValue.dismiss()
         }
     }
 }
 
 struct AddPlaylistSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddPlaylistSheet(state: .constant(true), playlists: .constant([]), username: .constant("username"))
+        AddPlaylistSheet(playlists: .constant([]), username: .constant("username"))
     }
 }

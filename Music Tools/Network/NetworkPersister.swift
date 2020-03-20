@@ -8,27 +8,30 @@
 
 import Foundation
 
-@propertyWrapper
-struct NetworkPersister<Value: Codable>: Codable {
-    
-    enum ObjectType: String, Codable {
-        case playlist
-        case tag
-        case user
-    }
-    
-    var objType: ObjectType
-    var key: String
-//
-//    init(_ objType: ObjectType, key: String) {
-//        self.objType = objType
-//        self.key = key
-//    }
-    
-    var wrappedValue: Value {
-        didSet {
-            print("set")
-        }
-    }
-    
+enum ObjectType: String, Codable {
+    case playlist
+    case tag
+    case user
 }
+
+//@propertyWrapper public struct NetworkPersister<Value: Codable>: Codable {
+//
+////    var objType: ObjectType
+////    var key: String
+////    var value: Value
+//
+////    var sets = 0
+//
+////    public init(wrappedValue: Value) {
+//////        self.objType = objType
+//////        self.key = key
+////        self.value = wrappedValue
+////    }
+//
+//    public var wrappedValue: Value {
+//        didSet(newValue) {
+//            print(newValue)
+//        }
+//    }
+//
+//}

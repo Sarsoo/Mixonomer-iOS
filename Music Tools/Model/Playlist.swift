@@ -30,7 +30,7 @@ class Playlist: Identifiable, Equatable, Codable {
     var description_overwrite: String?
     var description_suffix: String?
     
-    var last_updated: String
+    var last_updated: String?
     
     var lastfm_stat_count: Int
     var lastfm_stat_album_count: Int
@@ -55,7 +55,7 @@ class Playlist: Identifiable, Equatable, Codable {
         }
     }
     
-    var lastfm_stat_last_refresh: String
+    var lastfm_stat_last_refresh: String?
     
     private enum CodingKeys: String, CodingKey {
         case name
@@ -105,7 +105,7 @@ class Playlist: Identifiable, Equatable, Codable {
          description_overwrite: String? = nil,
          description_suffix: String? = nil,
          
-         last_updated: String = "",
+         last_updated: String? = "",
          
          lastfm_stat_count: Int = 0,
          lastfm_stat_album_count: Int = 0,
@@ -115,23 +115,11 @@ class Playlist: Identifiable, Equatable, Codable {
          lastfm_stat_album_percent: Float = 0,
          lastfm_stat_artist_percent: Float = 0,
          
-         lastfm_stat_last_refresh: String = ""){
+         lastfm_stat_last_refresh: String? = ""){
 
         self.name = name
         self.uri = uri
         self.username = username
-
-        self.include_recommendations = include_recommendations
-        self.recommendation_sample = recommendation_sample
-        self.include_library_tracks = include_library_tracks
-
-        self.parts = parts
-        self.playlist_references = playlist_references
-        self.shuffle = shuffle
-        
-        self.sort = sort
-        self.description_overwrite = description_overwrite
-        self.description_suffix = description_suffix
         
         self.last_updated = last_updated
         
@@ -144,6 +132,18 @@ class Playlist: Identifiable, Equatable, Codable {
         self.lastfm_stat_artist_percent = lastfm_stat_artist_percent
         
         self.lastfm_stat_last_refresh = lastfm_stat_last_refresh
+
+        self.include_recommendations = include_recommendations
+        self.recommendation_sample = recommendation_sample
+        self.include_library_tracks = include_library_tracks
+
+        self.parts = parts
+        self.playlist_references = playlist_references
+        self.shuffle = shuffle
+        
+        self.sort = sort
+        self.description_overwrite = description_overwrite
+        self.description_suffix = description_suffix
     }
     
     var link: String {
@@ -162,15 +162,6 @@ class Playlist: Identifiable, Equatable, Codable {
         uri = try container.decode(String.self, forKey: .uri)
 //        username = try container.decode(String.self, forKey: .username)
         
-        include_recommendations = try container.decode(Bool.self, forKey: .include_recommendations)
-        recommendation_sample = try container.decode(Int.self, forKey: .recommendation_sample)
-        include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
-        
-        parts = try container.decode([String].self, forKey: .parts)
-        playlist_references = try container.decode([String].self, forKey: .playlist_references)
-        shuffle = try container.decode(Bool.self, forKey: .shuffle)
-        
-        sort = try container.decode(String.self, forKey: .sort)
 //        description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
 //        description_suffix = try container.decode(String.self, forKey: .description_suffix)
         
@@ -186,6 +177,15 @@ class Playlist: Identifiable, Equatable, Codable {
         
         lastfm_stat_last_refresh = try container.decode(String.self, forKey: .lastfm_stat_last_refresh)
         
+        include_recommendations = try container.decode(Bool.self, forKey: .include_recommendations)
+        recommendation_sample = try container.decode(Int.self, forKey: .recommendation_sample)
+        include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
+        
+        parts = try container.decode([String].self, forKey: .parts)
+        playlist_references = try container.decode([String].self, forKey: .playlist_references)
+        shuffle = try container.decode(Bool.self, forKey: .shuffle)
+        
+        sort = try container.decode(String.self, forKey: .sort)
     }
     
 }

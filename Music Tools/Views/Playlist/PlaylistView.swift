@@ -163,7 +163,7 @@ struct PlaylistView: View {
                 }
             }
             Section(header: Text("Inputs")){
-                NavigationLink(destination: PlaylistInputList(names: self.playlist.playlist_references, nameType: "Managed Playlists")) {
+                NavigationLink(destination: PlaylistInputList(names: self.$playlist.playlist_references, nameType: "Managed Playlists")) {
                     HStack {
                         Text("Managed Playlists")
                         Spacer()
@@ -172,7 +172,7 @@ struct PlaylistView: View {
                     }
                 }
                 
-                NavigationLink(destination: PlaylistInputList(names: self.playlist.parts, nameType: "Spotify Playlists")) {
+                NavigationLink(destination: PlaylistInputList(names: self.$playlist.parts, nameType: "Spotify Playlists")) {
                     HStack {
                         Text("Spotify Playlists")
                         Spacer()
@@ -183,8 +183,8 @@ struct PlaylistView: View {
             }
             Section(header: Text("Actions"),
                     footer: VStack(alignment: .leading) {
-                        Text("Last Updated \(self.playlist.last_updated)")
-                        Text("Stats Updated \(self.playlist.lastfm_stat_last_refresh)")
+                        Text("Last Updated \(self.playlist.last_updated ?? "never")")
+                        Text("Stats Updated \(self.playlist.lastfm_stat_last_refresh ?? "never")")
             }){
                 Button(action: { self.runPlaylist() }) {
                     Text("Update")

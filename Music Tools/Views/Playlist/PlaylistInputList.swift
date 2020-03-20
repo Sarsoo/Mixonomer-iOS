@@ -15,12 +15,12 @@ struct Name: Identifiable, Hashable {
 
 struct PlaylistInputList: View {
     
-    var names: Array<String> = []
+    @Binding var names: [String]
     var nameType: String
     
-    init(names: Array<String>, nameType: String){
+    init(names: Binding<[String]>, nameType: String){
         self.nameType = nameType
-        self.names = names.sorted(by: { $0.lowercased() < $1.lowercased() })
+        self._names = names
     }
     
     var body: some View {
@@ -52,8 +52,8 @@ struct PlaylistInputList: View {
 
 struct PlaylistInputList_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistInputList(names: [
+        PlaylistInputList(names: .constant([
             "name"
-        ], nameType: "Spotify Playlists")
+        ]), nameType: "Spotify Playlists")
     }
 }

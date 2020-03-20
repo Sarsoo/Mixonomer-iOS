@@ -59,7 +59,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddPlaylistSheet(state: self.$showAdd, playlists: self.$liveUser.playlists, username: self.$liveUser.username)
+                        AddPlaylistSheet(playlists: self.$liveUser.playlists, username: self.$liveUser.username)
                     }
                 )
             }
@@ -108,7 +108,7 @@ struct RootView: View {
                         action: { self.showAdd = true },
                         label: { Text("Add") }
                     ).sheet(isPresented: $showAdd) {
-                        AddTagSheet(state: self.$showAdd, tags: self.$liveUser.tags, username: self.$liveUser.username)
+                        AddTagSheet(tags: self.$liveUser.tags, username: self.$liveUser.username)
                     }
                 )
             }

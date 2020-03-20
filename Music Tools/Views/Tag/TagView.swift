@@ -104,7 +104,7 @@ struct TagView: View {
                 Spacer()
             }
             Section(header: Text("Actions"),
-                    footer: Text("Last Updated \(self.tag.last_updated)")){
+                    footer: Text("Last Updated \(self.tag.last_updated ?? "never")")){
                 Button(action: { self.runTag() }) {
                     Text("Update")
                 }

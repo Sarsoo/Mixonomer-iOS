@@ -54,9 +54,8 @@ class LiveUser: ObservableObject {
             self.isRefreshingPlaylists = false
             
             let encoder = JSONEncoder()
-            let defaults = UserDefaults.standard
             do {
-                defaults.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
+                UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
             } catch {
                print("error encoding playlists: \(error)")
             }
@@ -85,9 +84,8 @@ class LiveUser: ObservableObject {
             self.isRefreshingTags = false
             
             let encoder = JSONEncoder()
-            let defaults = UserDefaults.standard
             do {
-                defaults.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
+                UserDefaults.standard.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
             } catch {
                print("error encoding tags: \(error)")
             }
@@ -103,11 +101,15 @@ class LiveUser: ObservableObject {
         
         do {
             if let _strPlaylists = _strPlaylists {
-                self.playlists = (try decoder.decode([Playlist].self, from: _strPlaylists.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                if _strPlaylists.count > 0 {
+                    self.playlists = (try decoder.decode([Playlist].self, from: _strPlaylists.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                }
             }
             
             if let _strTags = _strTags {
-                self.tags = (try decoder.decode([Tag].self, from: _strTags.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                if _strTags.count > 0 {
+                    self.tags = (try decoder.decode([Tag].self, from: _strTags.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                }
             }
         } catch {
           print("error decoding: \(error)")

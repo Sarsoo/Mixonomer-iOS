@@ -15,7 +15,8 @@ struct AddTagSheet: View {
     @State private var errorMessage = ""
     @State private var isLoading = false
     
-    @Binding var state: Bool
+    @Environment(\.presentationMode) var presentationMode
+    
     @Binding var tags: Array<Tag>
     @Binding var username: String
     
@@ -49,7 +50,6 @@ struct AddTagSheet: View {
     }
     
     func create(){
-        debugPrint(name)
         let tag_id = self.$name.wrappedValue.replacingOccurrences(of: " ", with: "_")
         
         if tag_id.count == 0 {
@@ -78,13 +78,13 @@ struct AddTagSheet: View {
             self.tags = self.tags.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
             self.isLoading = false
-            self.state = false
+            self.presentationMode.wrappedValue.dismiss()
         }
     }
 }
 
 struct AddTagSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddTagSheet(state: .constant(true), tags: .constant([]), username: .constant("username"))
+        AddTagSheet(tags: .constant([]), username: .constant("username"))
     }
 }

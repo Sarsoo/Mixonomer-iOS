@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class Tag: Identifiable, Equatable, Decodable {
+class Tag: Identifiable, Equatable, Codable {
     
     //MARK: Properties
     
@@ -31,7 +31,7 @@ class Tag: Identifiable, Equatable, Decodable {
     var proportion: Double
     var total_user_scrobbles: Int
     
-    var last_updated: String
+    var last_updated: String?
     
     //MARK: Initialization
     
@@ -47,7 +47,7 @@ class Tag: Identifiable, Equatable, Decodable {
          proportion: Double,
          total_user_scrobbles: Int,
 
-         last_updated: String){
+         last_updated: String?){
 
         self.tag_id = tag_id
         self.name = name
