@@ -26,6 +26,8 @@
 		E98254D023FB00B60056D9D3 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98254CF23FB00B60056D9D3 /* LoginScreen.swift */; };
 		E98254D923FB53780056D9D3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E98254D823FB53780056D9D3 /* Alamofire */; };
 		E98254DB23FB64740056D9D3 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98254DA23FB64740056D9D3 /* Network.swift */; };
+		E9CCD5BB2454C57300B5CD6C /* PlaylistList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CCD5BA2454C57300B5CD6C /* PlaylistList.swift */; };
+		E9CCD5BD2454C64300B5CD6C /* TagList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CCD5BC2454C64300B5CD6C /* TagList.swift */; };
 		E9E30C2623FEA4F000574EEF /* TagApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E30C2523FEA4EF00574EEF /* TagApi.swift */; };
 		E9E30C2823FEA6BD00574EEF /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E30C2723FEA6BD00574EEF /* Tag.swift */; };
 		E9E30C2A23FEAA3A00574EEF /* TagRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E30C2923FEAA3A00574EEF /* TagRow.swift */; };
@@ -74,6 +76,8 @@
 		E98254C923FA26600056D9D3 /* PlaylistRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistRow.swift; sourceTree = "<group>"; };
 		E98254CF23FB00B60056D9D3 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		E98254DA23FB64740056D9D3 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		E9CCD5BA2454C57300B5CD6C /* PlaylistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistList.swift; sourceTree = "<group>"; };
+		E9CCD5BC2454C64300B5CD6C /* TagList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagList.swift; sourceTree = "<group>"; };
 		E9E30C2523FEA4EF00574EEF /* TagApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagApi.swift; sourceTree = "<group>"; };
 		E9E30C2723FEA6BD00574EEF /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		E9E30C2923FEAA3A00574EEF /* TagRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRow.swift; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 				E98254C923FA26600056D9D3 /* PlaylistRow.swift */,
 				E97AF46623FD650800635494 /* AddPlaylistSheet.swift */,
 				E97AF46823FD9E1B00635494 /* PlaylistInputList.swift */,
+				E9CCD5BA2454C57300B5CD6C /* PlaylistList.swift */,
 			);
 			path = Playlist;
 			sourceTree = "<group>";
@@ -189,6 +194,7 @@
 				E9E30C2C23FEAB0200574EEF /* TagView.swift */,
 				E9E30C3023FEAF2B00574EEF /* TagObjList.swift */,
 				E934AC98240DD0E4009869F4 /* AddTagSheet.swift */,
+				E9CCD5BC2454C64300B5CD6C /* TagList.swift */,
 			);
 			path = Tag;
 			sourceTree = "<group>";
@@ -417,7 +423,9 @@
 				E9E30C3323FF255C00574EEF /* SettingsList.swift in Sources */,
 				E9EA690D23F9A5430012C3E8 /* SceneDelegate.swift in Sources */,
 				E98254DB23FB64740056D9D3 /* Network.swift in Sources */,
+				E9CCD5BD2454C64300B5CD6C /* TagList.swift in Sources */,
 				E9E30C2A23FEAA3A00574EEF /* TagRow.swift in Sources */,
+				E9CCD5BB2454C57300B5CD6C /* PlaylistList.swift in Sources */,
 				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
 				E9EA690F23F9A5430012C3E8 /* AppSkeleton.swift in Sources */,
 				E98254BD23F9B7A90056D9D3 /* Playlist.swift in Sources */,

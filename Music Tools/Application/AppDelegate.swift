@@ -15,15 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let keychain = Keychain(service: "xyz.sarsoo.music.login")
-//        do {
-//            try keychain.remove("username")
-//            try keychain.remove("password")
-//        } catch let error {
-//            debugPrint("Could not clear keychain, \(error)")
-//        }
-//
         return true
     }
 

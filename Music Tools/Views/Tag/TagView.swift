@@ -43,7 +43,7 @@ struct TagView: View {
                         .foregroundColor(Color.gray)
                 }
                 HStack {
-                    Text("User Total")
+                    Text("Total")
                     Spacer()
                     Text("\(self.tag.total_user_scrobbles)")
                         .font(.title)

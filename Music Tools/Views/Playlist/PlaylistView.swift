@@ -24,6 +24,7 @@ struct PlaylistView: View {
     
     @State private var showingSheet = false
     @State private var isRefreshing = false
+    @State private var showingNetworkError = false
     
     var chartStyle: ChartStyle {
         get {
@@ -211,6 +212,10 @@ struct PlaylistView: View {
                 self.$chart_limit.wrappedValue = playlist.chart_limit
             }
         }
+        .alert(isPresented: $showingNetworkError) {
+            Alert(title: Text("Network Error"),
+                  message: Text("Could not refresh playlist"))
+        }
     }
     
     func changeChartRange(newRange: LastFmRange) {
@@ -222,8 +227,15 @@ struct PlaylistView: View {
     
     func runPlaylist() {
         let api = PlaylistApi.runPlaylist(name: playlist.name)
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            
+        RequestBuilder.buildRequest(apiRequest: api)
+            .validate()
+            .responseJSON{ response in
+                switch response.result {
+                case .success:
+                    break
+                case .failure:
+                    self.showingNetworkError = true
+                }
         }
         //TODO: do better error checking
     }

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// Root level view loaded by delegate to show either main app or login screen
 struct Router: View {
     
     @EnvironmentObject var liveUser: LiveUser

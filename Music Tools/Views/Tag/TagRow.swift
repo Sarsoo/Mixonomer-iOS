@@ -12,24 +12,37 @@ import SwiftyJSON
 struct TagRow: View {
     
     @Binding var tag: Tag
+    @State private var showingNetworkError = false
     
     var body: some View {
         NavigationLink(destination: TagView(tag: $tag)){
             HStack {
                 Text(tag.name)
-                    .contextMenu {
-                        
-                        // run force touch
-                        Button(action: {
-                            let api = TagApi.runTag(tag_id: self.tag.tag_id)
-                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-                                
+                if tag.count > 0 {
+                    Spacer()
+                    Text("\(tag.count)")
+                        .foregroundColor(.gray)
+                }
+            }.contextMenu {
+                Button(action: {
+                    let api = TagApi.runTag(tag_id: self.tag.tag_id)
+                    RequestBuilder.buildRequest(apiRequest: api)
+                        .validate()
+                        .responseJSON{ response in
+                            switch response.result {
+                            case .success:
+                                break
+                            case .failure:
+                                self.showingNetworkError = true
                             }
-                        }) {
-                            Text("Refresh")
-                            Image(systemName: "arrow.clockwise.circle")
                         }
-                    }
+                }) {
+                    Text("Refresh")
+                    Image(systemName: "arrow.clockwise.circle")
+                }
+            }.alert(isPresented: $showingNetworkError) {
+                Alert(title: Text("Network Error"),
+                      message: Text("Could not refresh tag"))
             }
         }
     }
