@@ -23,7 +23,6 @@ struct PlaylistView: View {
     @State private var chart_limit: Int = 0
     
     @State private var showingSheet = false
-    
     @State private var isRefreshing = false
     
     var chartStyle: ChartStyle {

@@ -11,6 +11,8 @@ import KeychainAccess
 
 struct SettingsList: View {
     
+    @EnvironmentObject var liveUser: LiveUser
+    
     init(){
         UITableView.appearance().tableFooterView = UIView()
     }
@@ -31,6 +33,9 @@ struct SettingsList: View {
                     do {
                         try keychain.remove("username")
                         try keychain.remove("password")
+                        
+                        self.liveUser.loggedIn = false
+                        
                     } catch let error {
                         debugPrint("Could not clear keychain, \(error)")
                     }

@@ -9,9 +9,15 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    
+    @EnvironmentObject var liveUser: LiveUser
+    
+    @State private var username: String = ""
+    @State private var password: String = ""
+    
     var body: some View {
         VStack {
-            Image("Logo")
+            Image("MusicToolsLogo")
                 .resizable()
                 .frame(width: 200.0, height: 200.0, alignment: .trailing)
                 .cornerRadius(18)
@@ -19,12 +25,13 @@ struct LoginScreen: View {
                 .padding(.bottom, 20)
             Text("Sarsoo Music Tools")
                 .font(.largeTitle)
-            TextField("Username", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
-            SecureField("Password", text: /*@START_MENU_TOKEN@*/ /*@PLACEHOLDER=Value@*/.constant("Apple")/*@END_MENU_TOKEN@*/)
+            TextField("Username", text: $username)
+            SecureField("Password", text: $password)
             HStack {
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
+                Button(action: {
+                    self.liveUser.loggedIn = true
+                }) {
                     Text("Log In")
-                        
                 }
                 .padding(.trailing, 20.0)
                 Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {

@@ -1,5 +1,5 @@
 //
-//  RootView.swift
+//  AppSkeleton.swift
 //  Music Tools
 //
 //  Created by Andy Pack on 16/02/2020.
@@ -11,16 +11,15 @@ import SwiftUIRefresh
 import Alamofire
 import SwiftyJSON
 
-struct RootView: View {
+struct AppSkeleton: View {
     
     @EnvironmentObject var liveUser: LiveUser
     
     @State private var selection = 0 // Tab view selection
-    
     @State private var showAdd = false // State for showing add modal view
     
     var body: some View {
-        TabView   {
+        TabView {
             
             // PLAYLISTS
             NavigationView {
@@ -114,7 +113,7 @@ struct RootView: View {
             }
             .tabItem {
                 VStack {
-                    Image(systemName: "sum")
+                    Image(systemName: "tag")
                     Text("Tags")
                 }
             }
@@ -144,6 +143,6 @@ struct RootView: View {
 
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
-        RootView()
+        AppSkeleton()
     }
 }

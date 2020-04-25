@@ -16,13 +16,20 @@ class LiveUser: ObservableObject {
     @Published var tags: [Tag]
     @Published var username: String
     
+    @Published var loggedIn: Bool {
+        didSet {
+            UserDefaults.standard.set(loggedIn, forKey: "loggedIn")
+        }
+    }
+    
     @Published var isRefreshingPlaylists = false
     @Published var isRefreshingTags = false
     
-    init(playlists: [Playlist], tags: [Tag], username: String) {
+    init(playlists: [Playlist], tags: [Tag], username: String, loggedIn: Bool) {
         self.playlists = playlists
         self.tags = tags
         self.username = username
+        self.loggedIn = loggedIn
     }
     
     func updatePlaylist(playlistIn: Playlist) {
@@ -98,6 +105,7 @@ class LiveUser: ObservableObject {
         
         let _strPlaylists = defaults.string(forKey: "playlists")
         let _strTags = defaults.string(forKey: "tags")
+        loggedIn = defaults.bool(forKey: "loggedIn")
         
         do {
             if let _strPlaylists = _strPlaylists {

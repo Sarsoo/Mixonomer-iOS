@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = RootView()
+        let contentView = Router()
         
         let keychain = Keychain(service: "xyz.sarsoo.music.login")
 
@@ -28,17 +28,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             
-            var controller: UIViewController
-            if keychain["username"] != nil && keychain["password"] != nil {
-                let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"]!).loadUserDefaults()
-                controller = UIHostingController(rootView: contentView.environmentObject(liveUser))
-            } else {
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                controller = storyboard.instantiateInitialViewController()!
-            }
+            let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"] ?? "", loggedIn: false).loadUserDefaults()
             
             
-            window.rootViewController = controller
+            window.rootViewController = UIHostingController(rootView: contentView.environmentObject(liveUser))
 //            window.rootViewController = UIHostingController(rootView: contentView.environmentObject(liveUser))
 //            window.rootViewController = LoginController()
             self.window = window
