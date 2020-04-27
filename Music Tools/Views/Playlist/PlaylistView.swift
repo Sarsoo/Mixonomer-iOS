@@ -13,8 +13,6 @@ import SwiftUICharts
 
 struct PlaylistView: View {
     
-    @EnvironmentObject var liveUser: LiveUser
-    
     @Binding var playlist: Playlist
     
     @State private var this_month: Bool = false
@@ -194,11 +192,19 @@ struct PlaylistView: View {
                     Text("Open")
                 }
             }
-            }.listStyle(GroupedListStyle())
+            
+            // alert seems to need to be within list root element
+            // else weird crash on half drag back
+            .alert(isPresented: $showingNetworkError) {
+                Alert(title: Text("Network Error"),
+                      message: Text("Could not refresh playlist"))
+            }
+            
+        }.listStyle(GroupedListStyle())
         .pullToRefresh(isShowing: $isRefreshing) {
             self.refreshPlaylist()
         }
-        .navigationBarTitle(playlist.name)
+        .navigationBarTitle(Text(playlist.name))
         .onAppear {
             
             // TODO are these binding properly?
@@ -206,15 +212,11 @@ struct PlaylistView: View {
                 self.$this_month.wrappedValue = playlist.add_this_month
                 self.$last_month.wrappedValue = playlist.add_last_month
             }
-            
+
             if let playlist = self.playlist as? LastFMChartPlaylist {
                 self.$chart_range.wrappedValue = playlist.chart_range
                 self.$chart_limit.wrappedValue = playlist.chart_limit
             }
-        }
-        .alert(isPresented: $showingNetworkError) {
-            Alert(title: Text("Network Error"),
-                  message: Text("Could not refresh playlist"))
         }
     }
     
