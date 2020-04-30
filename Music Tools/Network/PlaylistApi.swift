@@ -123,20 +123,8 @@ extension PlaylistApi: ApiRequest {
         
         let decoder = JSONDecoder()
         do {
-            let json = try JSON(data: playlist)
-            switch json["type"].string {
-            case "default":
-                let playlist = try decoder.decode(Playlist.self, from: playlist)
-                return playlist
-            case "recents":
-                let playlist = try decoder.decode(RecentsPlaylist.self, from: playlist)
-                return playlist
-            case "fmchart":
-                let playlist = try decoder.decode(LastFMChartPlaylist.self, from: playlist)
-                return playlist
-            default:
-                return nil
-            }
+            let playlist = try decoder.decode(Playlist.self, from: playlist)
+            return playlist
         } catch {
             print(error)
         }
@@ -150,19 +138,8 @@ extension PlaylistApi: ApiRequest {
         if let data = _json {
             let decoder = JSONDecoder()
             do {
-                switch playlist["type"].string {
-                case "default":
-                    let playlist = try decoder.decode(Playlist.self, from: data)
-                    return playlist
-                case "recents":
-                    let playlist = try decoder.decode(RecentsPlaylist.self, from: data)
-                    return playlist
-                case "fmchart":
-                    let playlist = try decoder.decode(LastFMChartPlaylist.self, from: data)
-                    return playlist
-                default:
-                    return nil
-                }
+                let playlist = try decoder.decode(Playlist.self, from: data)
+                return playlist
             } catch {
                 print(error)
             }

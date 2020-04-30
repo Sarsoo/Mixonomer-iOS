@@ -75,16 +75,16 @@ struct AddPlaylistSheet: View {
             return
         }
         
-        var playlist: Playlist? = nil
+        let playlist: Playlist = Playlist(name: name, username: username)
         switch PlaylistType(rawValue: selectedType) ?? .defaultPlaylist {
         case .defaultPlaylist:
-            playlist = Playlist(name: name, username: username)
+            playlist.type = "default"
             break
         case .recents:
-            playlist = RecentsPlaylist(name: name, username: username)
+            playlist.type = "recents"
             break
         case .fmchart:
-            playlist = LastFMChartPlaylist(name: name, username: username)
+            playlist.type = "fmchart"
             break
         }
         
@@ -92,7 +92,7 @@ struct AddPlaylistSheet: View {
         let api = PlaylistApi.newPlaylist(name: self.name,
                                           type: PlaylistType(rawValue: selectedType) ?? .defaultPlaylist)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            self.playlists.append(playlist!)
+            self.playlists.append(playlist)
             self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
             self.isLoading = false

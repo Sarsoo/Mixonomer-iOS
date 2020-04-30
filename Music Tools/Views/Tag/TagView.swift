@@ -114,9 +114,6 @@ struct TagView: View {
             self.refreshTag()
         }
         .navigationBarTitle(Text(tag.name))
-        .onAppear {
-            
-        }
     }
     
     func runTag() {

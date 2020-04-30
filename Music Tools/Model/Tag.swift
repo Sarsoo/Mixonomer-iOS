@@ -15,7 +15,7 @@ class Tag: Identifiable, Equatable, Codable {
     
     var tag_id: String
     var name: String
-    var username: String
+//    var username: String
     
     var tracks: [JSON]
     var albums: [JSON]
@@ -51,7 +51,7 @@ class Tag: Identifiable, Equatable, Codable {
 
         self.tag_id = tag_id
         self.name = name
-        self.username = username
+//        self.username = username
 
         self.tracks = tracks
         self.albums = albums

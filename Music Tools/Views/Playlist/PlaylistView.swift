@@ -15,11 +15,6 @@ struct PlaylistView: View {
     
     @Binding var playlist: Playlist
     
-    @State private var this_month: Bool = false
-    @State private var last_month: Bool = false
-    @State private var chart_range: LastFmRange = .overall
-    @State private var chart_limit: Int = 0
-    
     @State private var showingSheet = false
     @State private var isRefreshing = false
     @State private var showingNetworkError = false
@@ -32,7 +27,7 @@ struct PlaylistView: View {
     }
     
     var body: some View {
-        List {
+        Form {
             Section(header: Text("Stats")){
                 HStack {
                     Text("Track Count")
@@ -104,11 +99,12 @@ struct PlaylistView: View {
                 if self.playlist.include_recommendations {
                     Stepper(onIncrement: {
                         self.$playlist.recommendation_sample.wrappedValue += 1
-                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.playlist.recommendation_sample]))
                     },
-                            onDecrement: {
-                        self.$playlist.recommendation_sample.wrappedValue -= 1
-                        self.updatePlaylist(updates: JSON(["recommendation_sample": self.playlist.recommendation_sample]))
+                        onDecrement: {
+                            if self.playlist.recommendation_sample > 0 {
+                                self.$playlist.recommendation_sample.wrappedValue -= 1
+                                
+                            }
                     }){
                         Text("#:")
                             .foregroundColor(Color.gray)
@@ -127,24 +123,24 @@ struct PlaylistView: View {
                     Text("Shuffle")
                 }
                 
-                if playlist is RecentsPlaylist {
-                    Toggle(isOn: $this_month) {
+                if playlist.type == "recents" {
+                    Toggle(isOn: self.$playlist.add_this_month) {
                         Text("This Month")
                     }
                     
-                    Toggle(isOn: $last_month) {
+                    Toggle(isOn: self.$playlist.add_last_month) {
                         Text("Last Month")
                     }
                 }
                 
-                if playlist is LastFMChartPlaylist {
+                if playlist.type == "fmchart" {
                     HStack {
                         Text("Chart Range")
                         Spacer()
                         Button(action: {
                             self.showingSheet = true
                             }) {
-                                Text("\(self.chart_range.rawValue)")
+                                Text("\(self.playlist.chart_range.rawValue)")
                                 .foregroundColor(Color.gray)
                         }.actionSheet(isPresented: $showingSheet) {
                             ActionSheet(title: Text("Chart range"),
@@ -193,6 +189,7 @@ struct PlaylistView: View {
                 }
             }
             
+            
             // alert seems to need to be within list root element
             // else weird crash on half drag back
             .alert(isPresented: $showingNetworkError) {
@@ -200,31 +197,11 @@ struct PlaylistView: View {
                       message: Text("Could not refresh playlist"))
             }
             
-        }.listStyle(GroupedListStyle())
+        }
+        .navigationBarTitle(Text(playlist.name), displayMode: .inline)
         .pullToRefresh(isShowing: $isRefreshing) {
             self.refreshPlaylist()
         }
-        .navigationBarTitle(Text(playlist.name))
-        .onAppear {
-            
-            // TODO are these binding properly?
-            if let playlist = self.playlist as? RecentsPlaylist {
-                self.$this_month.wrappedValue = playlist.add_this_month
-                self.$last_month.wrappedValue = playlist.add_last_month
-            }
-
-            if let playlist = self.playlist as? LastFMChartPlaylist {
-                self.$chart_range.wrappedValue = playlist.chart_range
-                self.$chart_limit.wrappedValue = playlist.chart_limit
-            }
-        }
-    }
-    
-    func changeChartRange(newRange: LastFmRange) {
-        self.chart_range = newRange
-//        self.updatePlaylist(["chart_range": newRange.rawValue])
-        //TODO: are enums wrong by the time they're here? not sure api will accept it now
-        //TODO: fix downcasting local playlist object to change state
     }
     
     func runPlaylist() {

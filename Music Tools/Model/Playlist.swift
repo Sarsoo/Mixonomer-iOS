@@ -10,57 +10,129 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
-class Playlist: Identifiable, Equatable, Codable {
+class Playlist: Identifiable, Equatable, Codable, ObservableObject {
     
     //MARK: Properties
     
-    var name: String
-    var uri: String
-    var username: String?
+    @Published var name: String
+    @Published var uri: String
+    @Published var username: String?
     
-    var include_recommendations: Bool
-    var recommendation_sample: Int
-    var include_library_tracks: Bool
+    @Published var type: String {
+        didSet {
+            self.updatePlaylist(updates: JSON(["type": self.type]))
+        }
+    }
     
-    var parts: Array<String>
-    var playlist_references: Array<String>
-    var shuffle: Bool
+    @Published var include_recommendations: Bool {
+        didSet {
+            self.updatePlaylist(updates: JSON(["include_recommendations": self.include_recommendations]))
+        }
+    }
+    @Published var recommendation_sample: Int{
+        didSet {
+            self.updatePlaylist(updates: JSON(["recommendation_sample": self.recommendation_sample]))
+        }
+    }
+    @Published var include_library_tracks: Bool{
+        didSet {
+            self.updatePlaylist(updates: JSON(["include_library_tracks": self.include_library_tracks]))
+        }
+    }
     
-    var sort: String
-    var description_overwrite: String?
-    var description_suffix: String?
+    @Published var parts: Array<String>{
+        didSet {
+            self.updatePlaylist(updates: JSON(["parts": self.parts]))
+        }
+    }
+    @Published var playlist_references: Array<String>{
+        didSet {
+            self.updatePlaylist(updates: JSON(["playlist_references": self.playlist_references]))
+        }
+    }
+    @Published var shuffle: Bool{
+        didSet {
+            self.updatePlaylist(updates: JSON(["shuffle": self.shuffle]))
+        }
+    }
     
-    var last_updated: String?
+    var sort: String?
+    @Published var description_overwrite: String?
+    @Published var description_suffix: String?
     
-    var lastfm_stat_count: Int
-    var lastfm_stat_album_count: Int
-    var lastfm_stat_artist_count: Int
+    @Published var last_updated: String?
     
-    var lastfm_stat_percent: Float
+    @Published var lastfm_stat_count: Int
+    @Published var lastfm_stat_album_count: Int
+    @Published var lastfm_stat_artist_count: Int
+    
+    @Published var lastfm_stat_percent: Float
     var lastfm_stat_percent_str: String {
         get {
             return String(format: "%.2f%%", lastfm_stat_percent)
         }
     }
-    var lastfm_stat_album_percent: Float
+    @Published var lastfm_stat_album_percent: Float
     var lastfm_stat_album_percent_str: String {
         get {
             return String(format: "%.2f%%", lastfm_stat_album_percent)
         }
     }
-    var lastfm_stat_artist_percent: Float
+    @Published var lastfm_stat_artist_percent: Float
     var lastfm_stat_artist_percent_str: String {
         get {
             return String(format: "%.2f%%", lastfm_stat_artist_percent)
         }
     }
     
-    var lastfm_stat_last_refresh: String?
+    @Published var lastfm_stat_last_refresh: String?
+    
+    @Published var add_last_month: Bool{
+        didSet {
+            self.updatePlaylist(updates: JSON(["add_last_month": self.add_last_month]))
+        }
+    }
+    @Published var add_this_month: Bool{
+        didSet {
+            self.updatePlaylist(updates: JSON(["add_this_month": self.add_this_month]))
+        }
+    }
+    @Published var day_boundary: Int{
+        didSet {
+            self.updatePlaylist(updates: JSON(["day_boundary": self.day_boundary]))
+        }
+    }
+    
+    @Published var chart_range: LastFmRange{
+        didSet {
+            self.updatePlaylist(updates: JSON(["chart_range": self.chart_range.rawValue]))
+        }
+    }
+    @Published var chart_limit: Int{
+        didSet {
+            self.updatePlaylist(updates: JSON(["chart_range": self.chart_range.rawValue]))
+        }
+    }
+    
+    func updatePlaylist(updates: JSON) {
+        let api = PlaylistApi.updatePlaylist(name: self.name, updates: updates)
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            switch response.result {
+            case .success:
+                break
+            case .failure:
+                debugPrint("error: \(self.name), \(updates)")
+            }
+        }
+        //TODO: do better error checking
+    }
     
     private enum CodingKeys: String, CodingKey {
         case name
         case uri
         case username
+        
+        case type
         
         case include_recommendations
         case recommendation_sample
@@ -85,6 +157,13 @@ class Playlist: Identifiable, Equatable, Codable {
         case lastfm_stat_artist_percent
         
         case lastfm_stat_last_refresh
+        
+        case add_last_month
+        case add_this_month
+        case day_boundary
+        
+        case chart_range
+        case chart_limit
     }
     
     //MARK: Initialization
@@ -92,6 +171,8 @@ class Playlist: Identifiable, Equatable, Codable {
     init(name: String,
          uri: String = "spotify::",
          username: String = "NO USER",
+         
+         type: String = "default",
 
          include_recommendations: Bool = false,
          recommendation_sample: Int = 0,
@@ -115,11 +196,20 @@ class Playlist: Identifiable, Equatable, Codable {
          lastfm_stat_album_percent: Float = 0,
          lastfm_stat_artist_percent: Float = 0,
          
-         lastfm_stat_last_refresh: String? = ""){
+         lastfm_stat_last_refresh: String? = "",
+         
+         add_last_month: Bool = false,
+         add_this_month: Bool = false,
+         day_boundary: Int = 14,
+         
+         chart_range: LastFmRange = .overall,
+         chart_limit: Int = 10){
 
         self.name = name
         self.uri = uri
         self.username = username
+        
+        self.type = type
         
         self.last_updated = last_updated
         
@@ -144,6 +234,13 @@ class Playlist: Identifiable, Equatable, Codable {
         self.sort = sort
         self.description_overwrite = description_overwrite
         self.description_suffix = description_suffix
+        
+        self.add_last_month = add_last_month
+        self.add_this_month = add_this_month
+        self.day_boundary = day_boundary
+        
+        self.chart_range = chart_range
+        self.chart_limit = chart_limit
     }
     
     var link: String {
@@ -160,11 +257,26 @@ class Playlist: Identifiable, Equatable, Codable {
         
         name = try container.decode(String.self, forKey: .name)
         uri = try container.decode(String.self, forKey: .uri)
-//        username = try container.decode(String.self, forKey: .username)
+        do{
+            username = try container.decode(String.self, forKey: .username)
+        }catch {
+            username = "NO USER"
+            debugPrint("failed to parse username")
+        }
+            
+        type = try container.decode(String.self, forKey: .type)
         
-//        description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
-//        description_suffix = try container.decode(String.self, forKey: .description_suffix)
+        do{
+            description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
+        }catch {
+            debugPrint("no description overwrite")
+        }
         
+        do{
+            description_suffix = try container.decode(String.self, forKey: .description_suffix)
+        }catch {
+            debugPrint("no description suffix")
+        }
         last_updated = try container.decode(String.self, forKey: .last_updated)
         
         lastfm_stat_count = try container.decode(Int.self, forKey: .lastfm_stat_count)
@@ -179,92 +291,109 @@ class Playlist: Identifiable, Equatable, Codable {
         
         include_recommendations = try container.decode(Bool.self, forKey: .include_recommendations)
         recommendation_sample = try container.decode(Int.self, forKey: .recommendation_sample)
-        include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
+        
+        do{
+            include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
+        }catch {
+            include_library_tracks = false
+//            debugPrint("failed to parse include_library_tracks")
+        }
         
         parts = try container.decode([String].self, forKey: .parts)
         playlist_references = try container.decode([String].self, forKey: .playlist_references)
         shuffle = try container.decode(Bool.self, forKey: .shuffle)
         
-        sort = try container.decode(String.self, forKey: .sort)
+        do{
+            sort = try container.decode(String.self, forKey: .sort)
+        }catch {
+            sort = "release_date"
+//            debugPrint("failed to parse sort value")
+        }
+        
+        do {
+            add_last_month = try container.decode(Bool.self, forKey: .add_last_month)
+        }catch {
+            add_last_month = false
+//            debugPrint("failed to parse add last month")
+        }
+        
+        do {
+            add_this_month = try container.decode(Bool.self, forKey: .add_this_month)
+        }catch {
+            add_this_month = false
+//            debugPrint("failed to parse add this month")
+        }
+        
+        do {
+            day_boundary = try container.decode(Int.self, forKey: .day_boundary)
+        }catch {
+            day_boundary = 21
+//            debugPrint("failed to parse day boundary")
+        }
+        
+        do{
+            chart_range = try LastFmRange(rawValue: container.decode(String.self, forKey: .chart_range)) ?? LastFmRange.month
+        }catch {
+            chart_range = .halfyear
+//            debugPrint("failed to parse chart_range")
+        }
+     
+        do{
+            chart_limit = try container.decode(Int.self, forKey: .chart_limit)
+        }catch {
+            chart_limit = 50
+//            debugPrint("failed to parse chart_limit")
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.uri, forKey: .uri)
+        try container.encode(self.username, forKey: .username)
+        
+        try container.encode(self.type, forKey: .type)
+        
+        try container.encode(self.include_recommendations, forKey: .include_recommendations)
+        try container.encode(self.recommendation_sample, forKey: .recommendation_sample)
+        try container.encode(self.include_library_tracks, forKey: .include_library_tracks)
+        
+        try container.encode(self.parts, forKey: .parts)
+        try container.encode(self.playlist_references, forKey: .playlist_references)
+        try container.encode(self.shuffle, forKey: .shuffle)
+        
+        try container.encode(self.sort, forKey: .sort)
+        try container.encode(self.description_overwrite, forKey: .description_overwrite)
+        try container.encode(self.description_suffix, forKey: .description_suffix)
+        
+        try container.encode(self.last_updated, forKey: .last_updated)
+        
+        try container.encode(self.lastfm_stat_count, forKey: .lastfm_stat_count)
+        try container.encode(self.lastfm_stat_album_count, forKey: .lastfm_stat_album_count)
+        try container.encode(self.lastfm_stat_artist_count, forKey: .lastfm_stat_artist_count)
+        
+        try container.encode(self.lastfm_stat_percent, forKey: .lastfm_stat_percent)
+        try container.encode(self.lastfm_stat_album_percent, forKey: .lastfm_stat_album_percent)
+        try container.encode(self.lastfm_stat_artist_percent, forKey: .lastfm_stat_artist_percent)
+        
+        try container.encode(self.lastfm_stat_last_refresh, forKey: .lastfm_stat_last_refresh)
+        
+        try container.encode(self.add_last_month, forKey: .add_last_month)
+        try container.encode(self.add_this_month, forKey: .add_this_month)
+        try container.encode(self.day_boundary, forKey: .day_boundary)
+        
+        try container.encode(self.chart_range, forKey: .chart_range)
+        try container.encode(self.chart_limit, forKey: .chart_limit)
     }
     
 }
 
-class RecentsPlaylist: Playlist {
-    
-    //MARK: Properties
-    
-    var add_last_month: Bool
-    var add_this_month: Bool
-    var day_boundary: Int
-    
-    private enum CodingKeys: String, CodingKey { case add_last_month; case add_this_month; case day_boundary }
-    
-    //MARK: Initialization
-    
-    init(name: String,
-         username: String = "NO USER",
-         
-         add_last_month: Bool = false,
-         add_this_month: Bool = false,
-         day_boundary: Int = 14){
-
-        self.add_last_month = add_last_month
-        self.add_this_month = add_this_month
-        self.day_boundary = day_boundary
-        
-        super.init(name: name, username: username)
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        add_last_month = try container.decode(Bool.self, forKey: .add_last_month)
-        add_this_month = try container.decode(Bool.self, forKey: .add_this_month)
-        day_boundary = try container.decode(Int.self, forKey: .day_boundary)
-        
-        try super.init(from: decoder)
-    }
-}
-
-enum LastFmRange: String, Decodable {
+enum LastFmRange: String, Codable {
     case overall = "OVERALL"
     case week = "WEEK"
     case month = "MONTH"
     case quarter = "QUARTER"
     case halfyear = "HALFYEAR"
     case year = "YEAR"
-}
-
-class LastFMChartPlaylist: Playlist {
-    
-    //MARK: Properties
-    
-    var chart_range: LastFmRange
-    var chart_limit: Int
-    
-    private enum CodingKeys: String, CodingKey { case chart_range; case chart_limit }
-    
-    //MARK: Initialization
-    
-    init(name: String,
-         username: String = "NO USER",
-         
-         chart_range: LastFmRange = .overall,
-         chart_limit: Int = 10){
-
-        self.chart_range = chart_range
-        self.chart_limit = chart_limit
-        
-        super.init(name: name, username: username)
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        chart_range = try LastFmRange(rawValue: container.decode(String.self, forKey: .chart_range))!
-        chart_limit = try container.decode(Int.self, forKey: .chart_limit)
-        
-        try super.init(from: decoder)
-    }
 }
