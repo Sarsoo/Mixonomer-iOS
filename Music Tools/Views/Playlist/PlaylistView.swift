@@ -26,6 +26,8 @@ struct PlaylistView: View {
         }
     }
     
+    var chartSize = CGSize(width:140, height:220);
+    
     var body: some View {
         Form {
             Section(header: Text("Stats")){
@@ -74,13 +76,13 @@ struct PlaylistView: View {
                         title: "Tracks",
                         legend:"Listening",
                         style: chartStyle,
-                        form: ChartForm.medium)
+                        form: chartSize)
                     PieChartView(
                         data: [Double(self.playlist.lastfm_stat_album_percent), Double(100 - self.playlist.lastfm_stat_album_percent)],
                         title: "Albums",
                         legend:"Listening",
                         style: chartStyle,
-                        form: ChartForm.medium)
+                        form: chartSize)
                     Spacer()
                 }
                 PieChartView(
@@ -88,7 +90,7 @@ struct PlaylistView: View {
                     title: "Artists",
                     legend:"Listening",
                     style: chartStyle,
-                    form: ChartForm.medium)
+                    form: chartSize)
             }
             
             Section(header: Text("Options")){
