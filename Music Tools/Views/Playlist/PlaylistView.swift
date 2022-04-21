@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftUIRefresh
 import SwiftyJSON
 import SwiftUICharts
 
@@ -201,7 +200,7 @@ struct PlaylistView: View {
             
         }
         .navigationBarTitle(Text(playlist.name), displayMode: .inline)
-        .pullToRefresh(isShowing: $isRefreshing) {
+        .refreshable {
             self.refreshPlaylist()
         }
     }

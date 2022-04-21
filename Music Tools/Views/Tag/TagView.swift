@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftUIRefresh
 import SwiftyJSON
 import SwiftUICharts
 
@@ -96,7 +95,7 @@ struct TagView: View {
                 }),
                     title: self.tag.name,
                     legend: "Scrobbles", style: chartStyle,
-                    form: ChartForm.medium,
+                    form: CGSize(width: 250, height: 300),
                     cornerImage: Image(systemName: "music.note")
                 )
                 .padding()
@@ -110,7 +109,7 @@ struct TagView: View {
                 }
             }
         }.listStyle(GroupedListStyle())
-        .pullToRefresh(isShowing: $isRefreshing) {
+        .refreshable {
             self.refreshTag()
         }
         .navigationBarTitle(Text(tag.name))

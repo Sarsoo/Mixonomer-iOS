@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import SwiftUIRefresh
 import Alamofire
 import SwiftyJSON
 

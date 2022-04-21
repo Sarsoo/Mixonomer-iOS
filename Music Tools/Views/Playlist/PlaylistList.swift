@@ -26,7 +26,7 @@ struct PlaylistList: View {
                             let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
-                            }
+                            } 
                         }
                         
                         self.liveUser.playlists.remove(atOffsets: indexSet)
@@ -35,7 +35,8 @@ struct PlaylistList: View {
                     Text("No Playlists")
                 }
             }
-            .pullToRefresh(isShowing: self.$liveUser.isRefreshingPlaylists) {
+            .refreshable
+            {
                 self.liveUser.refreshPlaylists()
             }
             .navigationBarTitle(Text("Playlists 📻"))

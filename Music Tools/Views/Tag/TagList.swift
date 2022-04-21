@@ -35,7 +35,7 @@ struct TagList: View {
                     Text("No Tags")
                 }
             }
-            .pullToRefresh(isShowing: self.$liveUser.isRefreshingTags) {
+            .refreshable {
                 self.liveUser.refreshTags()
             }
             .navigationBarTitle(Text("Tags 🎷"))

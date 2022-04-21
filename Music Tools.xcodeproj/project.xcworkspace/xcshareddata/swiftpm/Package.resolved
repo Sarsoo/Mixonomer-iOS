@@ -1,61 +1,41 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Alamofire",
-        "repositoryURL": "https://github.com/alamofire/alamofire.git",
-        "state": {
-          "branch": null,
-          "revision": "0c8cb78d05b6d067ee331c05058ff4dedcb45ffa",
-          "version": "5.0.0"
-        }
-      },
-      {
-        "package": "SwiftUICharts",
-        "repositoryURL": "https://github.com/apppear/chartview",
-        "state": {
-          "branch": null,
-          "revision": "04989ad159380290a74729dbce1d39d64b893ab2",
-          "version": "1.4.9"
-        }
-      },
-      {
-        "package": "KeychainAccess",
-        "repositoryURL": "https://github.com/kishikawakatsumi/keychainaccess",
-        "state": {
-          "branch": null,
-          "revision": "b920ad7df3c73189dcdd4aa05c540849b2010dbf",
-          "version": "4.1.0"
-        }
-      },
-      {
-        "package": "Introspect",
-        "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
-        "state": {
-          "branch": null,
-          "revision": "de5c32c15ae169cfcb27397ffb2734dcd0e1e6d5",
-          "version": "0.1.0"
-        }
-      },
-      {
-        "package": "SwiftUIRefresh",
-        "repositoryURL": "https://github.com/siteline/swiftuirefresh",
-        "state": {
-          "branch": null,
-          "revision": "6939ec13efa866eb9f556f5de7f0e06f5d7f2761",
-          "version": "0.0.2"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/swiftyjson/swiftyjson",
-        "state": {
-          "branch": null,
-          "revision": "2b6054efa051565954e1d2b9da831680026cd768",
-          "version": "5.0.0"
-        }
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alamofire/alamofire.git",
+      "state" : {
+        "revision" : "0c8cb78d05b6d067ee331c05058ff4dedcb45ffa",
+        "version" : "5.0.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "chartview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apppear/chartview",
+      "state" : {
+        "revision" : "04989ad159380290a74729dbce1d39d64b893ab2",
+        "version" : "1.4.9"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/keychainaccess",
+      "state" : {
+        "revision" : "b920ad7df3c73189dcdd4aa05c540849b2010dbf",
+        "version" : "4.1.0"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftyjson/swiftyjson",
+      "state" : {
+        "revision" : "2b6054efa051565954e1d2b9da831680026cd768",
+        "version" : "5.0.0"
+      }
+    }
+  ],
+  "version" : 2
 }
