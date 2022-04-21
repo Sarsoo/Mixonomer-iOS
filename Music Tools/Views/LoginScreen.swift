@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import KeychainAccess
 
 struct LoginScreen: View {
     
@@ -29,6 +30,12 @@ struct LoginScreen: View {
             SecureField("Password", text: $password)
             HStack {
                 Button(action: {
+                    
+                    let keychain = Keychain(service: "xyz.sarsoo.music.login")
+                    
+                    keychain["username"] = username
+                    keychain["password"] = password
+                    
                     self.liveUser.loggedIn = true
                 }) {
                     Text("Log In")

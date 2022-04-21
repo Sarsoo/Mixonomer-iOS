@@ -56,7 +56,17 @@ struct RequestBuilder {
 
 struct ApiRequestDefaults {
     static let authMethod: AuthMethod = .basic
-    static let domain: String = "https://music.sarsoo.xyz/"
+    static var domain: String { get {
+        
+        let default_url = "https://music.sarsoo.xyz/"
+        
+        switch getenv("MTOOLS_SERVER") {
+            case .none:
+                return default_url
+            case .some(let url):
+                return String(utf8String: url) ?? default_url
+        }
+    } }
 }
 
 protocol ApiRequest {
