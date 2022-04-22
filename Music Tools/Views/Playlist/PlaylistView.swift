@@ -199,7 +199,7 @@ struct PlaylistView: View {
             }
             
         }
-        .navigationBarTitle(Text(playlist.name), displayMode: .inline)
+        .navigationBarTitle(Text(playlist.name))
         .refreshable {
             self.refreshPlaylist()
         }

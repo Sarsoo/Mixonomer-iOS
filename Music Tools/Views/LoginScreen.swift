@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ToastUI
 import KeychainAccess
 
 struct LoginScreen: View {
@@ -15,6 +16,9 @@ struct LoginScreen: View {
     
     @State private var username: String = ""
     @State private var password: String = ""
+    
+    @State private var showingToast = false
+    @State private var toastText = ""
     
     var body: some View {
         VStack {
@@ -36,7 +40,25 @@ struct LoginScreen: View {
                     keychain["username"] = username
                     keychain["password"] = password
                     
-                    self.liveUser.loggedIn = true
+                    let api = UserApi.getUser
+                    RequestBuilder.buildRequest(apiRequest: api)
+                        .validate()
+                        .responseData { response in
+                            
+                            switch response.result {
+                            case .success:
+                                makingRequest = false
+                                self.liveUser.loggedIn = true
+                            case .failure:
+                                makingRequest = false
+                                
+                                keychain["username"] = nil
+                                keychain["password"] = nil
+                                
+                                toastText = "Login Failed"
+                                showingToast = true
+                            }
+                        }
                 }) {
                     Text("Log In")
                 }
@@ -45,6 +67,11 @@ struct LoginScreen: View {
                     Text("Register")
                 }
             }
+            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+                ToastView(toastText)
+                    .toastViewStyle(.failure)
+            }
+            .toastDimmedBackground(false)
         }
         .padding()
     }

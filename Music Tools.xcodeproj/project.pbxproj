@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10C8D29281302050018AE12 /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = A10C8D28281302050018AE12 /* ToastUI */; };
 		E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = E906F7F32414019C004E1E31 /* NetworkPersister.swift */; };
 		E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E906F7F624143AA7004E1E31 /* SwiftUICharts */; };
 		E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E934AC98240DD0E4009869F4 /* AddTagSheet.swift */; };
@@ -108,6 +109,7 @@
 				E97AF45923FC50EC00635494 /* SwiftyJSON in Frameworks */,
 				E98254D923FB53780056D9D3 /* Alamofire in Frameworks */,
 				E97AF45E23FC83AF00635494 /* KeychainAccess in Frameworks */,
+				A10C8D29281302050018AE12 /* ToastUI in Frameworks */,
 				E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +291,7 @@
 				E97AF45823FC50EC00635494 /* SwiftyJSON */,
 				E97AF45D23FC83AF00635494 /* KeychainAccess */,
 				E906F7F624143AA7004E1E31 /* SwiftUICharts */,
+				A10C8D28281302050018AE12 /* ToastUI */,
 			);
 			productName = "Music Tools";
 			productReference = E9EA690723F9A5430012C3E8 /* Music Tools.app */;
@@ -367,6 +370,7 @@
 				E97AF45723FC50EC00635494 /* XCRemoteSwiftPackageReference "swiftyjson" */,
 				E97AF45C23FC83AF00635494 /* XCRemoteSwiftPackageReference "keychainaccess" */,
 				E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */,
+				A10C8D27281302050018AE12 /* XCRemoteSwiftPackageReference "ToastUI" */,
 			);
 			productRefGroup = E9EA690823F9A5430012C3E8 /* Products */;
 			projectDirPath = "";
@@ -768,6 +772,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A10C8D27281302050018AE12 /* XCRemoteSwiftPackageReference "ToastUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/quanshousio/ToastUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apppear/chartview";
@@ -803,6 +815,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A10C8D28281302050018AE12 /* ToastUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A10C8D27281302050018AE12 /* XCRemoteSwiftPackageReference "ToastUI" */;
+			productName = ToastUI;
+		};
 		E906F7F624143AA7004E1E31 /* SwiftUICharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E906F7F524143AA7004E1E31 /* XCRemoteSwiftPackageReference "chartview" */;

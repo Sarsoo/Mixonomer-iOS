@@ -35,6 +35,15 @@
         "revision" : "2b6054efa051565954e1d2b9da831680026cd768",
         "version" : "5.0.0"
       }
+    },
+    {
+      "identity" : "toastui",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/quanshousio/ToastUI",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b064788dd92a64fbd01208a65af10beded99062c"
+      }
     }
   ],
   "version" : 2
