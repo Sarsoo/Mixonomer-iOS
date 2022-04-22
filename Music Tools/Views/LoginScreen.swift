@@ -47,10 +47,8 @@ struct LoginScreen: View {
                             
                             switch response.result {
                             case .success:
-                                makingRequest = false
                                 self.liveUser.loggedIn = true
                             case .failure:
-                                makingRequest = false
                                 
                                 keychain["username"] = nil
                                 keychain["password"] = nil
