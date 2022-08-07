@@ -18,7 +18,7 @@ struct SettingsList: View {
             List{
                 Section {
                     Button(action: {
-                        if let url = URL(string: "https://music.sarsoo.xyz") {
+                        if let url = URL(string: "https://mixonomer.sarsoo.xyz") {
                             UIApplication.shared.open(url)
                         }
                     }) {

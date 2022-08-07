@@ -58,7 +58,7 @@ struct ApiRequestDefaults {
     static let authMethod: AuthMethod = .basic
     static var domain: String { get {
         
-        let default_url = "https://music.sarsoo.xyz/"
+        let default_url = "https://mixonomer.sarsoo.xyz/"
         
         switch getenv("MTOOLS_SERVER") {
             case .none:
