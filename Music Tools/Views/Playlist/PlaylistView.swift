@@ -1,6 +1,6 @@
 //
 //  PlaylistView.swift
-//  Music Tools
+//  Mixonomer
 //
 //  Created by Andy Pack on 16/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
@@ -25,7 +25,7 @@ struct PlaylistView: View {
         }
     }
     
-    var chartSize = CGSize(width:140, height:220);
+    var chartSize = CGSize(width:210, height:250);
     
     var body: some View {
         Form {
@@ -66,8 +66,8 @@ struct PlaylistView: View {
                     Text("Refresh")
                 }
             }
-            
-            VStack {
+        
+            ScrollView(.horizontal){
                 HStack {
                     Spacer()
                     PieChartView(
@@ -76,20 +76,24 @@ struct PlaylistView: View {
                         legend:"Listening",
                         style: chartStyle,
                         form: chartSize)
+                    Spacer(minLength: 20)
                     PieChartView(
                         data: [Double(self.playlist.lastfm_stat_album_percent), Double(100 - self.playlist.lastfm_stat_album_percent)],
                         title: "Albums",
                         legend:"Listening",
                         style: chartStyle,
                         form: chartSize)
+                    Spacer(minLength: 20)
+                    PieChartView(
+                        data: [Double(self.playlist.lastfm_stat_artist_percent), Double(100 - self.playlist.lastfm_stat_artist_percent)],
+                        title: "Artists",
+                        legend:"Listening",
+                        style: chartStyle,
+                        form: chartSize)
                     Spacer()
                 }
-                PieChartView(
-                    data: [Double(self.playlist.lastfm_stat_artist_percent), Double(100 - self.playlist.lastfm_stat_artist_percent)],
-                    title: "Artists",
-                    legend:"Listening",
-                    style: chartStyle,
-                    form: chartSize)
+                .padding([.vertical], 20)
+                .padding([.horizontal], 10)
             }
             
             Section(header: Text("Options")){
@@ -264,7 +268,13 @@ struct PlaylistView: View {
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         PlaylistView(playlist: .constant(
-            Playlist(name: "playlist name", username: "username")
+            Playlist(name: "playlist name",
+                     username: "username",
+                     lastfm_stat_percent: 30,
+                     lastfm_stat_album_percent: 40,
+                     lastfm_stat_artist_percent: 80
+                    )
         ))
+        
     }
 }

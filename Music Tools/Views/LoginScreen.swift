@@ -1,6 +1,6 @@
 //
 //  LoginScreen.swift
-//  Music Tools
+//  Mixonomer
 //
 //  Created by Andy Pack on 17/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
@@ -28,7 +28,7 @@ struct LoginScreen: View {
                 .cornerRadius(18)
                 .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                 .padding(.bottom, 20)
-            Text("Sarsoo Music Tools")
+            Text("Sarsoo's Mixonomer")
                 .font(.largeTitle)
             TextField("Username", text: $username)
             SecureField("Password", text: $password)

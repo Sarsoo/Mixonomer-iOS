@@ -1,6 +1,6 @@
 //
 //  User.swift
-//  Music Tools
+//  Mixonomer
 //
 //  Created by Andy Pack on 18/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.

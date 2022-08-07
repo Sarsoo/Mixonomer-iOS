@@ -1,6 +1,6 @@
-# Music Tools iOS
+# Mixonomer iOS
 
-iOS client for [Music Tools](https://music.sarsoo.xyz) ([Source](https://github.com/sarsoo/Music-Tools)), using it to learn swift.
+iOS client for [Mixonomer](https://music.sarsoo.xyz) ([Source](https://github.com/sarsoo/Mixonomer)), using it to learn swift.
 
 Using SwiftUI for the main app UI. Hanging SwiftUI on a hosting controller for log in/register.
 

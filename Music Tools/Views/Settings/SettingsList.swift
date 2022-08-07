@@ -1,6 +1,6 @@
 //
 //  SettingsList.swift
-//  Music Tools
+//  Mixonomer
 //
 //  Created by Andy Pack on 20/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
@@ -53,14 +53,14 @@ struct SettingsList: View {
                         }
                 ) {
                     Button(action: {
-                        if let url = URL(string: "https://github.com/sarsoo/music-tools") {
+                        if let url = URL(string: "https://github.com/sarsoo/Mixonomer") {
                             UIApplication.shared.open(url)
                         }
                     }) {
                         Text("Server Source")
                     }
                     Button(action: {
-                        if let url = URL(string: "https://github.com/sarsoo/music-tools-ios") {
+                        if let url = URL(string: "https://github.com/sarsoo/Mixonomer-ios") {
                             UIApplication.shared.open(url)
                         }
                     }) {
