@@ -13,6 +13,8 @@ import KeychainAccess
 
 public enum AuthMethod {
     case basic
+    case jwt
+    case none
     
     func auth(headers: Alamofire.HTTPHeaders?) -> Alamofire.HTTPHeaders {
         switch self {
@@ -22,6 +24,18 @@ public enum AuthMethod {
             let keychain = Keychain(service: "xyz.sarsoo.music.login")
             txHeaders.add(.authorization(username: keychain["username"] ?? "", password: keychain["password"] ?? ""))
             return txHeaders
+            
+        case .jwt:
+            var txHeaders = headers ?? HTTPHeaders()
+            
+            let keychain = Keychain(service: "xyz.sarsoo.music.login")
+            txHeaders.add(.authorization(bearerToken: keychain["jwt"] ?? ""))
+            return txHeaders
+            
+        case .none:
+            let txHeaders = headers ?? HTTPHeaders()
+            
+            return txHeaders
         }
     }
 }
@@ -29,7 +43,15 @@ public enum AuthMethod {
 struct RequestBuilder {
     static func buildRequest(apiRequest: ApiRequest) -> Alamofire.DataRequest {
         
+        print(apiRequest.authMethod)
+        print(apiRequest.headers)
+        print(apiRequest.httpMethod)
+        
         let txHeaders = apiRequest.authMethod?.auth(headers: apiRequest.headers)
+        
+        print(txHeaders)
+        print(apiRequest.parameters)
+        print(apiRequest.domain + apiRequest.path)
         
         if apiRequest.parameters != nil {
             if apiRequest.parameterType != nil {
@@ -55,7 +77,7 @@ struct RequestBuilder {
 }
 
 struct ApiRequestDefaults {
-    static let authMethod: AuthMethod = .basic
+    static let authMethod: AuthMethod = .jwt
     static var domain: String { get {
         
         let default_url = "https://mixonomer.sarsoo.xyz/"

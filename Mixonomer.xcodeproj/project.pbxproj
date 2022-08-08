@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A10C8D29281302050018AE12 /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = A10C8D28281302050018AE12 /* ToastUI */; };
+		A11AC70628A188AE00645043 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11AC70528A188AE00645043 /* AuthApi.swift */; };
 		E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = E906F7F32414019C004E1E31 /* NetworkPersister.swift */; };
 		E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E906F7F624143AA7004E1E31 /* SwiftUICharts */; };
 		E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E934AC98240DD0E4009869F4 /* AddTagSheet.swift */; };
@@ -40,8 +41,8 @@
 		E9EA691123F9A54A0012C3E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9EA691023F9A54A0012C3E8 /* Assets.xcassets */; };
 		E9EA691423F9A54B0012C3E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9EA691323F9A54B0012C3E8 /* Preview Assets.xcassets */; };
 		E9EA691723F9A54B0012C3E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9EA691523F9A54B0012C3E8 /* LaunchScreen.storyboard */; };
-		E9EA692223F9A54B0012C3E8 /* Music_ToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA692123F9A54B0012C3E8 /* Music_ToolsTests.swift */; };
-		E9EA692D23F9A54B0012C3E8 /* Music_ToolsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA692C23F9A54B0012C3E8 /* Music_ToolsUITests.swift */; };
+		E9EA692223F9A54B0012C3E8 /* MixonomerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA692123F9A54B0012C3E8 /* MixonomerTests.swift */; };
+		E9EA692D23F9A54B0012C3E8 /* MixonomerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA692C23F9A54B0012C3E8 /* MixonomerUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A146915A28118F940052999D /* Music Tools.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Music Tools.entitlements"; sourceTree = "<group>"; };
+		A11AC70528A188AE00645043 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
+		A146915A28118F940052999D /* Mixonomer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mixonomer.entitlements; sourceTree = "<group>"; };
 		E906F7F32414019C004E1E31 /* NetworkPersister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPersister.swift; sourceTree = "<group>"; };
 		E934AC98240DD0E4009869F4 /* AddTagSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagSheet.swift; sourceTree = "<group>"; };
 		E971F8B8245462D500B543B6 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -85,7 +87,7 @@
 		E9E30C2C23FEAB0200574EEF /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		E9E30C3023FEAF2B00574EEF /* TagObjList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagObjList.swift; sourceTree = "<group>"; };
 		E9E30C3223FF255C00574EEF /* SettingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsList.swift; sourceTree = "<group>"; };
-		E9EA690723F9A5430012C3E8 /* Music Tools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Tools.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9EA690723F9A5430012C3E8 /* Mixonomer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mixonomer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9EA690A23F9A5430012C3E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E9EA690C23F9A5430012C3E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E9EA690E23F9A5430012C3E8 /* AppSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSkeleton.swift; sourceTree = "<group>"; };
@@ -93,11 +95,11 @@
 		E9EA691323F9A54B0012C3E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E9EA691623F9A54B0012C3E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E9EA691823F9A54B0012C3E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E9EA691D23F9A54B0012C3E8 /* Music ToolsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Music ToolsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E9EA692123F9A54B0012C3E8 /* Music_ToolsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music_ToolsTests.swift; sourceTree = "<group>"; };
+		E9EA691D23F9A54B0012C3E8 /* MixonomerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixonomerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9EA692123F9A54B0012C3E8 /* MixonomerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixonomerTests.swift; sourceTree = "<group>"; };
 		E9EA692323F9A54B0012C3E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E9EA692823F9A54B0012C3E8 /* Music ToolsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Music ToolsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E9EA692C23F9A54B0012C3E8 /* Music_ToolsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music_ToolsUITests.swift; sourceTree = "<group>"; };
+		E9EA692823F9A54B0012C3E8 /* MixonomerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MixonomerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9EA692C23F9A54B0012C3E8 /* MixonomerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixonomerUITests.swift; sourceTree = "<group>"; };
 		E9EA692E23F9A54B0012C3E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,6 +152,7 @@
 				E97AF45A23FC748D00635494 /* UserApi.swift */,
 				E9E30C2523FEA4EF00574EEF /* TagApi.swift */,
 				E906F7F32414019C004E1E31 /* NetworkPersister.swift */,
+				A11AC70528A188AE00645043 /* AuthApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -211,9 +214,9 @@
 		E9EA68FE23F9A5430012C3E8 = {
 			isa = PBXGroup;
 			children = (
-				E9EA690923F9A5430012C3E8 /* Music Tools */,
-				E9EA692023F9A54B0012C3E8 /* Music ToolsTests */,
-				E9EA692B23F9A54B0012C3E8 /* Music ToolsUITests */,
+				E9EA690923F9A5430012C3E8 /* Mixonomer */,
+				E9EA692023F9A54B0012C3E8 /* MixonomerTests */,
+				E9EA692B23F9A54B0012C3E8 /* MixonomerUITests */,
 				E9EA690823F9A5430012C3E8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -221,17 +224,17 @@
 		E9EA690823F9A5430012C3E8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E9EA690723F9A5430012C3E8 /* Music Tools.app */,
-				E9EA691D23F9A54B0012C3E8 /* Music ToolsTests.xctest */,
-				E9EA692823F9A54B0012C3E8 /* Music ToolsUITests.xctest */,
+				E9EA690723F9A5430012C3E8 /* Mixonomer.app */,
+				E9EA691D23F9A54B0012C3E8 /* MixonomerTests.xctest */,
+				E9EA692823F9A54B0012C3E8 /* MixonomerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E9EA690923F9A5430012C3E8 /* Music Tools */ = {
+		E9EA690923F9A5430012C3E8 /* Mixonomer */ = {
 			isa = PBXGroup;
 			children = (
-				A146915A28118F940052999D /* Music Tools.entitlements */,
+				A146915A28118F940052999D /* Mixonomer.entitlements */,
 				E98254C623FA25280056D9D3 /* Application */,
 				E9EA691023F9A54A0012C3E8 /* Assets.xcassets */,
 				E9EA691823F9A54B0012C3E8 /* Info.plist */,
@@ -241,7 +244,7 @@
 				E98254C023F9FFDD0056D9D3 /* Views */,
 				E971F8B8245462D500B543B6 /* Router.swift */,
 			);
-			path = "Music Tools";
+			path = Mixonomer;
 			sourceTree = "<group>";
 		};
 		E9EA691223F9A54B0012C3E8 /* Preview Content */ = {
@@ -252,30 +255,30 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		E9EA692023F9A54B0012C3E8 /* Music ToolsTests */ = {
+		E9EA692023F9A54B0012C3E8 /* MixonomerTests */ = {
 			isa = PBXGroup;
 			children = (
-				E9EA692123F9A54B0012C3E8 /* Music_ToolsTests.swift */,
+				E9EA692123F9A54B0012C3E8 /* MixonomerTests.swift */,
 				E9EA692323F9A54B0012C3E8 /* Info.plist */,
 			);
-			path = "Music ToolsTests";
+			path = MixonomerTests;
 			sourceTree = "<group>";
 		};
-		E9EA692B23F9A54B0012C3E8 /* Music ToolsUITests */ = {
+		E9EA692B23F9A54B0012C3E8 /* MixonomerUITests */ = {
 			isa = PBXGroup;
 			children = (
-				E9EA692C23F9A54B0012C3E8 /* Music_ToolsUITests.swift */,
+				E9EA692C23F9A54B0012C3E8 /* MixonomerUITests.swift */,
 				E9EA692E23F9A54B0012C3E8 /* Info.plist */,
 			);
-			path = "Music ToolsUITests";
+			path = MixonomerUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E9EA690623F9A5430012C3E8 /* Music Tools */ = {
+		E9EA690623F9A5430012C3E8 /* Mixonomer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E9EA693123F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music Tools" */;
+			buildConfigurationList = E9EA693123F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Mixonomer" */;
 			buildPhases = (
 				E9EA690323F9A5430012C3E8 /* Sources */,
 				E9EA690423F9A5430012C3E8 /* Frameworks */,
@@ -285,7 +288,7 @@
 			);
 			dependencies = (
 			);
-			name = "Music Tools";
+			name = Mixonomer;
 			packageProductDependencies = (
 				E98254D823FB53780056D9D3 /* Alamofire */,
 				E97AF45823FC50EC00635494 /* SwiftyJSON */,
@@ -294,12 +297,12 @@
 				A10C8D28281302050018AE12 /* ToastUI */,
 			);
 			productName = "Music Tools";
-			productReference = E9EA690723F9A5430012C3E8 /* Music Tools.app */;
+			productReference = E9EA690723F9A5430012C3E8 /* Mixonomer.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E9EA691C23F9A54B0012C3E8 /* Music ToolsTests */ = {
+		E9EA691C23F9A54B0012C3E8 /* MixonomerTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E9EA693423F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music ToolsTests" */;
+			buildConfigurationList = E9EA693423F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "MixonomerTests" */;
 			buildPhases = (
 				E9EA691923F9A54B0012C3E8 /* Sources */,
 				E9EA691A23F9A54B0012C3E8 /* Frameworks */,
@@ -310,14 +313,14 @@
 			dependencies = (
 				E9EA691F23F9A54B0012C3E8 /* PBXTargetDependency */,
 			);
-			name = "Music ToolsTests";
+			name = MixonomerTests;
 			productName = "Music ToolsTests";
-			productReference = E9EA691D23F9A54B0012C3E8 /* Music ToolsTests.xctest */;
+			productReference = E9EA691D23F9A54B0012C3E8 /* MixonomerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E9EA692723F9A54B0012C3E8 /* Music ToolsUITests */ = {
+		E9EA692723F9A54B0012C3E8 /* MixonomerUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E9EA693723F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music ToolsUITests" */;
+			buildConfigurationList = E9EA693723F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "MixonomerUITests" */;
 			buildPhases = (
 				E9EA692423F9A54B0012C3E8 /* Sources */,
 				E9EA692523F9A54B0012C3E8 /* Frameworks */,
@@ -328,9 +331,9 @@
 			dependencies = (
 				E9EA692A23F9A54B0012C3E8 /* PBXTargetDependency */,
 			);
-			name = "Music ToolsUITests";
+			name = MixonomerUITests;
 			productName = "Music ToolsUITests";
-			productReference = E9EA692823F9A54B0012C3E8 /* Music ToolsUITests.xctest */;
+			productReference = E9EA692823F9A54B0012C3E8 /* MixonomerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -356,7 +359,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E9EA690223F9A5430012C3E8 /* Build configuration list for PBXProject "Music Tools" */;
+			buildConfigurationList = E9EA690223F9A5430012C3E8 /* Build configuration list for PBXProject "Mixonomer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -376,9 +379,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E9EA690623F9A5430012C3E8 /* Music Tools */,
-				E9EA691C23F9A54B0012C3E8 /* Music ToolsTests */,
-				E9EA692723F9A54B0012C3E8 /* Music ToolsUITests */,
+				E9EA690623F9A5430012C3E8 /* Mixonomer */,
+				E9EA691C23F9A54B0012C3E8 /* MixonomerTests */,
+				E9EA692723F9A54B0012C3E8 /* MixonomerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -429,6 +432,7 @@
 				E9E30C2A23FEAA3A00574EEF /* TagRow.swift in Sources */,
 				E9CCD5BB2454C57300B5CD6C /* PlaylistList.swift in Sources */,
 				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
+				A11AC70628A188AE00645043 /* AuthApi.swift in Sources */,
 				E9EA690F23F9A5430012C3E8 /* AppSkeleton.swift in Sources */,
 				E98254BD23F9B7A90056D9D3 /* Playlist.swift in Sources */,
 				E97AF46723FD650800635494 /* AddPlaylistSheet.swift in Sources */,
@@ -447,7 +451,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9EA692223F9A54B0012C3E8 /* Music_ToolsTests.swift in Sources */,
+				E9EA692223F9A54B0012C3E8 /* MixonomerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,7 +459,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9EA692D23F9A54B0012C3E8 /* Music_ToolsUITests.swift in Sources */,
+				E9EA692D23F9A54B0012C3E8 /* MixonomerUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,12 +468,12 @@
 /* Begin PBXTargetDependency section */
 		E9EA691F23F9A54B0012C3E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E9EA690623F9A5430012C3E8 /* Music Tools */;
+			target = E9EA690623F9A5430012C3E8 /* Mixonomer */;
 			targetProxy = E9EA691E23F9A54B0012C3E8 /* PBXContainerItemProxy */;
 		};
 		E9EA692A23F9A54B0012C3E8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E9EA690623F9A5430012C3E8 /* Music Tools */;
+			target = E9EA690623F9A5430012C3E8 /* Mixonomer */;
 			targetProxy = E9EA692923F9A54B0012C3E8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -606,17 +610,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Music Tools/Music Tools.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Mixonomer/Mixonomer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Music\\ Tools/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Mixonomer/Preview\\ Content";
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Music Tools/Info.plist";
+				INFOPLIST_FILE = Mixonomer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "xyz.sarsoo.Music-Tools";
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.sarsoo.Mixonomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
@@ -628,17 +632,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "Music Tools/Music Tools.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Mixonomer/Mixonomer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "Music\\ Tools/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Mixonomer/Preview\\ Content";
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Music Tools/Info.plist";
+				INFOPLIST_FILE = Mixonomer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "xyz.sarsoo.Music-Tools";
+				PRODUCT_BUNDLE_IDENTIFIER = xyz.sarsoo.Mixonomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
@@ -654,7 +658,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				INFOPLIST_FILE = "Music ToolsTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -664,7 +668,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Music Tools.app/Music Tools";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mixonomer.app/Mixonomer";
 			};
 			name = Debug;
 		};
@@ -676,7 +680,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				INFOPLIST_FILE = "Music ToolsTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -686,7 +690,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Music Tools.app/Music Tools";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mixonomer.app/Mixonomer";
 			};
 			name = Release;
 		};
@@ -733,7 +737,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E9EA690223F9A5430012C3E8 /* Build configuration list for PBXProject "Music Tools" */ = {
+		E9EA690223F9A5430012C3E8 /* Build configuration list for PBXProject "Mixonomer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9EA692F23F9A54B0012C3E8 /* Debug */,
@@ -742,7 +746,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E9EA693123F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music Tools" */ = {
+		E9EA693123F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Mixonomer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9EA693223F9A54B0012C3E8 /* Debug */,
@@ -751,7 +755,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E9EA693423F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music ToolsTests" */ = {
+		E9EA693423F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "MixonomerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9EA693523F9A54B0012C3E8 /* Debug */,
@@ -760,7 +764,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E9EA693723F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "Music ToolsUITests" */ = {
+		E9EA693723F9A54B0012C3E8 /* Build configuration list for PBXNativeTarget "MixonomerUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E9EA693823F9A54B0012C3E8 /* Debug */,

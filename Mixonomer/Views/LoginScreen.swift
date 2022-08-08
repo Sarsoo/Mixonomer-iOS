@@ -9,6 +9,7 @@
 import SwiftUI
 import ToastUI
 import KeychainAccess
+import SwiftyJSON
 
 struct LoginScreen: View {
     
@@ -40,18 +41,35 @@ struct LoginScreen: View {
                     keychain["username"] = username
                     keychain["password"] = password
                     
-                    let api = UserApi.getUser
+                    print(username)
+                    print(password)
+                    
+                    let api = AuthApi.token(username: username, password: password)
                     RequestBuilder.buildRequest(apiRequest: api)
                         .validate()
-                        .responseData { response in
+                        .responseJSON { response in
                             
                             switch response.result {
                             case .success:
+                                
+                                guard let data = response.data else {
+                                    fatalError("error getting token")
+                                }
+
+                                guard let json = try? JSON(data: data) else {
+                                    fatalError("error parsing reponse")
+                                }
+                                    
+                                let token = json["token"].stringValue
+                                
+                                keychain["jwt"] = token
                                 self.liveUser.loggedIn = true
+                                
                             case .failure:
                                 
                                 keychain["username"] = nil
                                 keychain["password"] = nil
+                                keychain["jwt"] = nil
                                 
                                 toastText = "Login Failed"
                                 showingToast = true
