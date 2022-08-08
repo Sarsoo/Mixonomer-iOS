@@ -39,10 +39,7 @@ struct LoginScreen: View {
                     let keychain = Keychain(service: "xyz.sarsoo.music.login")
                     
                     keychain["username"] = username
-                    keychain["password"] = password
-                    
-                    print(username)
-                    print(password)
+//                    keychain["password"] = password
                     
                     let api = AuthApi.token(username: username, password: password)
                     RequestBuilder.buildRequest(apiRequest: api)

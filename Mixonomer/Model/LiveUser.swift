@@ -44,27 +44,40 @@ class LiveUser: ObservableObject {
         
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            
+            switch response.result {
+            case .success:
         
-            guard let data = response.data else {
-                fatalError("error getting playlists")
-            }
+                guard let data = response.data else {
+                    fatalError("error getting playlists")
+                }
 
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
+                guard let json = try? JSON(data: data) else {
+                    fatalError("error parsing reponse")
+                }
+                    
+                let playlists = json["playlists"].arrayValue
                 
-            let playlists = json["playlists"].arrayValue
-            
-            // update state
-            self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-            
-            self.isRefreshingPlaylists = false
-            
-            let encoder = JSONEncoder()
-            do {
-                UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
-            } catch {
-               print("error encoding playlists: \(error)")
+                // update state
+                self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                
+                self.isRefreshingPlaylists = false
+                
+                let encoder = JSONEncoder()
+                do {
+                    UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
+                } catch {
+                   print("error encoding playlists: \(error)")
+                }
+                
+            case .failure:
+                
+                switch response.response?.statusCode {
+                case 401:
+                    self.loggedIn = false
+                case _:
+                    print("error")
+                }
             }
         }
     }

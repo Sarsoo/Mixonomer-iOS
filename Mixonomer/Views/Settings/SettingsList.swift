@@ -29,6 +29,7 @@ struct SettingsList: View {
                         do {
                             try keychain.remove("username")
                             try keychain.remove("password")
+                            try keychain.remove("jwt")
                             
                             self.liveUser.loggedIn = false
                             

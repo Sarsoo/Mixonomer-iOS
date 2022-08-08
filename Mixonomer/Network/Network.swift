@@ -43,15 +43,7 @@ public enum AuthMethod {
 struct RequestBuilder {
     static func buildRequest(apiRequest: ApiRequest) -> Alamofire.DataRequest {
         
-        print(apiRequest.authMethod)
-        print(apiRequest.headers)
-        print(apiRequest.httpMethod)
-        
         let txHeaders = apiRequest.authMethod?.auth(headers: apiRequest.headers)
-        
-        print(txHeaders)
-        print(apiRequest.parameters)
-        print(apiRequest.domain + apiRequest.path)
         
         if apiRequest.parameters != nil {
             if apiRequest.parameterType != nil {
