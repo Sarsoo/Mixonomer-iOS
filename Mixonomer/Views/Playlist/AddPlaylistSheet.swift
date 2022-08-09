@@ -11,6 +11,7 @@ import SwiftyJSON
 
 struct AddPlaylistSheet: View {
     
+    @EnvironmentObject var liveUser: LiveUser
     @State private var selectedType = 0
     @State private var name = ""
     @State private var errorMessage = ""
@@ -92,11 +93,21 @@ struct AddPlaylistSheet: View {
         let api = PlaylistApi.newPlaylist(name: self.name,
                                           type: PlaylistType(rawValue: selectedType) ?? .defaultPlaylist)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            self.playlists.append(playlist)
-            self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
-            self.isLoading = false
-            self.presentationMode.wrappedValue.dismiss()
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+            
+                self.playlists.append(playlist)
+                self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                
+                self.isLoading = false
+                self.presentationMode.wrappedValue.dismiss()
+                
+            case _:
+                break
+            }
         }
     }
 }

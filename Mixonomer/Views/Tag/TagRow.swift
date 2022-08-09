@@ -11,6 +11,7 @@ import SwiftyJSON
 
 struct TagRow: View {
     
+    @EnvironmentObject var liveUser: LiveUser
     @Binding var tag: Tag
     @State private var showingNetworkError = false
     
@@ -29,10 +30,13 @@ struct TagRow: View {
                     RequestBuilder.buildRequest(apiRequest: api)
                         .validate()
                         .responseJSON{ response in
-                            switch response.result {
-                            case .success:
+                            
+                            self.liveUser.checkNetworkResponse(response: response)
+                            
+                            switch response.response?.statusCode {
+                            case 200, 201:
                                 break
-                            case .failure:
+                            case _:
                                 self.showingNetworkError = true
                             }
                         }

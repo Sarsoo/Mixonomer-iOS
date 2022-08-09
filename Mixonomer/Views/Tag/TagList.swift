@@ -26,6 +26,14 @@ struct TagList: View {
                             let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
+                                self.liveUser.checkNetworkResponse(response: response)
+                                
+                                switch response.response?.statusCode {
+                                case 200, 201:
+                                    break
+                                case _:
+                                    break
+                                }
                             }
                         }
                         

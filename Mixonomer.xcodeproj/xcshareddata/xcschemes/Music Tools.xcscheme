@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E9EA690623F9A5430012C3E8"
-               BuildableName = "Music Tools.app"
+               BuildableName = "Mixonomer.app"
                BlueprintName = "Mixonomer"
                ReferencedContainer = "container:Mixonomer.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E9EA691C23F9A54B0012C3E8"
-               BuildableName = "Music ToolsTests.xctest"
+               BuildableName = "MixonomerTests.xctest"
                BlueprintName = "MixonomerTests"
                ReferencedContainer = "container:Mixonomer.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E9EA692723F9A54B0012C3E8"
-               BuildableName = "Music ToolsUITests.xctest"
+               BuildableName = "MixonomerUITests.xctest"
                BlueprintName = "MixonomerUITests"
                ReferencedContainer = "container:Mixonomer.xcodeproj">
             </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E9EA690623F9A5430012C3E8"
-            BuildableName = "Music Tools.app"
+            BuildableName = "Mixonomer.app"
             BlueprintName = "Mixonomer"
             ReferencedContainer = "container:Mixonomer.xcodeproj">
          </BuildableReference>
@@ -74,7 +74,7 @@
          <EnvironmentVariable
             key = "MTOOLS_SERVER"
             value = "http://127.0.0.1:5000/"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
@@ -89,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E9EA690623F9A5430012C3E8"
-            BuildableName = "Music Tools.app"
+            BuildableName = "Mixonomer.app"
             BlueprintName = "Mixonomer"
             ReferencedContainer = "container:Mixonomer.xcodeproj">
          </BuildableReference>

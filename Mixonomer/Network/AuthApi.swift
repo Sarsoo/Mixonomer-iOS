@@ -12,7 +12,7 @@ import SwiftyJSON
 
 
 public enum AuthApi {
-    case token(username: String, password: String)
+    case token(username: String, password: String, expiry: Int)
 }
 
 extension AuthApi: ApiRequest {
@@ -37,8 +37,8 @@ extension AuthApi: ApiRequest {
     
     var parameters: JSON? {
         switch self {
-        case .token(let username, let password):
-            return JSON(["username": username, "password": password])
+        case .token(let username, let password, let expiry):
+            return JSON(["username": username, "password": password, "expiry": expiry])
         }
     }
     
@@ -55,34 +55,5 @@ extension AuthApi: ApiRequest {
     
     var authMethod: AuthMethod? {
         return AuthMethod.none
-    }
-    
-    static func fromJSON(playlist: Data) -> Playlist? {
-        
-        let decoder = JSONDecoder()
-        do {
-            let playlist = try decoder.decode(Playlist.self, from: playlist)
-            return playlist
-        } catch {
-            print(error)
-        }
-        return nil
-    }
-    
-    static func fromJSON(playlist: JSON) -> Playlist? {
-        
-        let _json = playlist.rawString()?.data(using: .utf8)
-        
-        if let data = _json {
-            let decoder = JSONDecoder()
-            do {
-                let playlist = try decoder.decode(Playlist.self, from: data)
-                return playlist
-            } catch {
-                print(error)
-            }
-        }
-        print(playlist)
-        return nil
     }
 }

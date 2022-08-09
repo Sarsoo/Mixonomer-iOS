@@ -12,6 +12,7 @@ import SwiftUICharts
 
 struct TagView: View {
     
+    @EnvironmentObject var liveUser: LiveUser
     @Binding var tag: Tag
     
     @State private var isRefreshing = false
@@ -119,6 +120,14 @@ struct TagView: View {
         let api = TagApi.runTag(tag_id: tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+                break
+            case _:
+                break
+            }
         }
         //TODO: do better error checking
     }
@@ -127,6 +136,14 @@ struct TagView: View {
         let api = TagApi.updateTag(tag_id: tag.tag_id, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+                break
+            case _:
+                break
+            }
         }
         //TODO: do better error checking
     }
@@ -134,17 +151,28 @@ struct TagView: View {
     func refreshTag() {
         let api = TagApi.getTag(tag_id: self.tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            guard let data = response.data else {
-                fatalError("error getting tag")
+            
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+                
+                guard let data = response.data else {
+                    fatalError("error getting tag")
+                }
+                
+                guard let json = try? JSON(data: data) else {
+                    fatalError("error parsing reponse")
+                }
+                let _tag = TagApi.fromJSON(tag: json["tag"])
+                if let tag = _tag {
+                    self.tag = tag
+                }
+                
+            case _:
+                break
             }
             
-            guard let json = try? JSON(data: data) else {
-                fatalError("error parsing reponse")
-            }
-            let _tag = TagApi.fromJSON(tag: json["tag"])
-            if let tag = _tag {
-                self.tag = tag
-            }
             self.isRefreshing = false
         }
         //TODO: do better error checking

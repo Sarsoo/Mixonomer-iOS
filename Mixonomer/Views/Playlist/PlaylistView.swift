@@ -12,6 +12,7 @@ import SwiftUICharts
 
 struct PlaylistView: View {
     
+    @EnvironmentObject var liveUser: LiveUser
     @Binding var playlist: Playlist
     
     @State private var showingSheet = false
@@ -214,10 +215,13 @@ struct PlaylistView: View {
         RequestBuilder.buildRequest(apiRequest: api)
             .validate()
             .responseJSON{ response in
-                switch response.result {
-                case .success:
+                
+                self.liveUser.checkNetworkResponse(response: response)
+                
+                switch response.response?.statusCode {
+                case 200, 201:
                     break
-                case .failure:
+                case _:
                     self.showingNetworkError = true
                 }
         }
@@ -228,6 +232,14 @@ struct PlaylistView: View {
         let api = PlaylistApi.refreshStats(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+                break
+            case _:
+                break
+            }
         }
         //TODO: do better error checking
     }
@@ -241,10 +253,13 @@ struct PlaylistView: View {
     func updatePlaylist(updates: JSON) {
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            switch response.result {
-            case .success:
+            
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
                 debugPrint("success")
-            case .failure:
+            case _:
                 debugPrint("error")
             }
         }
@@ -254,11 +269,22 @@ struct PlaylistView: View {
     func refreshPlaylist() {
         let api = PlaylistApi.getPlaylist(name: self.playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            guard let data = response.data else {
-                fatalError("error getting playlist")
+            
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+                
+                guard let data = response.data else {
+                    fatalError("error getting playlist")
+                }
+                
+                self.playlist = PlaylistApi.fromJSON(playlist: data)!
+                
+            case _:
+                break
             }
             
-            self.playlist = PlaylistApi.fromJSON(playlist: data)!
             self.isRefreshing = false
         }
         //TODO: do better error checking

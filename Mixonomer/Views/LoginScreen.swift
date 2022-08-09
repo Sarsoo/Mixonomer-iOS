@@ -41,13 +41,13 @@ struct LoginScreen: View {
                     keychain["username"] = username
 //                    keychain["password"] = password
                     
-                    let api = AuthApi.token(username: username, password: password)
+                    let api = AuthApi.token(username: username, password: password, expiry: 604800)
                     RequestBuilder.buildRequest(apiRequest: api)
                         .validate()
                         .responseJSON { response in
                             
-                            switch response.result {
-                            case .success:
+                            switch response.response?.statusCode {
+                            case 200, 201:
                                 
                                 guard let data = response.data else {
                                     fatalError("error getting token")
@@ -62,7 +62,7 @@ struct LoginScreen: View {
                                 keychain["jwt"] = token
                                 self.liveUser.loggedIn = true
                                 
-                            case .failure:
+                            case _:
                                 
                                 keychain["username"] = nil
                                 keychain["password"] = nil

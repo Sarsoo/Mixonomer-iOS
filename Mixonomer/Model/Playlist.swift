@@ -117,10 +117,10 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
     func updatePlaylist(updates: JSON) {
         let api = PlaylistApi.updatePlaylist(name: self.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            switch response.result {
-            case .success:
+            switch response.response?.statusCode {
+            case 200, 201:
                 break
-            case .failure:
+            case _:
                 debugPrint("error: \(self.name), \(updates)")
             }
         }

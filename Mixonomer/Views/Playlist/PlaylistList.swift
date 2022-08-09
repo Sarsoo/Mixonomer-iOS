@@ -25,7 +25,14 @@ struct PlaylistList: View {
                         indexSet.forEach { index in
                             let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                self.liveUser.checkNetworkResponse(response: response)
                                 
+                                switch response.response?.statusCode {
+                                case 200, 201:
+                                    break
+                                case _:
+                                    break
+                                }
                             } 
                         }
                         

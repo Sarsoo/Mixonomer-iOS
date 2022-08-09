@@ -11,6 +11,7 @@ import SwiftyJSON
 
 struct AddTagSheet: View {
     
+    @EnvironmentObject var liveUser: LiveUser
     @State private var name = ""
     @State private var errorMessage = ""
     @State private var isLoading = false
@@ -74,11 +75,21 @@ struct AddTagSheet: View {
         isLoading = true
         let api = TagApi.newTag(tag_id: tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            self.tags.append(tag)
-            self.tags = self.tags.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
             
-            self.isLoading = false
-            self.presentationMode.wrappedValue.dismiss()
+            self.liveUser.checkNetworkResponse(response: response)
+            
+            switch response.response?.statusCode {
+            case 200, 201:
+            
+                self.tags.append(tag)
+                self.tags = self.tags.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                
+                self.isLoading = false
+                self.presentationMode.wrappedValue.dismiss()
+                
+            case _:
+                break
+            }
         }
     }
 }
