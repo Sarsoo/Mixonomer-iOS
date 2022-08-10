@@ -27,5 +27,6 @@ struct Router: View {
 struct Router_Previews: PreviewProvider {
     static var previews: some View {
         Router()
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }
