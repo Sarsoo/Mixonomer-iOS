@@ -13,6 +13,8 @@ struct SettingsList: View {
     
     @EnvironmentObject var liveUser: LiveUser
     
+    @State private var deleteAlertShowing = false
+    
     var body: some View {
         NavigationView {
             List{
@@ -25,20 +27,42 @@ struct SettingsList: View {
                         Text("Launch Web Version")
                     }
                     Button(action: {
-                        let keychain = Keychain(service: "xyz.sarsoo.music.login")
-                        do {
-                            try keychain.remove("username")
-                            try keychain.remove("password")
-                            try keychain.remove("jwt")
-                            
-                            self.liveUser.loggedIn = false
-                            
-                        } catch let error {
-                            debugPrint("Could not clear keychain, \(error)")
-                        }
+                        self.liveUser.logout()
                     }) {
                         Text("Log out")
                     }
+                }
+                Section {
+                    Button(action: {
+                        deleteAlertShowing = true
+                    }) {
+                        Text("Delete Account")
+                            .foregroundColor(.red)
+                    }
+                    .alert("Delete Account", isPresented: $deleteAlertShowing, actions: {
+                        Text("This will irreversibly delete all of your data, are you sure?")
+                        Button("Delete", role: .destructive) {
+                            
+                            let api = UserApi.deleteUser
+                            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                                
+                                if self.liveUser.checkNetworkResponse(response: response) {
+                                    
+                                    self.liveUser.logout()
+                                }
+                                else {
+                                    
+                                }
+                            }
+                            
+                        }
+                        Button("Cancel", role: .cancel) {
+                            deleteAlertShowing = false
+                        }
+                    }, message: {
+                        Text("This is irreversible, are you sure you want to delete your account?")
+                        
+                    })
                 }
                 Section(
                     header:
@@ -70,7 +94,7 @@ struct SettingsList: View {
                 }
             }
             .listStyle(GroupedListStyle())
-            .navigationBarTitle(Text("Settings ⚡️").font(.title))
+            .navigationBarTitle(Text("Settings ⚡️"))
         }
     }
 }
@@ -78,5 +102,6 @@ struct SettingsList: View {
 struct SettingsList_Previews: PreviewProvider {
     static var previews: some View {
         SettingsList()
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

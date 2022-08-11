@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import KeychainAccess
 
 class LiveUser: ObservableObject {
     
@@ -32,6 +33,31 @@ class LiveUser: ObservableObject {
         self.tags = tags
         self.username = username
         self.loggedIn = loggedIn
+    }
+    
+    init(playlists: [Playlist], tags: [Tag], username: String, loggedIn: Bool, user: User) {
+        self.playlists = playlists
+        self.tags = tags
+        self.username = username
+        self.loggedIn = loggedIn
+        self.user = user
+    }
+    
+    func logout() {
+        let keychain = Keychain(service: "xyz.sarsoo.music.login")
+        
+        do {
+            try keychain.remove("username")
+            try keychain.remove("jwt")
+            
+            UserDefaults.standard.removeObject(forKey: "playlists")
+            UserDefaults.standard.removeObject(forKey: "tags")
+            
+            self.loggedIn = false
+            
+        } catch let error {
+            debugPrint("Could not clear keychain, \(error)")
+        }
     }
     
     func updatePlaylist(playlistIn: Playlist) {
@@ -166,7 +192,7 @@ class LiveUser: ObservableObject {
         if let statusCode = response.response?.statusCode {
             switch statusCode {
             case 401: // token has expired
-                self.loggedIn = false
+                self.logout()
                 return false
             case 400..<500:
                 return false

@@ -12,6 +12,7 @@ import SwiftyJSON
 
 public enum UserApi {
     case getUser
+    case deleteUser
 }
 
 extension UserApi: ApiRequest {
@@ -23,6 +24,8 @@ extension UserApi: ApiRequest {
         switch self {
         case .getUser:
             return "api/user"
+        case .deleteUser:
+            return "api/user"
         }
     }
     
@@ -30,6 +33,8 @@ extension UserApi: ApiRequest {
         switch self {
         case .getUser:
             return .get
+        case .deleteUser:
+            return .delete
         }
     }
     
@@ -49,5 +54,42 @@ extension UserApi: ApiRequest {
         return ApiRequestDefaults.authMethod
     }
     
+    static func fromJSON(user: Data) -> User? {
+        
+        let decoder = JSONDecoder()
+        do {
+            let user = try decoder.decode(User.self, from: user)
+            return user
+        } catch {
+            print(error)
+        }
+        return nil
+    }
     
+    static func fromJSON(user: JSON) -> User? {
+        
+        let _json = user.rawString()?.data(using: .utf8)
+        
+        if let data = _json {
+            let decoder = JSONDecoder()
+            do {
+                let user = try decoder.decode(User.self, from: data)
+                return user
+            } catch {
+                print(error)
+            }
+        }
+        return nil
+    }
+    
+    static func fromJSON(user: [JSON]) -> [User] {
+        var _users: [User] = []
+        for dict in user {
+            let _iter = self.fromJSON(user: dict)
+            if let returned = _iter {
+                _users.append(returned)
+            }
+        }
+        return _users
+    }
 }
