@@ -31,12 +31,9 @@ struct TagRow: View {
                         .validate()
                         .responseJSON{ response in
                             
-                            self.liveUser.checkNetworkResponse(response: response)
-                            
-                            switch response.response?.statusCode {
-                            case 200, 201:
-                                break
-                            case _:
+                            if self.liveUser.checkNetworkResponse(response: response) {
+                                
+                            } else {
                                 self.showingNetworkError = true
                             }
                         }
@@ -69,5 +66,6 @@ struct TagRow_Previews: PreviewProvider {
             
             last_updated: "10th Feb")
         ))
+        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

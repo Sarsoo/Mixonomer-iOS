@@ -76,19 +76,16 @@ struct AddTagSheet: View {
         let api = TagApi.newTag(tag_id: tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-            
+            if self.liveUser.checkNetworkResponse(response: response) {
+                
                 self.tags.append(tag)
                 self.tags = self.tags.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
                 
                 self.isLoading = false
                 self.presentationMode.wrappedValue.dismiss()
                 
-            case _:
-                break
+            } else {
+                
             }
         }
     }
@@ -97,5 +94,6 @@ struct AddTagSheet: View {
 struct AddTagSheet_Previews: PreviewProvider {
     static var previews: some View {
         AddTagSheet(tags: .constant([]), username: .constant("username"))
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

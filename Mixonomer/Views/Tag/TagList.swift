@@ -7,11 +7,16 @@
 //
 
 import SwiftUI
+import ToastUI
 
 struct TagList: View {
     
     @EnvironmentObject var liveUser: LiveUser
     @State private var showAdd = false // State for showing add modal view
+    
+    @State private var showingToast = false
+    @State private var toastText = ""
+    @State private var toastSuccess = true
     
     var body: some View {
         NavigationView {
@@ -26,13 +31,11 @@ struct TagList: View {
                             let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
-                                self.liveUser.checkNetworkResponse(response: response)
-                                
-                                switch response.response?.statusCode {
-                                case 200, 201:
-                                    break
-                                case _:
-                                    break
+                                if self.liveUser.checkNetworkResponse(response: response) {
+                                    
+                                }
+                                else {
+                                    
                                 }
                             }
                         }
@@ -44,7 +47,19 @@ struct TagList: View {
                 }
             }
             .refreshable {
-                self.liveUser.refreshTags()
+                self.liveUser.refreshTags(onSuccess: {
+                    
+                    toastText = "Refreshed!"
+                    toastSuccess = true
+                    showingToast = true
+                    
+                }, onFailure: {
+                    
+                    toastText = "Refresh Failed"
+                    toastSuccess = false
+                    showingToast = true
+                    
+                })
             }
             .navigationBarTitle(Text("Tags 🎷"))
             .navigationBarItems(
@@ -59,6 +74,18 @@ struct TagList: View {
                         AddTagSheet(tags: self.$liveUser.tags, username: self.$liveUser.username)
                     }
             )
+            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+                
+                if toastSuccess {
+                    ToastView(toastText)
+                        .toastViewStyle(.success)
+                }
+                else {
+                    ToastView(toastText)
+                        .toastViewStyle(.failure)
+                }
+            }
+            .toastDimmedBackground(false)
         }
     }
 }
@@ -66,5 +93,6 @@ struct TagList: View {
 struct TagList_Previews: PreviewProvider {
     static var previews: some View {
         TagList()
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

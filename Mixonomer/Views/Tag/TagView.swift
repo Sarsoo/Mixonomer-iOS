@@ -120,13 +120,10 @@ struct TagView: View {
         let api = TagApi.runTag(tag_id: tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-                break
-            case _:
-                break
+            if self.liveUser.checkNetworkResponse(response: response) {
+                
+            } else {
+                
             }
         }
         //TODO: do better error checking
@@ -136,13 +133,10 @@ struct TagView: View {
         let api = TagApi.updateTag(tag_id: tag.tag_id, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-                break
-            case _:
-                break
+            if self.liveUser.checkNetworkResponse(response: response) {
+                
+            } else {
+                
             }
         }
         //TODO: do better error checking
@@ -152,10 +146,7 @@ struct TagView: View {
         let api = TagApi.getTag(tag_id: self.tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
+            if self.liveUser.checkNetworkResponse(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting tag")
@@ -169,8 +160,8 @@ struct TagView: View {
                     self.tag = tag
                 }
                 
-            case _:
-                break
+            } else {
+                
             }
             
             self.isRefreshing = false
@@ -196,5 +187,6 @@ struct TagView_Previews: PreviewProvider {
             
             last_updated: "10th Feb")
         ))
+        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

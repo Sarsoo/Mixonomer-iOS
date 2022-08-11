@@ -7,11 +7,16 @@
 //
 
 import SwiftUI
+import ToastUI
 
 struct PlaylistList: View {
     
     @EnvironmentObject var liveUser: LiveUser
     @State private var showAdd = false // State for showing add modal view
+    
+    @State private var showingToast = false
+    @State private var toastText = ""
+    @State private var toastSuccess = true
     
     var body: some View {
         NavigationView {
@@ -25,13 +30,11 @@ struct PlaylistList: View {
                         indexSet.forEach { index in
                             let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-                                self.liveUser.checkNetworkResponse(response: response)
                                 
-                                switch response.response?.statusCode {
-                                case 200, 201:
-                                    break
-                                case _:
-                                    break
+                                if self.liveUser.checkNetworkResponse(response: response) {
+                                    
+                                } else {
+                                    
                                 }
                             } 
                         }
@@ -44,7 +47,19 @@ struct PlaylistList: View {
             }
             .refreshable
             {
-                self.liveUser.refreshPlaylists()
+                self.liveUser.refreshPlaylists(onSuccess: {
+                    
+                    toastText = "Refreshed!"
+                    toastSuccess = true
+                    showingToast = true
+                    
+                }, onFailure: {
+                    
+                    toastText = "Refresh Failed"
+                    toastSuccess = false
+                    showingToast = true
+                    
+                })
             }
             .navigationBarTitle(Text("Playlists 📻"))
             .navigationBarItems(trailing:
@@ -55,6 +70,18 @@ struct PlaylistList: View {
                     AddPlaylistSheet(playlists: self.$liveUser.playlists, username: self.$liveUser.username)
                 }
             )
+            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+                
+                if toastSuccess {
+                    ToastView(toastText)
+                        .toastViewStyle(.success)
+                }
+                else {
+                    ToastView(toastText)
+                        .toastViewStyle(.failure)
+                }
+            }
+            .toastDimmedBackground(false)
         }
     }
 }
@@ -62,5 +89,6 @@ struct PlaylistList: View {
 struct PlaylistList_Previews: PreviewProvider {
     static var previews: some View {
         PlaylistList()
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

@@ -144,7 +144,6 @@ extension PlaylistApi: ApiRequest {
                 print(error)
             }
         }
-        print(playlist)
         return nil
     }
     

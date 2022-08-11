@@ -30,7 +30,7 @@ extension TagApi: ApiRequest {
             return "api/tag"
         case .runTag(let tag_id):
             return "api/tag/\(tag_id)/update"
-        case .updateTag(let tag_id):
+        case .updateTag(let tag_id, _):
             return "api/tag/\(tag_id)"
         case .deleteTag(let tag_id):
             return "api/tag/\(tag_id)"
@@ -64,7 +64,7 @@ extension TagApi: ApiRequest {
             return nil
         case .runTag:
             return nil
-        case .updateTag(let _, let updates):
+        case .updateTag(_, let updates):
             return updates
         case .deleteTag:
             return nil

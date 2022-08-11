@@ -28,14 +28,31 @@ struct AppSkeleton: View {
                 }
                 .tag(0)
             
-            TagList()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "tag")
-                        Text("Tags")
-                    }
+            if let user = liveUser.user {
+                if let _ = user.lastfm_username {
+                    TagList()
+                        .tabItem {
+                            VStack {
+                                Image(systemName: "tag")
+                                Text("Tags")
+                            }
+                        }
+                        .tag(1)
                 }
-                .tag(1)
+            }
+            
+            if let user = liveUser.user {
+                if user.type == .admin {
+                    AdminList()
+                        .tabItem( {
+                            VStack {
+                                Image(systemName: "person.badge.key.fill")
+                                Text("Admin")
+                            }
+                        })
+                        .tag(2)
+                }
+            }
             
             SettingsList()
                 .tabItem {
@@ -44,7 +61,7 @@ struct AppSkeleton: View {
                         Text("Settings")
                     }
                 }
-                .tag(2)
+                .tag(3)
             
         }.onAppear {
             self.fetchAll()
@@ -52,6 +69,7 @@ struct AppSkeleton: View {
     }
     
     private func fetchAll() {
+        self.liveUser.refreshUser()
         self.liveUser.refreshPlaylists()
         self.liveUser.refreshTags()
     }
@@ -60,5 +78,6 @@ struct AppSkeleton: View {
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
         AppSkeleton()
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }

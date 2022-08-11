@@ -116,7 +116,7 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
     
     func updatePlaylist(updates: JSON) {
         let api = PlaylistApi.updatePlaylist(name: self.name, updates: updates)
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in          
             switch response.response?.statusCode {
             case 200, 201:
                 break
@@ -269,13 +269,13 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
         do{
             description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
         }catch {
-            debugPrint("no description overwrite")
+//            debugPrint("no description overwrite")
         }
         
         do{
             description_suffix = try container.decode(String.self, forKey: .description_suffix)
         }catch {
-            debugPrint("no description suffix")
+//            debugPrint("no description suffix")
         }
         last_updated = try container.decode(String.self, forKey: .last_updated)
         

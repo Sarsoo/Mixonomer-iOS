@@ -184,6 +184,11 @@ struct LoginScreen: View {
                 .buttonStyle(.bordered)
             }
         }
+        .toast(isPresented: $showingToast, dismissAfter: 3.0){
+            ToastView(toastText)
+                .toastViewStyle(.failure)
+        }
+        .toastDimmedBackground(false)
         .padding()
     }
 }

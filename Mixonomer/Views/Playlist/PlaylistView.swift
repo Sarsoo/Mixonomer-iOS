@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ToastUI
 import SwiftyJSON
 import SwiftUICharts
 
@@ -17,7 +18,11 @@ struct PlaylistView: View {
     
     @State private var showingSheet = false
     @State private var isRefreshing = false
-    @State private var showingNetworkError = false
+    
+    // TOAST
+    @State private var showingToast = false
+    @State private var toastText = ""
+    @State private var toastSuccess = true
     
     var chartStyle: ChartStyle {
         get {
@@ -194,14 +199,18 @@ struct PlaylistView: View {
                     Text("Open")
                 }
             }
-            
-            
-            // alert seems to need to be within list root element
-            // else weird crash on half drag back
-            .alert(isPresented: $showingNetworkError) {
-                Alert(title: Text("Network Error"),
-                      message: Text("Could not refresh playlist"))
+            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+                
+                if toastSuccess {
+                    ToastView(toastText)
+                        .toastViewStyle(.success)
+                }
+                else {
+                    ToastView(toastText)
+                        .toastViewStyle(.failure)
+                }
             }
+            .toastDimmedBackground(false)
             
         }
         .navigationBarTitle(Text(playlist.name))
@@ -216,32 +225,39 @@ struct PlaylistView: View {
             .validate()
             .responseJSON{ response in
                 
-                self.liveUser.checkNetworkResponse(response: response)
+            if self.liveUser.checkNetworkResponse(response: response) {
                 
-                switch response.response?.statusCode {
-                case 200, 201:
-                    break
-                case _:
-                    self.showingNetworkError = true
-                }
+                toastText = "Running!"
+                toastSuccess = true
+                showingToast = true
+                
+            } else {
+                
+                toastText = "Run Request Failed"
+                toastSuccess = false
+                showingToast = true
+            }
         }
-        //TODO: do better error checking
     }
     
     func refreshStats() {
         let api = PlaylistApi.refreshStats(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-                break
-            case _:
-                break
+            if self.liveUser.checkNetworkResponse(response: response) {
+                
+                toastText = "Refreshing Stats!"
+                toastSuccess = true
+                showingToast = true
+                
+            } else {
+             
+                toastText = "Stat Refresh Failed"
+                toastSuccess = false
+                showingToast = true
+                
             }
         }
-        //TODO: do better error checking
     }
     
     func openPlaylist() {
@@ -254,12 +270,9 @@ struct PlaylistView: View {
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
+            if self.liveUser.checkNetworkResponse(response: response) {
                 debugPrint("success")
-            case _:
+            } else {
                 debugPrint("error")
             }
         }
@@ -270,10 +283,7 @@ struct PlaylistView: View {
         let api = PlaylistApi.getPlaylist(name: self.playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.liveUser.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
+            if self.liveUser.checkNetworkResponse(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting playlist")
@@ -281,13 +291,20 @@ struct PlaylistView: View {
                 
                 self.playlist = PlaylistApi.fromJSON(playlist: data)!
                 
-            case _:
-                break
+                toastText = "Refreshed!"
+                toastSuccess = true
+                showingToast = true
+                
+            } else {
+             
+                toastText = "Refresh Failed"
+                toastSuccess = false
+                showingToast = true
+                
             }
             
             self.isRefreshing = false
         }
-        //TODO: do better error checking
     }
 }
 
@@ -301,6 +318,7 @@ struct PlaylistView_Previews: PreviewProvider {
                      lastfm_stat_artist_percent: 80
                     )
         ))
+        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
         
     }
 }

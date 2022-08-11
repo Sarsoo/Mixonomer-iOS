@@ -23,6 +23,8 @@ class User: Identifiable, Decodable {
     var type: UserType
     
     var last_login: String
+    var last_keygen: String
+    
     var spotify_linked: Bool
     var lastfm_username: String?
     
@@ -33,6 +35,7 @@ class User: Identifiable, Decodable {
          type: UserType = .user,
     
          last_login: String,
+         last_keygen: String,
          spotify_linked: Bool,
          lastfm_username: String?){
         
@@ -41,6 +44,7 @@ class User: Identifiable, Decodable {
         self.type = type
         
         self.last_login = last_login
+        self.last_keygen = last_keygen
         self.spotify_linked = spotify_linked
         self.lastfm_username = lastfm_username
     }    

@@ -15,6 +15,7 @@ class LiveUser: ObservableObject {
     @Published var playlists: [Playlist]
     @Published var tags: [Tag]
     @Published var username: String
+    @Published var user: User?
     
     @Published var loggedIn: Bool {
         didSet {
@@ -22,6 +23,7 @@ class LiveUser: ObservableObject {
         }
     }
     
+    @Published var isRefreshingUser = false
     @Published var isRefreshingPlaylists = false
     @Published var isRefreshingTags = false
     
@@ -39,17 +41,48 @@ class LiveUser: ObservableObject {
         self.playlists[index] = playlistIn
     }
     
-    func refreshPlaylists() {
+    func refreshUser(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
+        self.isRefreshingUser = true
+        
+        let api = UserApi.getUser
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            
+            if self.checkNetworkResponse(response: response) {
+                
+                guard let data = response.data else {
+                    fatalError("error getting user")
+                }
+
+                guard let json = try? JSON(data: data) else {
+                    fatalError("error parsing user")
+                }
+                
+                // update state
+                self.user = UserApi.fromJSON(user: json)
+                
+                self.isRefreshingUser = false
+                
+                if let success = onSuccess {
+                    success()
+                }
+                
+            } else {
+                
+                if let failure = onFailure {
+                    failure()
+                }
+            }
+        }
+    }
+    
+    func refreshPlaylists(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingPlaylists = true
         
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-        
+            if self.checkNetworkResponse(response: response) {
+                
                 guard let data = response.data else {
                     fatalError("error getting playlists")
                 }
@@ -65,6 +98,10 @@ class LiveUser: ObservableObject {
                 
                 self.isRefreshingPlaylists = false
                 
+                if let success = onSuccess {
+                    success()
+                }
+                
                 let encoder = JSONEncoder()
                 do {
                     UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
@@ -72,23 +109,23 @@ class LiveUser: ObservableObject {
                    print("error encoding playlists: \(error)")
                 }
                 
-            case _:
-                break
+            } else {
+                
+                if let failure = onFailure {
+                    failure()
+                }
             }
         }
     }
     
-    func refreshTags() {
+    func refreshTags(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingTags = true
         
         let api = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            self.checkNetworkResponse(response: response)
-            
-            switch response.response?.statusCode {
-            case 200, 201:
-        
+            if self.checkNetworkResponse(response: response) {
+                
                 guard let data = response.data else {
                     fatalError("error getting tags")
                 }
@@ -104,6 +141,10 @@ class LiveUser: ObservableObject {
                 
                 self.isRefreshingTags = false
                 
+                if let success = onSuccess {
+                    success()
+                }
+                
                 let encoder = JSONEncoder()
                 do {
                     UserDefaults.standard.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
@@ -111,20 +152,32 @@ class LiveUser: ObservableObject {
                    print("error encoding tags: \(error)")
                 }
                 
-            case _:
-                break
+            } else {
+                
+                if let failure = onFailure {
+                    failure()
+                }
             }
         }
     }
     
-    func checkNetworkResponse(response: AFDataResponse<Any>) {
+    func checkNetworkResponse(response: AFDataResponse<Any>) -> Bool {
         
-        switch response.response?.statusCode {
-        case 401:
-            self.loggedIn = false
-        case _:
-            print("error making request")
+        if let statusCode = response.response?.statusCode {
+            switch statusCode {
+            case 401: // token has expired
+                self.loggedIn = false
+                return false
+            case 400..<500:
+                return false
+            case 500..<600:
+                return false
+            case _: // 200 -> Success
+                return true
+            }
         }
+        
+        return false
     }
     
     func loadUserDefaults() -> LiveUser {

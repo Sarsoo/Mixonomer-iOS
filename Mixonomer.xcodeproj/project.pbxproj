@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A10C8D29281302050018AE12 /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = A10C8D28281302050018AE12 /* ToastUI */; };
 		A11AC70628A188AE00645043 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11AC70528A188AE00645043 /* AuthApi.swift */; };
+		A1DBCDA628A51869002CF730 /* AdminList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DBCDA528A51869002CF730 /* AdminList.swift */; };
 		E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = E906F7F32414019C004E1E31 /* NetworkPersister.swift */; };
 		E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E906F7F624143AA7004E1E31 /* SwiftUICharts */; };
 		E934AC99240DD0E4009869F4 /* AddTagSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E934AC98240DD0E4009869F4 /* AddTagSheet.swift */; };
@@ -65,6 +66,7 @@
 /* Begin PBXFileReference section */
 		A11AC70528A188AE00645043 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
 		A146915A28118F940052999D /* Mixonomer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mixonomer.entitlements; sourceTree = "<group>"; };
+		A1DBCDA528A51869002CF730 /* AdminList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminList.swift; sourceTree = "<group>"; };
 		E906F7F32414019C004E1E31 /* NetworkPersister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPersister.swift; sourceTree = "<group>"; };
 		E934AC98240DD0E4009869F4 /* AddTagSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagSheet.swift; sourceTree = "<group>"; };
 		E971F8B8245462D500B543B6 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -133,6 +135,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A1DBCDA428A5184D002CF730 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				A1DBCDA528A51869002CF730 /* AdminList.swift */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
 		E98254BE23F9BD540056D9D3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +170,7 @@
 		E98254C023F9FFDD0056D9D3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A1DBCDA428A5184D002CF730 /* Admin */,
 				E9E30C3423FF256100574EEF /* Settings */,
 				E9E30C2F23FEACF700574EEF /* Tag */,
 				E9E30C2E23FEACDE00574EEF /* Playlist */,
@@ -431,6 +442,7 @@
 				E9CCD5BD2454C64300B5CD6C /* TagList.swift in Sources */,
 				E9E30C2A23FEAA3A00574EEF /* TagRow.swift in Sources */,
 				E9CCD5BB2454C57300B5CD6C /* PlaylistList.swift in Sources */,
+				A1DBCDA628A51869002CF730 /* AdminList.swift in Sources */,
 				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
 				A11AC70628A188AE00645043 /* AuthApi.swift in Sources */,
 				E9EA690F23F9A5430012C3E8 /* AppSkeleton.swift in Sources */,

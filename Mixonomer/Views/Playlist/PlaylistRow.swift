@@ -31,14 +31,12 @@ struct PlaylistRow: View {
                         .validate()
                         .responseJSON{ response in
                             
-                            self.liveUser.checkNetworkResponse(response: response)
+                        if self.liveUser.checkNetworkResponse(response: response) {
                             
-                            switch response.response?.statusCode {
-                            case 200, 201:
-                                break
-                            case _:
-                                self.showingNetworkError = true
-                            }
+                        }
+                        else {
+                            self.showingNetworkError = true
+                        }
                     }
                 }) {
                     Text("Refresh")
@@ -65,5 +63,6 @@ struct PlaylistRow_Previews: PreviewProvider {
         PlaylistView(playlist: .constant(
             Playlist(name: "playlist name", username: "username")
         ))
+        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
     }
 }
