@@ -50,6 +50,11 @@ class LiveUser: ObservableObject {
             try keychain.remove("username")
             try keychain.remove("jwt")
             
+            playlists.removeAll()
+            tags.removeAll()
+            username = ""
+            user = nil
+            
             UserDefaults.standard.removeObject(forKey: "playlists")
             UserDefaults.standard.removeObject(forKey: "tags")
             

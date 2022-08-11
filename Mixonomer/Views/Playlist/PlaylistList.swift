@@ -20,8 +20,19 @@ struct PlaylistList: View {
     
     var body: some View {
         NavigationView {
+            
             List{
-                if(liveUser.playlists.count > 0){
+                if liveUser.user?.spotify_linked == false {
+                    Text("Spotify isn't linked, login to the web client to pair")
+                    
+                    Button(action: {
+                        UIApplication.shared.open(URL(string: "https://mixonomer.sarsoo.xyz/")!)
+                    }) {
+                        Text("Go-to Mixonomer Web")
+                            .foregroundColor(.blue)
+                    }
+                }
+                else if liveUser.playlists.count > 0 {
                     ForEach(liveUser.playlists.indices, id:\.self) { idx in
                         PlaylistRow(playlist: self.$liveUser.playlists[idx])
                     }
@@ -88,7 +99,11 @@ struct PlaylistList: View {
 
 struct PlaylistList_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistList()
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+        Group {
+            PlaylistList()
+                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            PlaylistList()
+                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User(username: "user", email: nil, last_login: "", last_keygen: "", spotify_linked: false, lastfm_username: nil)))
+        }
     }
 }
