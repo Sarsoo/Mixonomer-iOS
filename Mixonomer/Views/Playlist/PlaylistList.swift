@@ -81,7 +81,7 @@ struct PlaylistList: View {
                     AddPlaylistSheet(playlists: self.$liveUser.playlists, username: self.$liveUser.username)
                 }
             )
-            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+            .toast(isPresented: $showingToast, dismissAfter: 1.0){
                 
                 if toastSuccess {
                     ToastView(toastText)

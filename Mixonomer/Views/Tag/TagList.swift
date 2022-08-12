@@ -74,7 +74,7 @@ struct TagList: View {
                         AddTagSheet(tags: self.$liveUser.tags, username: self.$liveUser.username)
                     }
             )
-            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+            .toast(isPresented: $showingToast, dismissAfter: 1.0){
                 
                 if toastSuccess {
                     ToastView(toastText)

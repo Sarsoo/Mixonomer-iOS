@@ -199,7 +199,7 @@ struct PlaylistView: View {
                     Text("Open")
                 }
             }
-            .toast(isPresented: $showingToast, dismissAfter: 3.0){
+            .toast(isPresented: $showingToast, dismissAfter: 1.0){
                 
                 if toastSuccess {
                     ToastView(toastText)
