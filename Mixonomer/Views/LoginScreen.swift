@@ -183,6 +183,13 @@ struct LoginScreen: View {
                 }
                 .buttonStyle(.bordered)
             }
+            
+            Button(action: {
+                UIApplication.shared.open(URL(string: "https://mixonomer.sarsoo.xyz/privacy")!)
+            }) {
+                Text("Privacy Policy")
+            }
+            .padding(.top, 20)
         }
         .toast(isPresented: $showingToast, dismissAfter: 3.0){
             ToastView(toastText)

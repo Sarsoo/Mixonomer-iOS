@@ -27,6 +27,13 @@ struct SettingsList: View {
                         Text("Launch Web Version")
                     }
                     Button(action: {
+                        if let url = URL(string: "https://mixonomer.sarsoo.xyz/privacy") {
+                            UIApplication.shared.open(url)
+                        }
+                    }) {
+                        Text("Privacy Policy")
+                    }
+                    Button(action: {
                         self.liveUser.logout()
                     }) {
                         Text("Log out")
