@@ -69,9 +69,9 @@ struct AppSkeleton: View {
     }
     
     private func fetchAll() {
-        self.liveUser.refreshUser()
-        self.liveUser.refreshPlaylists()
-        self.liveUser.refreshTags()
+        self.liveUser.refresh_user()
+        self.liveUser.refresh_playlists()
+        self.liveUser.refresh_tags()
     }
 }
 

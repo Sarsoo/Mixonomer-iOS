@@ -53,7 +53,7 @@ struct SettingsList: View {
                             let api = UserApi.deleteUser
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
-                                if self.liveUser.checkNetworkResponse(response: response) {
+                                if self.liveUser.check_network_response(response: response) {
                                     
                                     self.liveUser.logout()
                                 }

@@ -24,9 +24,23 @@ struct PlaylistView: View {
     @State private var toastText = ""
     @State private var toastSuccess = true
     
-    var chartStyle: ChartStyle {
+    var trackChartStyle: ChartStyle {
         get {
-            let _style = ChartStyle(backgroundColor: .white, accentColor: .red, gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.4765, green: 0.5976, blue: 0.7578), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            return _style
+        }
+    }
+    
+    var albumChartStyle: ChartStyle {
+        get {
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.6367, green: 0.2968, blue: 0.4648), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            return _style
+        }
+    }
+    
+    var artistChartStyle: ChartStyle {
+        get {
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.3476, green: 0.5195, blue: 0.3359), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
             return _style
         }
     }
@@ -35,71 +49,76 @@ struct PlaylistView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Stats")){
-                HStack {
-                    Text("Track Count")
-                    Spacer()
-                    Text("\(self.playlist.lastfm_stat_count)")
-                        .font(.title)
-                        .foregroundColor(Color.gray)
-                    Text("\(self.playlist.lastfm_stat_percent_str)")
-                        .font(.body)
-                        .foregroundColor(Color.gray)
+            
+            if liveUser.lastfm_connected() {
+            
+                Section(header: Text("Stats")){
+                    HStack {
+                        Text("Track Count")
+                        Spacer()
+                        Text("\(self.playlist.lastfm_stat_count)")
+                            .font(.title)
+                            .foregroundColor(Color.gray)
+                        Text("\(self.playlist.lastfm_stat_percent_str)")
+                            .font(.body)
+                            .foregroundColor(Color.gray)
+                    }
+                    HStack {
+                        Text("Album Count")
+                        Spacer()
+                        Text("\(self.playlist.lastfm_stat_album_count)")
+                            .font(.title)
+                            .foregroundColor(Color.gray)
+                        Text("\(self.playlist.lastfm_stat_album_percent_str)")
+                            .font(.body)
+                            .foregroundColor(Color.gray)
+                    }
+                    HStack {
+                        Text("Artist Count")
+                        Spacer()
+                        Text("\(self.playlist.lastfm_stat_artist_count)")
+                            .font(.title)
+                            .foregroundColor(Color.gray)
+                        Text("\(self.playlist.lastfm_stat_artist_percent_str)")
+                            .font(.body)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        self.refreshStats()
+                    }){
+                        Text("Refresh")
+                    }
                 }
-                HStack {
-                    Text("Album Count")
-                    Spacer()
-                    Text("\(self.playlist.lastfm_stat_album_count)")
-                        .font(.title)
-                        .foregroundColor(Color.gray)
-                    Text("\(self.playlist.lastfm_stat_album_percent_str)")
-                        .font(.body)
-                        .foregroundColor(Color.gray)
-                }
-                HStack {
-                    Text("Artist Count")
-                    Spacer()
-                    Text("\(self.playlist.lastfm_stat_artist_count)")
-                        .font(.title)
-                        .foregroundColor(Color.gray)
-                    Text("\(self.playlist.lastfm_stat_artist_percent_str)")
-                        .font(.body)
-                        .foregroundColor(Color.gray)
-                }
-                Button(action: {
-                    self.refreshStats()
-                }){
-                    Text("Refresh")
-                }
-            }
         
-            ScrollView(.horizontal){
-                HStack {
-                    Spacer()
-                    PieChartView(
-                        data: [Double(self.playlist.lastfm_stat_percent), Double(100 - self.playlist.lastfm_stat_percent)],
-                        title: "Tracks",
-                        legend:"Listening",
-                        style: chartStyle,
-                        form: chartSize)
-                    Spacer(minLength: 20)
-                    PieChartView(
-                        data: [Double(self.playlist.lastfm_stat_album_percent), Double(100 - self.playlist.lastfm_stat_album_percent)],
-                        title: "Albums",
-                        legend:"Listening",
-                        style: chartStyle,
-                        form: chartSize)
-                    Spacer(minLength: 20)
-                    PieChartView(
-                        data: [Double(self.playlist.lastfm_stat_artist_percent), Double(100 - self.playlist.lastfm_stat_artist_percent)],
-                        title: "Artists",
-                        legend:"Listening",
-                        style: chartStyle,
-                        form: chartSize)
-                    Spacer()
+                ScrollView(.horizontal){
+                    HStack {
+                        Spacer()
+                        PieChartView(
+                            data: [Double(self.playlist.lastfm_stat_percent), Double(100 - self.playlist.lastfm_stat_percent)],
+                            title: "Tracks",
+                            legend:"Listening",
+                            style: trackChartStyle,
+                            form: chartSize)
+                        Spacer(minLength: 20)
+                        PieChartView(
+                            data: [Double(self.playlist.lastfm_stat_album_percent), Double(100 - self.playlist.lastfm_stat_album_percent)],
+                            title: "Albums",
+                            legend:"Listening",
+                            style: albumChartStyle,
+                            form: chartSize)
+                        Spacer(minLength: 20)
+                        PieChartView(
+                            data: [Double(self.playlist.lastfm_stat_artist_percent), Double(100 - self.playlist.lastfm_stat_artist_percent)],
+                            title: "Artists",
+                            legend:"Listening",
+                            style: artistChartStyle,
+                            form: chartSize)
+                        Spacer()
+                    }
+                    .padding([.vertical], 20)
+                    .padding([.horizontal], 10)
                 }
-                .padding([.vertical], 20)
-                .padding([.horizontal], 10)
+                .listRowInsets(EdgeInsets())
             }
             
             Section(header: Text("Options")){
@@ -168,7 +187,7 @@ struct PlaylistView: View {
                 }
             }
             Section(header: Text("Inputs")){
-                NavigationLink(destination: PlaylistInputList(names: self.$playlist.playlist_references, nameType: "Managed Playlists")) {
+                NavigationLink(destination: PlaylistInputList(names: self.$playlist.playlist_references, nameType: "Managed Playlists", type: .MixonomerPlaylists)) {
                     HStack {
                         Text("Managed Playlists")
                         Spacer()
@@ -177,7 +196,7 @@ struct PlaylistView: View {
                     }
                 }
                 
-                NavigationLink(destination: PlaylistInputList(names: self.$playlist.parts, nameType: "Spotify Playlists")) {
+                NavigationLink(destination: PlaylistInputList(names: self.$playlist.parts, nameType: "Spotify Playlists", type: .SpotifyPlaylists)) {
                     HStack {
                         Text("Spotify Playlists")
                         Spacer()
@@ -225,7 +244,7 @@ struct PlaylistView: View {
             .validate()
             .responseJSON{ response in
                 
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 toastText = "Running!"
                 toastSuccess = true
@@ -244,7 +263,7 @@ struct PlaylistView: View {
         let api = PlaylistApi.refreshStats(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 toastText = "Refreshing Stats!"
                 toastSuccess = true
@@ -270,7 +289,7 @@ struct PlaylistView: View {
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 debugPrint("success")
             } else {
                 debugPrint("error")
@@ -283,7 +302,7 @@ struct PlaylistView: View {
         let api = PlaylistApi.getPlaylist(name: self.playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting playlist")

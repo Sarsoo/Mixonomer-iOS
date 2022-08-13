@@ -13,14 +13,21 @@ struct Name: Identifiable, Hashable {
     var name: String
 }
 
+enum PlaylistInputType {
+    case MixonomerPlaylists
+    case SpotifyPlaylists
+}
+
 struct PlaylistInputList: View {
     
     @Binding var names: [String]
     var nameType: String
+    var type: PlaylistInputType
     
-    init(names: Binding<[String]>, nameType: String){
+    init(names: Binding<[String]>, nameType: String, type: PlaylistInputType){
         self.nameType = nameType
         self._names = names
+        self.type = type
     }
     
     var body: some View {
@@ -41,12 +48,14 @@ struct PlaylistInputList: View {
         }
 //        .id(UUID())
         .navigationBarTitle(nameType)
-        .navigationBarItems(trailing:
-            Button(
-                action: {  },
-                label: { Image(systemName: "plus.circle") }
-            )
-        )
+//        .navigationBarItems(trailing:
+//            Button(
+//                action: {
+//                    
+//                },
+//                label: { Image(systemName: "plus.circle") }
+//            )
+//        )
     }
 }
 
@@ -54,6 +63,6 @@ struct PlaylistInputList_Previews: PreviewProvider {
     static var previews: some View {
         PlaylistInputList(names: .constant([
             "name"
-        ]), nameType: "Spotify Playlists")
+        ]), nameType: "Spotify Playlists", type: .MixonomerPlaylists)
     }
 }

@@ -64,12 +64,12 @@ struct TagObjList: View {
             }
         }
         .navigationBarTitle(Text(objType))
-        .navigationBarItems(trailing:
-            Button(
-                action: {  },
-                label: { Image(systemName: "plus.circle") }
-            )
-        )
+//        .navigationBarItems(trailing:
+//            Button(
+//                action: {  },
+//                label: { Image(systemName: "plus.circle") }
+//            )
+//        )
     }
 }
 

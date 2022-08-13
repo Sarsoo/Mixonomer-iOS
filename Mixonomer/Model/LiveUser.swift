@@ -43,6 +43,16 @@ class LiveUser: ObservableObject {
         self.user = user
     }
     
+    func lastfm_connected() -> Bool {
+        if let username = user?.lastfm_username {
+            if username.count > 0 {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
     func logout() {
         let keychain = Keychain(service: "xyz.sarsoo.music.login")
         
@@ -65,20 +75,20 @@ class LiveUser: ObservableObject {
         }
     }
     
-    func updatePlaylist(playlistIn: Playlist) {
+    func update_playlist(playlistIn: Playlist) {
         guard let index = self.playlists.firstIndex(of: playlistIn) else {
             fatalError("\(playlistIn) not found")
         }
         self.playlists[index] = playlistIn
     }
     
-    func refreshUser(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
+    func refresh_user(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingUser = true
         
         let api = UserApi.getUser
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.checkNetworkResponse(response: response) {
+            if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting user")
@@ -106,13 +116,13 @@ class LiveUser: ObservableObject {
         }
     }
     
-    func refreshPlaylists(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
+    func refresh_playlists(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingPlaylists = true
         
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.checkNetworkResponse(response: response) {
+            if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting playlists")
@@ -149,13 +159,13 @@ class LiveUser: ObservableObject {
         }
     }
     
-    func refreshTags(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
+    func refresh_tags(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingTags = true
         
         let api = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.checkNetworkResponse(response: response) {
+            if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting tags")
@@ -192,7 +202,7 @@ class LiveUser: ObservableObject {
         }
     }
     
-    func checkNetworkResponse(response: AFDataResponse<Any>) -> Bool {
+    func check_network_response(response: AFDataResponse<Any>) -> Bool {
         
         if let statusCode = response.response?.statusCode {
             switch statusCode {
@@ -211,7 +221,7 @@ class LiveUser: ObservableObject {
         return false
     }
     
-    func loadUserDefaults() -> LiveUser {
+    func load_user_defaults() -> LiveUser {
         let defaults = UserDefaults.standard
         let decoder = JSONDecoder()
         

@@ -120,7 +120,7 @@ struct TagView: View {
         let api = TagApi.runTag(tag_id: tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
             } else {
                 
@@ -133,7 +133,7 @@ struct TagView: View {
         let api = TagApi.updateTag(tag_id: tag.tag_id, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
             } else {
                 
@@ -146,7 +146,7 @@ struct TagView: View {
         let api = TagApi.getTag(tag_id: self.tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 guard let data = response.data else {
                     fatalError("error getting tag")

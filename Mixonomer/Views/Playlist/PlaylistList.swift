@@ -42,7 +42,7 @@ struct PlaylistList: View {
                             let api = PlaylistApi.deletePlaylist(name: self.liveUser.playlists[index].name)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
-                                if self.liveUser.checkNetworkResponse(response: response) {
+                                if self.liveUser.check_network_response(response: response) {
                                     
                                 } else {
                                     
@@ -58,7 +58,7 @@ struct PlaylistList: View {
             }
             .refreshable
             {
-                self.liveUser.refreshPlaylists(onSuccess: {
+                self.liveUser.refresh_playlists(onSuccess: {
                     
                     toastText = "Refreshed!"
                     toastSuccess = true

@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"] ?? "", loggedIn: false).loadUserDefaults()
+            let liveUser = LiveUser(playlists: [], tags: [], username: keychain["username"] ?? "", loggedIn: false).load_user_defaults()
             
             window.rootViewController = UIHostingController(rootView: contentView.environmentObject(liveUser))
             self.window = window

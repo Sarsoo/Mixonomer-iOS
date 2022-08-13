@@ -76,7 +76,7 @@ struct AddTagSheet: View {
         let api = TagApi.newTag(tag_id: tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 self.tags.append(tag)
                 self.tags = self.tags.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })

@@ -94,7 +94,7 @@ struct AddPlaylistSheet: View {
                                           type: PlaylistType(rawValue: selectedType) ?? .defaultPlaylist)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
-            if self.liveUser.checkNetworkResponse(response: response) {
+            if self.liveUser.check_network_response(response: response) {
                 
                 self.playlists.append(playlist)
                 self.playlists = self.playlists.sorted(by: { $0.name.lowercased() < $1.name.lowercased() })

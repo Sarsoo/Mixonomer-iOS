@@ -31,7 +31,7 @@ struct TagList: View {
                             let api = TagApi.deleteTag(tag_id: self.liveUser.tags[index].tag_id)
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                                 
-                                if self.liveUser.checkNetworkResponse(response: response) {
+                                if self.liveUser.check_network_response(response: response) {
                                     
                                 }
                                 else {
@@ -47,7 +47,7 @@ struct TagList: View {
                 }
             }
             .refreshable {
-                self.liveUser.refreshTags(onSuccess: {
+                self.liveUser.refresh_tags(onSuccess: {
                     
                     toastText = "Refreshed!"
                     toastSuccess = true

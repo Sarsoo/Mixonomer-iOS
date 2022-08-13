@@ -31,7 +31,7 @@ struct TagRow: View {
                         .validate()
                         .responseJSON{ response in
                             
-                            if self.liveUser.checkNetworkResponse(response: response) {
+                            if self.liveUser.check_network_response(response: response) {
                                 
                             } else {
                                 self.showingNetworkError = true
