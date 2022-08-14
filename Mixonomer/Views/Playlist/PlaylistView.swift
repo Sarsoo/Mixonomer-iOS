@@ -329,15 +329,26 @@ struct PlaylistView: View {
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
-        PlaylistView(playlist: .constant(
-            Playlist(name: "playlist name",
-                     username: "username",
-                     lastfm_stat_percent: 30,
-                     lastfm_stat_album_percent: 40,
-                     lastfm_stat_artist_percent: 80
-                    )
-        ))
-        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+        Group {
+            PlaylistView(playlist: .constant(
+                Playlist(name: "playlist name",
+                         username: "username",
+                         lastfm_stat_percent: 30,
+                         lastfm_stat_album_percent: 40,
+                         lastfm_stat_artist_percent: 80
+                        )
+            ))
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            PlaylistView(playlist: .constant(
+                Playlist(name: "playlist name",
+                         username: "username",
+                         lastfm_stat_percent: 30,
+                         lastfm_stat_album_percent: 40,
+                         lastfm_stat_artist_percent: 80
+                        )
+            ))
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User(username: "", email: "", last_login: "", last_keygen: "", spotify_linked: true, lastfm_username: "last.fm")))
+        }
         
     }
 }

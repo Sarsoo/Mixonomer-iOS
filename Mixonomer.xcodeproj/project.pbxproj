@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		A10C8D29281302050018AE12 /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = A10C8D28281302050018AE12 /* ToastUI */; };
 		A11AC70628A188AE00645043 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11AC70528A188AE00645043 /* AuthApi.swift */; };
+		A1AF726F28A84F7D00D317C9 /* AdminApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AF726E28A84F7D00D317C9 /* AdminApi.swift */; };
+		A1AF727128A850AE00D317C9 /* UsersList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AF727028A850AE00D317C9 /* UsersList.swift */; };
+		A1AF727328A9062600D317C9 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AF727228A9062600D317C9 /* UserView.swift */; };
 		A1DBCDA628A51869002CF730 /* AdminList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DBCDA528A51869002CF730 /* AdminList.swift */; };
 		E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */ = {isa = PBXBuildFile; fileRef = E906F7F32414019C004E1E31 /* NetworkPersister.swift */; };
 		E906F7F724143AA7004E1E31 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E906F7F624143AA7004E1E31 /* SwiftUICharts */; };
@@ -66,6 +69,9 @@
 /* Begin PBXFileReference section */
 		A11AC70528A188AE00645043 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
 		A146915A28118F940052999D /* Mixonomer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mixonomer.entitlements; sourceTree = "<group>"; };
+		A1AF726E28A84F7D00D317C9 /* AdminApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminApi.swift; sourceTree = "<group>"; };
+		A1AF727028A850AE00D317C9 /* UsersList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersList.swift; sourceTree = "<group>"; };
+		A1AF727228A9062600D317C9 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		A1DBCDA528A51869002CF730 /* AdminList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminList.swift; sourceTree = "<group>"; };
 		E906F7F32414019C004E1E31 /* NetworkPersister.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPersister.swift; sourceTree = "<group>"; };
 		E934AC98240DD0E4009869F4 /* AddTagSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagSheet.swift; sourceTree = "<group>"; };
@@ -139,6 +145,8 @@
 			isa = PBXGroup;
 			children = (
 				A1DBCDA528A51869002CF730 /* AdminList.swift */,
+				A1AF727028A850AE00D317C9 /* UsersList.swift */,
+				A1AF727228A9062600D317C9 /* UserView.swift */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -163,6 +171,7 @@
 				E9E30C2523FEA4EF00574EEF /* TagApi.swift */,
 				E906F7F32414019C004E1E31 /* NetworkPersister.swift */,
 				A11AC70528A188AE00645043 /* AuthApi.swift */,
+				A1AF726E28A84F7D00D317C9 /* AdminApi.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -436,6 +445,7 @@
 				E98254CA23FA26600056D9D3 /* PlaylistRow.swift in Sources */,
 				E9EA690B23F9A5430012C3E8 /* AppDelegate.swift in Sources */,
 				E906F7F42414019C004E1E31 /* NetworkPersister.swift in Sources */,
+				A1AF727328A9062600D317C9 /* UserView.swift in Sources */,
 				E9E30C3323FF255C00574EEF /* SettingsList.swift in Sources */,
 				E9EA690D23F9A5430012C3E8 /* SceneDelegate.swift in Sources */,
 				E98254DB23FB64740056D9D3 /* Network.swift in Sources */,
@@ -445,6 +455,8 @@
 				A1DBCDA628A51869002CF730 /* AdminList.swift in Sources */,
 				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
 				A11AC70628A188AE00645043 /* AuthApi.swift in Sources */,
+				A1AF726F28A84F7D00D317C9 /* AdminApi.swift in Sources */,
+				A1AF727128A850AE00D317C9 /* UsersList.swift in Sources */,
 				E9EA690F23F9A5430012C3E8 /* AppSkeleton.swift in Sources */,
 				E98254BD23F9B7A90056D9D3 /* Playlist.swift in Sources */,
 				E97AF46723FD650800635494 /* AddPlaylistSheet.swift in Sources */,

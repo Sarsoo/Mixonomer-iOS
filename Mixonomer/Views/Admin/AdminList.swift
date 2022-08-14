@@ -12,8 +12,12 @@ struct AdminList: View {
     var body: some View {
         NavigationView {
             List{
-                Section {
-                    
+                Section(header: Text("Users")) {
+                    NavigationLink(destination: UsersList()) {
+                        HStack {
+                            Text("View Users")
+                        }
+                    }
                 }
             }
             .listStyle(GroupedListStyle())

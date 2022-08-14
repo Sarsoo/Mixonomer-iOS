@@ -28,17 +28,16 @@ struct AppSkeleton: View {
                 }
                 .tag(0)
             
-            if let user = liveUser.user {
-                if let _ = user.lastfm_username {
-                    TagList()
-                        .tabItem {
-                            VStack {
-                                Image(systemName: "tag")
-                                Text("Tags")
-                            }
+            if liveUser.lastfm_connected() {
+                
+                TagList()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "tag")
+                            Text("Tags")
                         }
-                        .tag(1)
-                }
+                    }
+                    .tag(1)
             }
             
             if let user = liveUser.user {

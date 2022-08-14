@@ -69,16 +69,23 @@ class User: Identifiable, Decodable {
             email = try container.decode(String.self, forKey: .email)
         }catch {
             email = nil
-            debugPrint("failed to parse email")
         }
             
         type = try container.decode(UserType.self, forKey: .type)
         
         last_login = try container.decode(String.self, forKey: .last_login)
-        last_keygen = try container.decode(String.self, forKey: .last_keygen)
+        do{
+            last_keygen = try container.decode(String.self, forKey: .last_keygen)
+        }catch {
+            last_keygen = ""
+        }
         
         spotify_linked = try container.decode(Bool.self, forKey: .spotify_linked)
-        lastfm_username = try container.decode(String.self, forKey: .lastfm_username)
+        do{
+            lastfm_username = try container.decode(String.self, forKey: .lastfm_username)
+        }catch {
+            lastfm_username = nil
+        }
     }
     
     func encode(to encoder: Encoder) throws {
