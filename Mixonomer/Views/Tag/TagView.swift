@@ -26,7 +26,7 @@ struct TagView: View {
     }
     
     var body: some View {
-        List {
+        Form {
             Section(header: Text("Stats")){
                 HStack {
                     Text("Count")

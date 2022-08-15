@@ -11,7 +11,7 @@ import SwiftUI
 struct AdminList: View {
     var body: some View {
         NavigationView {
-            List{
+            Form {
                 Section(header: Text("Users")) {
                     NavigationLink(destination: UsersList()) {
                         HStack {
