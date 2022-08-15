@@ -39,6 +39,22 @@ struct SettingsList: View {
                         Text("Log out")
                     }
                 }
+                
+                Section(header: Text("Config")) {
+                    if let spotify_linked = self.liveUser.user?.spotify_linked {
+                        Toggle(isOn: .constant(spotify_linked)) {
+                            Text("Spotify Link")
+                        }
+                        .disabled(true)
+                    }
+//                    HStack {
+//                        Text("Last.fm Username")
+//                        Spacer()
+//
+//                        Text(self.$liveUser.user.lastfm_username ?? .constant(""))
+//                    }
+                }
+                
                 Section {
                     Button(action: {
                         deleteAlertShowing = true

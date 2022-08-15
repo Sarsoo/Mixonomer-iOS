@@ -103,7 +103,7 @@ struct PlaylistList_Previews: PreviewProvider {
             PlaylistList()
                 .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
             PlaylistList()
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User(username: "user", email: nil, last_login: "", last_keygen: "", spotify_linked: false, lastfm_username: nil)))
+                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User()))
         }
     }
 }

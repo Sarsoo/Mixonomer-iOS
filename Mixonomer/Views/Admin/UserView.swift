@@ -55,6 +55,13 @@ struct UserView: View {
                     Text(user.last_keygen)
                         .foregroundColor(.gray)
                 }
+                
+                HStack {
+                    Text("Last Spotify Refresh")
+                    Spacer()
+                    Text(user.last_refreshed)
+                        .foregroundColor(.gray)
+                }
             }
         }
         .navigationBarTitle(Text(user.username))
@@ -63,6 +70,6 @@ struct UserView: View {
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
-        UserView(user: .constant(User(username: "", email: "", last_login: "", last_keygen: "", spotify_linked: true, lastfm_username: nil)))
+        UserView(user: .constant(User()))
     }
 }

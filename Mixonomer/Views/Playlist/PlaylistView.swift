@@ -347,7 +347,7 @@ struct PlaylistView_Previews: PreviewProvider {
                          lastfm_stat_artist_percent: 80
                         )
             ))
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User(username: "", email: "", last_login: "", last_keygen: "", spotify_linked: true, lastfm_username: "last.fm")))
+            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User()))
         }
         
     }
