@@ -29,7 +29,11 @@ class User: Identifiable, Decodable {
     var last_refreshed: String
     
     var spotify_linked: Bool
-    @Published var lastfm_username: String?
+    @Published var lastfm_username: String? {
+        didSet {
+            self.updateUser(updates: JSON(["lastfm_username": self.lastfm_username]))
+        }
+    }
     
     //MARK: Initialization
     
@@ -56,6 +60,19 @@ class User: Identifiable, Decodable {
         self.last_refreshed = last_refreshed
         self.spotify_linked = spotify_linked
         self.lastfm_username = lastfm_username
+    }
+    
+    func updateUser(updates: JSON) {
+        let api = UserApi.updateUser(updates: updates)
+        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+            switch response.response?.statusCode {
+            case 200, 201:
+                break
+            case _:
+                debugPrint("error: \(updates)")
+            }
+        }
+        //TODO: do better error checking
     }
     
     private enum CodingKeys: String, CodingKey {

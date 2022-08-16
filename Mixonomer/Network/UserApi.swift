@@ -12,6 +12,7 @@ import SwiftyJSON
 
 public enum UserApi {
     case getUser
+    case updateUser(updates: JSON)
     case deleteUser
 }
 
@@ -24,6 +25,8 @@ extension UserApi: ApiRequest {
         switch self {
         case .getUser:
             return "api/user"
+        case .updateUser:
+            return "api/user"
         case .deleteUser:
             return "api/user"
         }
@@ -33,17 +36,29 @@ extension UserApi: ApiRequest {
         switch self {
         case .getUser:
             return .get
+        case .updateUser:
+            return .post
         case .deleteUser:
             return .delete
         }
     }
     
     var parameters: JSON? {
-        return nil
+        switch self {
+        case .getUser, .deleteUser:
+            return nil
+        case .updateUser(let updates):
+            return updates
+        }
     }
     
     var parameterType: ParameterEncoder? {
-        return nil
+        switch self {
+        case .getUser, .deleteUser:
+            return nil
+        case .updateUser:
+            return JSONParameterEncoder.default
+        }
     }
     
     var headers: HTTPHeaders? {

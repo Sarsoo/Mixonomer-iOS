@@ -16,7 +16,13 @@ struct SettingsList: View {
     @State private var deleteAlertShowing = false
     
     var body: some View {
-        NavigationView {
+        
+        let spotify_link_bind = Binding<Bool>(get: { liveUser.user?.spotify_linked ?? false},
+                                               set: { newVal in liveUser.user?.spotify_linked = newVal })
+        let lastfm_bind = Binding<String>(get: { liveUser.user?.lastfm_username ?? ""},
+                                          set: { newVal in liveUser.user?.lastfm_username = newVal })
+        
+        return NavigationView {
             List{
                 Section {
                     Button(action: {
@@ -40,19 +46,15 @@ struct SettingsList: View {
                     }
                 }
                 
-                Section(header: Text("Config")) {
-                    if let spotify_linked = self.liveUser.user?.spotify_linked {
-                        Toggle(isOn: .constant(spotify_linked)) {
-                            Text("Spotify Link")
-                        }
-                        .disabled(true)
+                Section(header: Text("Spotify")) {
+                    Toggle(isOn: spotify_link_bind) {
+                        Text("Account Link")
                     }
-//                    HStack {
-//                        Text("Last.fm Username")
-//                        Spacer()
-//
-//                        Text(self.$liveUser.user.lastfm_username ?? .constant(""))
-//                    }
+                    .disabled(true)
+                }
+                
+                Section(header: Text("Last.fm")) {
+                    TextField("Last.fm Username", text: lastfm_bind)
                 }
                 
                 Section {
