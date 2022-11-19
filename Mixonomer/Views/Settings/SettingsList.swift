@@ -19,8 +19,8 @@ struct SettingsList: View {
         
         let spotify_link_bind = Binding<Bool>(get: { liveUser.user?.spotify_linked ?? false},
                                                set: { newVal in liveUser.user?.spotify_linked = newVal })
-        let lastfm_bind = Binding<String>(get: { liveUser.user?.lastfm_username ?? ""},
-                                          set: { newVal in liveUser.user?.lastfm_username = newVal })
+//        let lastfm_bind = Binding<String>(get: { liveUser.user?.lastfm_username ?? ""},
+//                                          set: { newVal in liveUser.user?.lastfm_username = newVal })
         
         return NavigationView {
             List{
@@ -46,16 +46,22 @@ struct SettingsList: View {
                     }
                 }
                 
-                Section(header: Text("Spotify")) {
+                Section(header: Text("Integrations")) {
                     Toggle(isOn: spotify_link_bind) {
-                        Text("Account Link")
+                        Text("Spotify Link")
                     }
                     .disabled(true)
+                    
+//                    NavigationLink("Last.fm Username") {
+//                        List{
+//                            TextField("Username", text: lastfm_bind)
+//                        }
+//                    }
                 }
                 
-                Section(header: Text("Last.fm")) {
-                    TextField("Last.fm Username", text: lastfm_bind)
-                }
+//                Section(header: Text("Last.fm")) {
+//                    TextField("Last.fm Username", text: lastfm_bind)
+//                }
                 
                 Section {
                     Button(action: {
@@ -65,28 +71,23 @@ struct SettingsList: View {
                             .foregroundColor(.red)
                     }
                     .alert("Delete Account", isPresented: $deleteAlertShowing, actions: {
-                        Text("This will irreversibly delete all of your data, are you sure?")
                         Button("Delete", role: .destructive) {
-                            
+
                             let api = UserApi.deleteUser
                             RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-                                
+
                                 if self.liveUser.check_network_response(response: response) {
-                                    
+
                                     self.liveUser.logout()
                                 }
                                 else {
-                                    
+
                                 }
                             }
-                            
-                        }
-                        Button("Cancel", role: .cancel) {
-                            deleteAlertShowing = false
+
                         }
                     }, message: {
                         Text("This is irreversible, are you sure you want to delete your account?")
-                        
                     })
                 }
                 Section(

@@ -26,6 +26,11 @@ public enum PlaylistApi {
     case newPlaylist(name: String, type: PlaylistType)
     case getPlaylist(name: String)
     case refreshStats(name: String)
+    
+    case addPart(name: String, subject: String)
+    case removePart(name: String, subject: String)
+    case addRef(name: String, subject: String)
+    case removeRef(name: String, subject: String)
 }
 
 extension PlaylistApi: ApiRequest {
@@ -49,6 +54,8 @@ extension PlaylistApi: ApiRequest {
             return "api/playlist"
         case .refreshStats:
             return "api/spotfm/playlist/refresh"
+        case .addPart, .removePart, .addRef, .removeRef:
+            return "api/playlist"
         }
     }
     
@@ -68,6 +75,8 @@ extension PlaylistApi: ApiRequest {
             return .get
         case .refreshStats:
             return .get
+        case .addPart, .removePart, .addRef, .removeRef:
+            return .post
         }
     }
     
@@ -89,6 +98,14 @@ extension PlaylistApi: ApiRequest {
             return JSON(["name": name])
         case .refreshStats(let name):
             return JSON(["name": name])
+        case .addPart(let name, let subject):
+            return JSON(["name": name, "subject": subject])
+        case .removePart(let name, let subject):
+            return JSON(["name": name, "subject": subject])
+        case .addRef(let name, let subject):
+            return JSON(["name": name, "subject": subject])
+        case .removeRef(let name, let subject):
+            return JSON(["name": name, "subject": subject])
         }
     }
     
@@ -108,6 +125,8 @@ extension PlaylistApi: ApiRequest {
             return URLEncodedFormParameterEncoder()
         case .refreshStats:
             return URLEncodedFormParameterEncoder()
+        case .addPart, .removePart, .addRef, .removeRef:
+            return JSONParameterEncoder.default
         }
     }
     

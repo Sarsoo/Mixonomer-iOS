@@ -187,7 +187,7 @@ struct PlaylistView: View {
                 }
             }
             Section(header: Text("Inputs")){
-                NavigationLink(destination: PlaylistInputList(names: self.$playlist.playlist_references, nameType: "Managed Playlists", type: .MixonomerPlaylists)) {
+                NavigationLink(destination: ManagedInputList(names: self.$playlist.playlist_references, playlist: self.$playlist)) {
                     HStack {
                         Text("Managed Playlists")
                         Spacer()
@@ -196,7 +196,7 @@ struct PlaylistView: View {
                     }
                 }
                 
-                NavigationLink(destination: PlaylistInputList(names: self.$playlist.parts, nameType: "Spotify Playlists", type: .SpotifyPlaylists)) {
+                NavigationLink(destination: SpotInputList(names: self.$playlist.parts, playlist: self.$playlist)) {
                     HStack {
                         Text("Spotify Playlists")
                         Spacer()

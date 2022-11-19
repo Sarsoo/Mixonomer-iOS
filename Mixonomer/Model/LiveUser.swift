@@ -45,9 +45,7 @@ class LiveUser: ObservableObject {
     
     func lastfm_connected() -> Bool {
         if let username = user?.lastfm_username {
-            if username.count > 0 {
-                return true
-            }
+            return username.count > 0
         }
         
         return false
