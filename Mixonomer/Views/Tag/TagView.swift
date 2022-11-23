@@ -9,6 +9,7 @@
 import SwiftUI
 import SwiftyJSON
 import SwiftUICharts
+import OSLog
 
 struct TagView: View {
     
@@ -149,11 +150,13 @@ struct TagView: View {
             if self.liveUser.check_network_response(response: response) {
                 
                 guard let data = response.data else {
-                    fatalError("error getting tag")
+                    Logger.net.error("failed to get tag from net request")
+                    return
                 }
                 
                 guard let json = try? JSON(data: data) else {
-                    fatalError("error parsing reponse")
+                    Logger.net.error("failed to parse tag")
+                    return
                 }
                 let _tag = TagApi.fromJSON(tag: json["tag"])
                 if let tag = _tag {
@@ -161,7 +164,7 @@ struct TagView: View {
                 }
                 
             } else {
-                
+                Logger.net.error("request failed for refresh tag")
             }
             
             self.isRefreshing = false

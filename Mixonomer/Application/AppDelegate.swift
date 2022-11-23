@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import OSLog
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,3 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension Logger {
+    private static var subsystem = Bundle.main.bundleIdentifier!
+
+    /// Logs the view cycles like viewDidLoad.
+    static let net = Logger(subsystem: subsystem, category: "net")
+    static let parse = Logger(subsystem: subsystem, category: "parse")
+    static let sys = Logger(subsystem: subsystem, category: "sys")
+}

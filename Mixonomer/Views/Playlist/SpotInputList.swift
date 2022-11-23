@@ -8,6 +8,7 @@
 
 import SwiftUI
 import ToastUI
+import OSLog
 
 struct Name: Identifiable, Hashable {
     var id = UUID()
@@ -74,7 +75,7 @@ struct SpotInputList: View {
                             showingToast = true
                         }
                         else {
-                            print("Failed to add playlist: \(response.response?.statusCode ?? 0)")
+                            Logger.net.error("Failed to add playlist: \(response.response?.statusCode ?? 0)")
                             toastText = "Failed to add playlist"
                             toastSuccess = false
                             showingToast = true

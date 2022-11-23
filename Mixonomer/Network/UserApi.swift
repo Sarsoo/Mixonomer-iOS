@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import OSLog
 
 public enum UserApi {
     case getUser
@@ -76,7 +77,7 @@ extension UserApi: ApiRequest {
             let user = try decoder.decode(User.self, from: user)
             return user
         } catch {
-            print(error)
+            Logger.parse.error("error parsing user from json: \(error)")
         }
         return nil
     }
@@ -91,7 +92,7 @@ extension UserApi: ApiRequest {
                 let user = try decoder.decode(User.self, from: data)
                 return user
             } catch {
-                print(error)
+                Logger.parse.error("error parsing user from json: \(error)")
             }
         }
         return nil

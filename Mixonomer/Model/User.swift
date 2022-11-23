@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import OSLog
 
 enum UserType: String, Decodable {
     case user = "user"
@@ -69,7 +70,7 @@ class User: Identifiable, Decodable {
             case 200, 201:
                 break
             case _:
-                debugPrint("error: \(updates)")
+                Logger.net.error("error while updating user: \(updates)")
             }
         }
         //TODO: do better error checking

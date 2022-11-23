@@ -10,6 +10,7 @@ import SwiftUI
 import ToastUI
 import SwiftyJSON
 import SwiftUICharts
+import OSLog
 
 struct PlaylistView: View {
     
@@ -239,6 +240,9 @@ struct PlaylistView: View {
     }
     
     func runPlaylist() {
+        
+        Logger.net.debug("running playlist from view: \(self.playlist.name)")
+        
         let api = PlaylistApi.runPlaylist(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api)
             .validate()
@@ -250,16 +254,23 @@ struct PlaylistView: View {
                 toastSuccess = true
                 showingToast = true
                 
+                Logger.net.debug("playlist run queued from view: \(self.playlist.name)")
+                
             } else {
                 
                 toastText = "Run Request Failed"
                 toastSuccess = false
                 showingToast = true
+                
+                Logger.net.debug("playlist run request failed from view: \(self.playlist.name)")
             }
         }
     }
     
     func refreshStats() {
+        
+        Logger.net.debug("refreshing playlist stats from view: \(self.playlist.name)")
+        
         let api = PlaylistApi.refreshStats(name: playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
@@ -269,43 +280,56 @@ struct PlaylistView: View {
                 toastSuccess = true
                 showingToast = true
                 
+                Logger.net.debug("stat refresh queued from view: \(self.playlist.name)")
+                
             } else {
              
                 toastText = "Stat Refresh Failed"
                 toastSuccess = false
                 showingToast = true
                 
+                Logger.net.debug("stat refresh request failed from view: \(self.playlist.name)")
+                
             }
         }
     }
     
     func openPlaylist() {
+        
+        Logger.sys.debug("attempting to open \(self.playlist.link)")
+        
         if let url = URL(string: self.playlist.link) {
             UIApplication.shared.open(url)
         }
     }
     
     func updatePlaylist(updates: JSON) {
+        
+        Logger.net.debug("updating playlist from view: \(self.playlist.name)")
+        
         let api = PlaylistApi.updatePlaylist(name: playlist.name, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.liveUser.check_network_response(response: response) {
-                debugPrint("success")
+                Logger.net.debug("updated playlist from view")
             } else {
-                debugPrint("error")
+                Logger.net.error("failed to update playlist from view")
             }
         }
-        //TODO: do better error checking
     }
     
     func refreshPlaylist() {
+        
+        Logger.net.debug("Refreshing playlist: \(self.playlist.name)")
+        
         let api = PlaylistApi.getPlaylist(name: self.playlist.name)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.liveUser.check_network_response(response: response) {
                 
                 guard let data = response.data else {
-                    fatalError("error getting playlist")
+                    Logger.net.error("failed to get playlist from net request")
+                    return
                 }
                 
                 self.playlist = PlaylistApi.fromJSON(playlist: data)!
@@ -314,7 +338,11 @@ struct PlaylistView: View {
                 toastSuccess = true
                 showingToast = true
                 
+                Logger.net.debug("Successfully refreshed playlist: \(self.playlist.name)")
+                
             } else {
+                
+                Logger.net.error("request failed for get playlist")
              
                 toastText = "Refresh Failed"
                 toastSuccess = false

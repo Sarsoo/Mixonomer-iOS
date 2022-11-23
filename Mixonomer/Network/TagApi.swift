@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import OSLog
 
 public enum TagApi {
     case getTags
@@ -110,7 +111,7 @@ extension TagApi: ApiRequest {
                 let _tag = try decoder.decode(Tag.self, from: data)
                 return _tag
             } catch {
-                print(error)
+                Logger.parse.error("error parsing tag from json: \(error)")
             }
         }
         return nil

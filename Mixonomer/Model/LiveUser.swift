@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 import KeychainAccess
+import OSLog
 
 class LiveUser: ObservableObject {
     
@@ -54,6 +55,8 @@ class LiveUser: ObservableObject {
     func logout() {
         let keychain = Keychain(service: "xyz.sarsoo.music.login")
         
+        Logger.sys.info("logging user out")
+        
         do {
             try keychain.remove("username")
             try keychain.remove("jwt")
@@ -68,8 +71,10 @@ class LiveUser: ObservableObject {
             
             self.loggedIn = false
             
+            Logger.sys.debug("successfully logged user out")
+            
         } catch let error {
-            debugPrint("Could not clear keychain, \(error)")
+            Logger.sys.error("could not clear keychain, \(error)")
         }
     }
     
@@ -83,17 +88,21 @@ class LiveUser: ObservableObject {
     func refresh_user(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingUser = true
         
+        Logger.sys.info("refreshing user")
+        
         let api = UserApi.getUser
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
-                    fatalError("error getting user")
+                    Logger.net.error("error getting user")
+                    return
                 }
 
                 guard let json = try? JSON(data: data) else {
-                    fatalError("error parsing user")
+                    Logger.parse.error("error parsing user")
+                    return
                 }
                 
                 // update state
@@ -102,12 +111,14 @@ class LiveUser: ObservableObject {
                 self.isRefreshingUser = false
                 
                 if let success = onSuccess {
+                    Logger.sys.debug("successfully refreshed user")
                     success()
                 }
                 
             } else {
                 
                 if let failure = onFailure {
+                    Logger.net.error("failed to refresh user")
                     failure()
                 }
             }
@@ -117,17 +128,21 @@ class LiveUser: ObservableObject {
     func refresh_playlists(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingPlaylists = true
         
+        Logger.sys.info("refreshing playlists")
+
         let api = PlaylistApi.getPlaylists
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
-                    fatalError("error getting playlists")
+                    Logger.net.error("error getting playlists from net request")
+                    return
                 }
 
                 guard let json = try? JSON(data: data) else {
-                    fatalError("error parsing reponse")
+                    Logger.parse.error("error parsing playlists reponse")
+                    return
                 }
                     
                 let playlists = json["playlists"].arrayValue
@@ -138,6 +153,7 @@ class LiveUser: ObservableObject {
                 self.isRefreshingPlaylists = false
                 
                 if let success = onSuccess {
+                    Logger.sys.debug("successfully refreshed playlists")
                     success()
                 }
                 
@@ -145,12 +161,13 @@ class LiveUser: ObservableObject {
                 do {
                     UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
                 } catch {
-                   print("error encoding playlists: \(error)")
+                    Logger.parse.error("error encoding playlists: \(error)")
                 }
                 
             } else {
                 
                 if let failure = onFailure {
+                    Logger.net.error("failed to refresh playlists")
                     failure()
                 }
             }
@@ -159,6 +176,8 @@ class LiveUser: ObservableObject {
     
     func refresh_tags(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
         self.isRefreshingTags = true
+
+        Logger.sys.info("refreshing tags")
         
         let api = TagApi.getTags
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
@@ -166,11 +185,13 @@ class LiveUser: ObservableObject {
             if self.check_network_response(response: response) {
                 
                 guard let data = response.data else {
-                    fatalError("error getting tags")
+                    Logger.net.error("error getting tags")
+                    return
                 }
 
                 guard let json = try? JSON(data: data) else {
-                    fatalError("error parsing reponse")
+                    Logger.parse.error("error parsing tags response")
+                    return
                 }
                     
                 let tags = json["tags"].arrayValue
@@ -181,6 +202,7 @@ class LiveUser: ObservableObject {
                 self.isRefreshingTags = false
                 
                 if let success = onSuccess {
+                    Logger.sys.debug("successfully refreshed tags")
                     success()
                 }
                 
@@ -188,12 +210,13 @@ class LiveUser: ObservableObject {
                 do {
                     UserDefaults.standard.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
                 } catch {
-                   print("error encoding tags: \(error)")
+                    Logger.parse.error("error encoding tags: \(error)")
                 }
                 
             } else {
                 
                 if let failure = onFailure {
+                    Logger.net.error("failed to refresh tags")
                     failure()
                 }
             }
@@ -205,21 +228,28 @@ class LiveUser: ObservableObject {
         if let statusCode = response.response?.statusCode {
             switch statusCode {
             case 401: // token has expired
+                Logger.sys.info("token expired, logging user out")
                 self.logout()
                 return false
             case 400..<500:
+                Logger.net.error("client fault \(statusCode)")
                 return false
             case 500..<600:
+                Logger.net.warning("server fault \(statusCode)")
                 return false
             case _: // 200 -> Success
                 return true
             }
         }
         
+        Logger.net.error("live user failed to access status code to check")
+        
         return false
     }
     
     func load_user_defaults() -> LiveUser {
+        Logger.sys.debug("loading user defaults")
+        
         let defaults = UserDefaults.standard
         let decoder = JSONDecoder()
         
@@ -230,17 +260,19 @@ class LiveUser: ObservableObject {
         do {
             if let _strPlaylists = _strPlaylists {
                 if _strPlaylists.count > 0 {
+                    Logger.sys.debug("reading \(_strPlaylists.count) playlists")
                     self.playlists = (try decoder.decode([Playlist].self, from: _strPlaylists.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
                 }
             }
             
             if let _strTags = _strTags {
                 if _strTags.count > 0 {
+                    Logger.sys.debug("reading \(_strTags.count) tags")
                     self.tags = (try decoder.decode([Tag].self, from: _strTags.data(using: .utf8)!)).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
                 }
             }
         } catch {
-          print("error decoding: \(error)")
+            Logger.parse.error("error parsing user defaults: \(error)")
         }
         
         return self

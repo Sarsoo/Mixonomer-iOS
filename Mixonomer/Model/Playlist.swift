@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SwiftyJSON
+import OSLog
 
 class Playlist: Identifiable, Equatable, Codable, ObservableObject {
     
@@ -121,7 +122,7 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
             case 200, 201:
                 break
             case _:
-                debugPrint("error: \(self.name), \(updates)")
+                Logger.net.error("error: \(self.name), \(updates)")
             }
         }
         //TODO: do better error checking
@@ -261,7 +262,7 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
             username = try container.decode(String.self, forKey: .username)
         }catch {
             username = "NO USER"
-            debugPrint("failed to parse username")
+            Logger.parse.warning("failed to parse username")
         }
             
         type = try container.decode(String.self, forKey: .type)
@@ -269,13 +270,11 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
         do{
             description_overwrite = try container.decode(String.self, forKey: .description_overwrite)
         }catch {
-//            debugPrint("no description overwrite")
         }
         
         do{
             description_suffix = try container.decode(String.self, forKey: .description_suffix)
         }catch {
-//            debugPrint("no description suffix")
         }
         last_updated = try container.decode(String.self, forKey: .last_updated)
         
@@ -296,7 +295,6 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
             include_library_tracks = try container.decode(Bool.self, forKey: .include_library_tracks)
         }catch {
             include_library_tracks = false
-//            debugPrint("failed to parse include_library_tracks")
         }
         
         parts = try container.decode([String].self, forKey: .parts)
@@ -307,42 +305,36 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
             sort = try container.decode(String.self, forKey: .sort)
         }catch {
             sort = "release_date"
-//            debugPrint("failed to parse sort value")
         }
         
         do {
             add_last_month = try container.decode(Bool.self, forKey: .add_last_month)
         }catch {
             add_last_month = false
-//            debugPrint("failed to parse add last month")
         }
         
         do {
             add_this_month = try container.decode(Bool.self, forKey: .add_this_month)
         }catch {
             add_this_month = false
-//            debugPrint("failed to parse add this month")
         }
         
         do {
             day_boundary = try container.decode(Int.self, forKey: .day_boundary)
         }catch {
             day_boundary = 21
-//            debugPrint("failed to parse day boundary")
         }
         
         do{
             chart_range = try LastFmRange(rawValue: container.decode(String.self, forKey: .chart_range)) ?? LastFmRange.month
         }catch {
             chart_range = .halfyear
-//            debugPrint("failed to parse chart_range")
         }
      
         do{
             chart_limit = try container.decode(Int.self, forKey: .chart_limit)
         }catch {
             chart_limit = 50
-//            debugPrint("failed to parse chart_limit")
         }
     }
     

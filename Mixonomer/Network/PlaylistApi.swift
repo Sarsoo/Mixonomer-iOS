@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import OSLog
 
 let txTypeHeaders = ["default", "recents", "fmchart"]
 
@@ -145,7 +146,7 @@ extension PlaylistApi: ApiRequest {
             let playlist = try decoder.decode(Playlist.self, from: playlist)
             return playlist
         } catch {
-            print(error)
+            Logger.parse.error("error parsing playlist from json: \(error)")
         }
         return nil
     }
@@ -160,7 +161,7 @@ extension PlaylistApi: ApiRequest {
                 let playlist = try decoder.decode(Playlist.self, from: data)
                 return playlist
             } catch {
-                print(error)
+                Logger.parse.error("error parsing playlist from json: \(error)")
             }
         }
         return nil

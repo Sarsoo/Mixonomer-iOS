@@ -10,6 +10,7 @@ import SwiftUI
 import ToastUI
 import KeychainAccess
 import SwiftyJSON
+import OSLog
 
 enum ScreenMode {
     case None
@@ -83,27 +84,34 @@ struct LoginScreen: View {
                     
                     keychain["username"] = username
                     
+                    Logger.sys.debug("making login request")
+                    
                     let api = AuthApi.token(username: username, password: password, expiry: 604800)
                     RequestBuilder.buildRequest(apiRequest: api)
                         .validate()
                         .responseJSON { response in
                             
-                            switch response.response?.statusCode {
+                            let code = response.response?.statusCode ?? -1
+                            
+                            switch code {
                             case 200, 201:
                                 
                                 guard let data = response.data else {
-                                    fatalError("error getting token")
+                                    Logger.net.error("failed to get API token from request")
+                                    return
                                 }
-
+                                
                                 guard let json = try? JSON(data: data) else {
-                                    fatalError("error parsing reponse")
+                                    Logger.parse.error("failed to parse API token")
+                                    return
                                 }
-                                    
+                                
                                 let token = json["token"].stringValue
                                 
                                 keychain["jwt"] = token
                                 self.liveUser.loggedIn = true
                                 
+                                Logger.net.info("login succeeded (\(code))")
                             case _:
                                 
                                 keychain["username"] = nil
@@ -111,6 +119,14 @@ struct LoginScreen: View {
                                 
                                 toastText = "Login Failed"
                                 showingToast = true
+                                
+                                if let data = response.data {
+                                    Logger.net.info("login failed (\(code)): \(data)")
+                                    return
+                                }
+                                else {
+                                    Logger.net.info("login failed (\(code))")
+                                }
                             }
                         }
                 }) {
@@ -127,28 +143,38 @@ struct LoginScreen: View {
                     
                     keychain["username"] = username
                     
+                    Logger.sys.debug("making register request")
+                    
                     let api = AuthApi.register(username: username, password: password, password2: password2)
                     RequestBuilder.buildRequest(apiRequest: api)
                         .validate()
                         .responseJSON { response in
                             
-                            switch response.response?.statusCode {
+                            let registerCode = response.response?.statusCode ?? -1
+                            
+                            switch registerCode {
                             case 200, 201:
+                                
+                                Logger.net.debug("register request succeeded, logging in")
                                 
                                 let token_api = AuthApi.token(username: username, password: password, expiry: 604800)
                                 RequestBuilder.buildRequest(apiRequest: token_api)
                                     .validate()
                                     .responseJSON { response in
                                         
-                                        switch response.response?.statusCode {
+                                        let loginCode = response.response?.statusCode ?? -1
+                                        
+                                        switch loginCode {
                                         case 200, 201:
                                             
                                             guard let data = response.data else {
-                                                fatalError("error getting token")
+                                                Logger.net.error("failed to get API token for register from login request")
+                                                return
                                             }
 
                                             guard let json = try? JSON(data: data) else {
-                                                fatalError("error parsing reponse")
+                                                Logger.parse.error("failed to parse API token for register from login request")
+                                                return
                                             }
                                                 
                                             let token = json["token"].stringValue
@@ -163,13 +189,20 @@ struct LoginScreen: View {
                                             
                                             toastText = "Token Generation Failed"
                                             showingToast = true
+                                            
+                                            Logger.net.error("failed to login post-registration (\(loginCode)")
                                         }
                                     }
                                 
-                                // TODO: add handling for 400, password dont match
-                                // TODO: add handling for 409, conflict
+                            case 400:
+                                Logger.net.info("register failed, passwords didn't match (400)")
+                                
+                            case 409:
+                                Logger.net.info("register failed, username already exists (409)")
                                 
                             case _:
+                                
+                                Logger.net.info("register request failed (\(registerCode)")
                                 
                                 keychain["username"] = nil
                                 keychain["jwt"] = nil
