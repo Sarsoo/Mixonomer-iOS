@@ -366,7 +366,7 @@ struct PlaylistView_Previews: PreviewProvider {
                          lastfm_stat_artist_percent: 80
                         )
             ))
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
             PlaylistView(playlist: .constant(
                 Playlist(name: "playlist name",
                          username: "username",
@@ -375,7 +375,7 @@ struct PlaylistView_Previews: PreviewProvider {
                          lastfm_stat_artist_percent: 80
                         )
             ))
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User()))
+            .environmentObject(LiveUser.get_preview_user_with_user())
         }
         
     }

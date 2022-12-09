@@ -118,32 +118,41 @@ struct TagView: View {
     }
     
     func runTag() {
+        
+        Logger.net.debug("running tag from view: \(self.tag.name)")
+        
         let api = TagApi.runTag(tag_id: tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.liveUser.check_network_response(response: response) {
-                
+                Logger.net.debug("successfully running tag: \(self.tag.name)")
             } else {
-                
+                Logger.net.error("request failed for running tag: \(self.tag.name)")
             }
         }
         //TODO: do better error checking
     }
     
     func updateTag(updates: JSON) {
+        
+        Logger.net.debug("updating tag from view: \(self.tag.name)")
+        
         let api = TagApi.updateTag(tag_id: tag.tag_id, updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
             if self.liveUser.check_network_response(response: response) {
-                
+                Logger.net.debug("successfully updated tag: \(self.tag.name)")
             } else {
-                
+                Logger.net.error("request failed for updating tag: \(self.tag.name)")
             }
         }
         //TODO: do better error checking
     }
     
     func refreshTag() {
+        
+        Logger.net.debug("refreshing tag from view: \(self.tag.name)")
+        
         let api = TagApi.getTag(tag_id: self.tag.tag_id)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
             
@@ -190,6 +199,6 @@ struct TagView_Previews: PreviewProvider {
             
             last_updated: "10th Feb")
         ))
-        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+        .environmentObject(LiveUser.get_preview_user())
     }
 }

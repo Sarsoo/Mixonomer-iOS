@@ -11,18 +11,40 @@ import Alamofire
 import SwiftyJSON
 import KeychainAccess
 import OSLog
+import UserNotifications
 
 class LiveUser: ObservableObject {
     
     @Published var playlists: [Playlist]
     @Published var tags: [Tag]
     @Published var username: String
-    @Published var user: User?
+    @Published var user: User
     
     @Published var loggedIn: Bool {
         didSet {
             UserDefaults.standard.set(loggedIn, forKey: "loggedIn")
         }
+    }
+    
+    func requestAPNSPerms(){
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            
+            if error != nil {
+                self.handleAPNSFailure()
+            }
+            else {
+                
+                // load token from static var and pass to backend server
+                APNSHandler.pass_token_to_backend(onFailure: {
+                    self.handleAPNSFailure()
+                })
+            }
+        }
+    }
+    
+    func handleAPNSFailure(){
+        Logger.sys.debug("failed to get APNS token")
     }
     
     @Published var isRefreshingUser = false
@@ -34,6 +56,7 @@ class LiveUser: ObservableObject {
         self.tags = tags
         self.username = username
         self.loggedIn = loggedIn
+        self.user = User.get_null_user()
     }
     
     init(playlists: [Playlist], tags: [Tag], username: String, loggedIn: Bool, user: User) {
@@ -45,11 +68,7 @@ class LiveUser: ObservableObject {
     }
     
     func lastfm_connected() -> Bool {
-        if let username = user?.lastfm_username {
-            return username.count > 0
-        }
-        
-        return false
+        return username.count > 0
     }
     
     func logout() {
@@ -64,7 +83,7 @@ class LiveUser: ObservableObject {
             playlists.removeAll()
             tags.removeAll()
             username = ""
-            user = nil
+            user = User.get_null_user()
             
             UserDefaults.standard.removeObject(forKey: "playlists")
             UserDefaults.standard.removeObject(forKey: "tags")
@@ -224,27 +243,9 @@ class LiveUser: ObservableObject {
     }
     
     func check_network_response(response: AFDataResponse<Any>) -> Bool {
-        
-        if let statusCode = response.response?.statusCode {
-            switch statusCode {
-            case 401: // token has expired
-                Logger.sys.info("token expired, logging user out")
-                self.logout()
-                return false
-            case 400..<500:
-                Logger.net.error("client fault \(statusCode)")
-                return false
-            case 500..<600:
-                Logger.net.warning("server fault \(statusCode)")
-                return false
-            case _: // 200 -> Success
-                return true
-            }
-        }
-        
-        Logger.net.error("live user failed to access status code to check")
-        
-        return false
+        return NetworkHelper.check_network_response(response: response, onTokenFail: {
+            self.logout()
+        })
     }
     
     func load_user_defaults() -> LiveUser {
@@ -276,5 +277,13 @@ class LiveUser: ObservableObject {
         }
         
         return self
+    }
+    
+    static func get_preview_user() -> LiveUser {
+        return LiveUser(playlists: [], tags: [], username: "user", loggedIn: false)
+    }
+    
+    static func get_preview_user_with_user() -> LiveUser {
+        return LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User())
     }
 }

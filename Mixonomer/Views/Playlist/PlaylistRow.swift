@@ -63,6 +63,6 @@ struct PlaylistRow_Previews: PreviewProvider {
         PlaylistView(playlist: .constant(
             Playlist(name: "playlist name", username: "username")
         ))
-        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+        .environmentObject(LiveUser.get_preview_user())
     }
 }

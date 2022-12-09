@@ -16,13 +16,7 @@ struct SettingsList: View {
     @State private var deleteAlertShowing = false
     
     var body: some View {
-        
-        let spotify_link_bind = Binding<Bool>(get: { liveUser.user?.spotify_linked ?? false},
-                                               set: { newVal in liveUser.user?.spotify_linked = newVal })
-//        let lastfm_bind = Binding<String>(get: { liveUser.user?.lastfm_username ?? ""},
-//                                          set: { newVal in liveUser.user?.lastfm_username = newVal })
-        
-        return NavigationView {
+        NavigationView {
             List{
                 Section {
                     Button(action: {
@@ -47,21 +41,25 @@ struct SettingsList: View {
                 }
                 
                 Section(header: Text("Integrations")) {
-                    Toggle(isOn: spotify_link_bind) {
+                    Toggle(isOn: self.$liveUser.user.spotify_linked) {
                         Text("Spotify Link")
                     }
                     .disabled(true)
                     
-//                    NavigationLink("Last.fm Username") {
-//                        List{
-//                            TextField("Username", text: lastfm_bind)
-//                        }
-//                    }
+                    NavigationLink("Last.fm") {
+                        List{
+                            TextField("Username", text: self.$liveUser.user.lastfm_username)
+                        }
+                    }
                 }
                 
-//                Section(header: Text("Last.fm")) {
-//                    TextField("Last.fm Username", text: lastfm_bind)
-//                }
+                Section {
+                    NavigationLink(destination: NotificationsControls()) {
+                        HStack {
+                            Text("Notifications")
+                        }
+                    }
+                }
                 
                 Section {
                     Button(action: {
@@ -128,6 +126,6 @@ struct SettingsList: View {
 struct SettingsList_Previews: PreviewProvider {
     static var previews: some View {
         SettingsList()
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
     }
 }

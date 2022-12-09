@@ -15,7 +15,7 @@ enum UserType: String, Decodable {
     case admin = "admin"
 }
 
-class User: Identifiable, Decodable {
+class User: Identifiable, Decodable, ObservableObject {
     
     //MARK: Properties
     
@@ -30,7 +30,29 @@ class User: Identifiable, Decodable {
     var last_refreshed: String
     
     var spotify_linked: Bool
-    @Published var lastfm_username: String? {
+    
+    @Published var notify: Bool {
+        didSet {
+            self.updateUser(updates: JSON(["notify": self.notify]))
+        }
+    }
+    @Published var notify_playlist_updates: Bool {
+        didSet {
+            self.updateUser(updates: JSON(["notify_playlist_updates": self.notify_playlist_updates]))
+        }
+    }
+    @Published var notify_tag_updates: Bool {
+        didSet {
+            self.updateUser(updates: JSON(["notify_tag_updates": self.notify_tag_updates]))
+        }
+    }
+    @Published var notify_admins: Bool {
+        didSet {
+            self.updateUser(updates: JSON(["notify_admins": self.notify_admins]))
+        }
+    }
+    
+    @Published var lastfm_username: String {
         didSet {
             self.updateUser(updates: JSON(["lastfm_username": self.lastfm_username]))
         }
@@ -48,7 +70,12 @@ class User: Identifiable, Decodable {
          last_keygen: String = "",
          last_refreshed: String = "",
          spotify_linked: Bool = true,
-         lastfm_username: String? = nil){
+         lastfm_username: String = "",
+         
+         notify: Bool = false,
+         notify_playlist_updates: Bool = false,
+         notify_tag_updates: Bool = false,
+         notify_admins: Bool = false){
         
         self.username = username
         self.email = email
@@ -61,19 +88,21 @@ class User: Identifiable, Decodable {
         self.last_refreshed = last_refreshed
         self.spotify_linked = spotify_linked
         self.lastfm_username = lastfm_username
+        
+        self.notify = notify
+        self.notify_playlist_updates = notify_playlist_updates
+        self.notify_tag_updates = notify_tag_updates
+        self.notify_admins = notify_admins
     }
-    
+
     func updateUser(updates: JSON) {
         let api = UserApi.updateUser(updates: updates)
         RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
-            switch response.response?.statusCode {
-            case 200, 201:
-                break
-            case _:
+            
+            if !NetworkHelper.check_network_response(response: response) {
                 Logger.net.error("error while updating user: \(updates)")
             }
         }
-        //TODO: do better error checking
     }
     
     private enum CodingKeys: String, CodingKey {
@@ -89,6 +118,11 @@ class User: Identifiable, Decodable {
         
         case spotify_linked
         case lastfm_username
+        
+        case notify
+        case notify_playlist_updates
+        case notify_tag_updates
+        case notify_admins
     }
     
     required init(from decoder: Decoder) throws {
@@ -120,7 +154,31 @@ class User: Identifiable, Decodable {
         do{
             lastfm_username = try container.decode(String.self, forKey: .lastfm_username)
         }catch {
-            lastfm_username = nil
+            lastfm_username = ""
+        }
+        
+        do{
+            notify = try container.decode(Bool.self, forKey: .notify)
+        }catch {
+            notify = false
+        }
+        
+        do{
+            notify_playlist_updates = try container.decode(Bool.self, forKey: .notify_playlist_updates)
+        }catch {
+            notify_playlist_updates = false
+        }
+        
+        do{
+            notify_tag_updates = try container.decode(Bool.self, forKey: .notify_tag_updates)
+        }catch {
+            notify_tag_updates = false
+        }
+        
+        do{
+            notify_admins = try container.decode(Bool.self, forKey: .notify_admins)
+        }catch {
+            notify_admins = false
         }
     }
     
@@ -139,6 +197,15 @@ class User: Identifiable, Decodable {
         
         try container.encode(self.spotify_linked, forKey: .spotify_linked)
         try container.encode(self.lastfm_username, forKey: .lastfm_username)
+        
+        try container.encode(self.notify, forKey: .notify)
+        try container.encode(self.notify_playlist_updates, forKey: .notify_playlist_updates)
+        try container.encode(self.notify_tag_updates, forKey: .notify_tag_updates)
+        try container.encode(self.notify_admins, forKey: .notify_admins)
+    }
+    
+    static func get_null_user() -> User {
+        return User()
     }
 }
 

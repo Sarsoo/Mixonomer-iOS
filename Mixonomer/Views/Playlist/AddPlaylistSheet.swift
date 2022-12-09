@@ -112,6 +112,6 @@ struct AddPlaylistSheet: View {
 struct AddPlaylistSheet_Previews: PreviewProvider {
     static var previews: some View {
         AddPlaylistSheet(playlists: .constant([]), username: .constant("username"))
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
     }
 }

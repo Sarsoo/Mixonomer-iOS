@@ -66,6 +66,6 @@ struct TagRow_Previews: PreviewProvider {
             
             last_updated: "10th Feb")
         ))
-        .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+        .environmentObject(LiveUser.get_preview_user())
     }
 }

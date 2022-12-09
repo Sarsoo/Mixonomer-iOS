@@ -237,11 +237,11 @@ struct LoginScreen_Previews: PreviewProvider {
     static var previews: some View {
         Group{
             LoginScreen(screenMode: .None)
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+                .environmentObject(LiveUser.get_preview_user())
             LoginScreen(screenMode: .Login)
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+                .environmentObject(LiveUser.get_preview_user())
             LoginScreen(screenMode: .Register)
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+                .environmentObject(LiveUser.get_preview_user())
         }
     }
 }

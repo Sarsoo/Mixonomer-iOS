@@ -15,6 +15,11 @@ public enum UserApi {
     case getUser
     case updateUser(updates: JSON)
     case deleteUser
+    case passAPNSToken(updates: String)
+    case updateNotify(state: Bool)
+    case updateNotifyPlaylist(state: String)
+    case updateNotifyTag(state: String)
+    case updateNotifyAdmin(state: String)
 }
 
 extension UserApi: ApiRequest {
@@ -30,6 +35,10 @@ extension UserApi: ApiRequest {
             return "api/user"
         case .deleteUser:
             return "api/user"
+        case .passAPNSToken:
+            return "api/user"
+        case .updateNotify, .updateNotifyPlaylist, .updateNotifyTag, .updateNotifyAdmin:
+            return "api/user"
         }
     }
     
@@ -41,6 +50,10 @@ extension UserApi: ApiRequest {
             return .post
         case .deleteUser:
             return .delete
+        case .passAPNSToken:
+            return .post
+        case .updateNotify, .updateNotifyPlaylist, .updateNotifyTag, .updateNotifyAdmin:
+            return .post
         }
     }
     
@@ -50,6 +63,16 @@ extension UserApi: ApiRequest {
             return nil
         case .updateUser(let updates):
             return updates
+        case .passAPNSToken(let token):
+            return JSON(["apns_token": token])
+        case .updateNotify(let state):
+            return JSON(["notify": state])
+        case .updateNotifyPlaylist(let state):
+            return JSON(["notify_playlist_updates": state])
+        case .updateNotifyTag(let state):
+            return JSON(["notify_tag_updates": state])
+        case .updateNotifyAdmin(let state):
+            return JSON(["notify_admins": state])
         }
     }
     
@@ -57,7 +80,9 @@ extension UserApi: ApiRequest {
         switch self {
         case .getUser, .deleteUser:
             return nil
-        case .updateUser:
+        case .updateUser, .passAPNSToken:
+            return JSONParameterEncoder.default
+        case .updateNotify, .updateNotifyPlaylist, .updateNotifyTag, .updateNotifyAdmin:
             return JSONParameterEncoder.default
         }
     }
@@ -70,7 +95,7 @@ extension UserApi: ApiRequest {
         return ApiRequestDefaults.authMethod
     }
     
-    static func fromJSON(user: Data) -> User? {
+    static func fromJSON(user: Data) -> User {
         
         let decoder = JSONDecoder()
         do {
@@ -78,11 +103,11 @@ extension UserApi: ApiRequest {
             return user
         } catch {
             Logger.parse.error("error parsing user from json: \(error)")
+            return User.get_null_user()
         }
-        return nil
     }
     
-    static func fromJSON(user: JSON) -> User? {
+    static func fromJSON(user: JSON) -> User {
         
         let _json = user.rawString()?.data(using: .utf8)
         
@@ -95,16 +120,16 @@ extension UserApi: ApiRequest {
                 Logger.parse.error("error parsing user from json: \(error)")
             }
         }
-        return nil
+        
+        return User.get_null_user()
     }
     
     static func fromJSON(user: [JSON]) -> [User] {
         var _users: [User] = []
         for dict in user {
             let _iter = self.fromJSON(user: dict)
-            if let returned = _iter {
-                _users.append(returned)
-            }
+            
+            _users.append(_iter)
         }
         return _users
     }

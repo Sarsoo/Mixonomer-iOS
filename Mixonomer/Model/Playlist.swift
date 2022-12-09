@@ -30,28 +30,28 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
             self.updatePlaylist(updates: JSON(["include_recommendations": self.include_recommendations]))
         }
     }
-    @Published var recommendation_sample: Int{
+    @Published var recommendation_sample: Int {
         didSet {
             self.updatePlaylist(updates: JSON(["recommendation_sample": self.recommendation_sample]))
         }
     }
-    @Published var include_library_tracks: Bool{
+    @Published var include_library_tracks: Bool {
         didSet {
             self.updatePlaylist(updates: JSON(["include_library_tracks": self.include_library_tracks]))
         }
     }
     
-    @Published var parts: Array<String>{
+    @Published var parts: Array<String> {
         didSet {
             self.updatePlaylist(updates: JSON(["parts": self.parts]))
         }
     }
-    @Published var playlist_references: Array<String>{
+    @Published var playlist_references: Array<String> {
         didSet {
             self.updatePlaylist(updates: JSON(["playlist_references": self.playlist_references]))
         }
     }
-    @Published var shuffle: Bool{
+    @Published var shuffle: Bool {
         didSet {
             self.updatePlaylist(updates: JSON(["shuffle": self.shuffle]))
         }
@@ -88,45 +88,45 @@ class Playlist: Identifiable, Equatable, Codable, ObservableObject {
     
     @Published var lastfm_stat_last_refresh: String?
     
-    @Published var add_last_month: Bool{
+    @Published var add_last_month: Bool {
         didSet {
             self.updatePlaylist(updates: JSON(["add_last_month": self.add_last_month]))
         }
     }
-    @Published var add_this_month: Bool{
+    @Published var add_this_month: Bool {
         didSet {
             self.updatePlaylist(updates: JSON(["add_this_month": self.add_this_month]))
         }
     }
-    @Published var day_boundary: Int{
+    @Published var day_boundary: Int {
         didSet {
             self.updatePlaylist(updates: JSON(["day_boundary": self.day_boundary]))
         }
     }
     
-    @Published var chart_range: LastFmRange{
+    @Published var chart_range: LastFmRange {
         didSet {
             self.updatePlaylist(updates: JSON(["chart_range": self.chart_range.rawValue]))
         }
     }
-    @Published var chart_limit: Int{
+    @Published var chart_limit: Int {
         didSet {
-            self.updatePlaylist(updates: JSON(["chart_range": self.chart_range.rawValue]))
+            self.updatePlaylist(updates: JSON(["chart_limit": self.chart_limit]))
         }
     }
     
     func updatePlaylist(updates: JSON) {
-        let api = PlaylistApi.updatePlaylist(name: self.name, updates: updates)
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in          
-            switch response.response?.statusCode {
-            case 200, 201:
-                break
-            case _:
-                Logger.net.error("error: \(self.name), \(updates)")
+            let api = PlaylistApi.updatePlaylist(name: self.name, updates: updates)
+            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+                switch response.response?.statusCode {
+                case 200, 201:
+                    break
+                case _:
+                    Logger.net.error("error: \(self.name), \(updates)")
+                }
             }
+            //TODO: do better error checking
         }
-        //TODO: do better error checking
-    }
     
     private enum CodingKeys: String, CodingKey {
         case name

@@ -77,6 +77,6 @@ struct AppSkeleton: View {
 struct RootView_Previews: PreviewProvider {
     static var previews: some View {
         AppSkeleton()
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
     }
 }

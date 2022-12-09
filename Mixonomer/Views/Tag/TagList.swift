@@ -93,6 +93,6 @@ struct TagList: View {
 struct TagList_Previews: PreviewProvider {
     static var previews: some View {
         TagList()
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
     }
 }

@@ -22,7 +22,7 @@ struct PlaylistList: View {
         NavigationView {
             
             List{
-                if liveUser.user?.spotify_linked == false {
+                if liveUser.user.spotify_linked == false {
                     Text("Spotify isn't linked, login to the web client to pair")
                     
                     Button(action: {
@@ -101,9 +101,9 @@ struct PlaylistList_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PlaylistList()
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+                .environmentObject(LiveUser.get_preview_user())
             PlaylistList()
-                .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false, user: User()))
+                .environmentObject(LiveUser.get_preview_user_with_user())
         }
     }
 }

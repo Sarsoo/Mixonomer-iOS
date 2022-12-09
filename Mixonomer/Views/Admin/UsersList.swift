@@ -74,6 +74,6 @@ struct UsersList: View {
 struct UsersList_Previews: PreviewProvider {
     static var previews: some View {
         UsersList()
-            .environmentObject(LiveUser(playlists: [], tags: [], username: "user", loggedIn: false))
+            .environmentObject(LiveUser.get_preview_user())
     }
 }
