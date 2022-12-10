@@ -1,15 +1,15 @@
 //
-//  Music_ToolsTests.swift
-//  Music ToolsTests
+//  MixonomerTests.swift
+//  MixonomerTests
 //
 //  Created by Andy Pack on 16/02/2020.
 //  Copyright © 2020 Sarsoo. All rights reserved.
 //
 
 import XCTest
-@testable import Music_Tools
+@testable import Mixonomer
 
-class Music_ToolsTests: XCTestCase {
+class MixonomerTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

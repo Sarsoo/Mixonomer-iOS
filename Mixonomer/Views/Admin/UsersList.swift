@@ -15,30 +15,37 @@ struct UsersList: View {
     @EnvironmentObject var liveUser: LiveUser
     
     @State private var users: [User] = []
+    @State var isLoading = true
     
     var body: some View {
-        List{
-            Section { // Weird? added empty header as list renders with space for header then jumps up, not nice
-                if self.users.count > 0 {
-                    ForEach(self.users.indices, id: \.self){ userIdx in
-                        
-                        NavigationLink(destination: UserView(user: self.$users[userIdx])) {
-                            Text(self.users[userIdx].username)
+        
+        if isLoading {
+            LoadingScreen()
+                .onAppear {
+                    self.get_users()
+                }
+        }
+        else {
+            List{
+                Section { // Weird? added empty header as list renders with space for header then jumps up, not nice
+                    if self.users.count > 0 {
+                        ForEach(self.users.indices, id: \.self){ userIdx in
+                            
+                            NavigationLink(destination: UserView(user: self.$users[userIdx])) {
+                                Text(self.users[userIdx].username)
+                            }
                         }
-                    }
-                }else {
-                    HStack {
-                        Text("No Users")
-                            .multilineTextAlignment(.center)
-                        Spacer()
+                    }else {
+                        HStack {
+                            Text("No Users")
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
                     }
                 }
             }
-        }
-//        .id(UUID())
-        .navigationBarTitle("Users")
-        .onAppear {
-            self.get_users()
+            //        .id(UUID())
+            .navigationBarTitle("Users")
         }
     }
     
@@ -64,6 +71,8 @@ struct UsersList: View {
                                     return user1.username < user2.username
                                 })
                 
+                self.isLoading = false
+                
             } else {
                 Logger.net.error("failed to get users from view")
             }
@@ -73,7 +82,7 @@ struct UsersList: View {
 
 struct UsersList_Previews: PreviewProvider {
     static var previews: some View {
-        UsersList()
+        UsersList(isLoading: false)
             .environmentObject(LiveUser.get_preview_user())
     }
 }
