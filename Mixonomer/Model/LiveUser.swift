@@ -47,6 +47,10 @@ class LiveUser: ObservableObject {
         Logger.sys.debug("failed to get APNS token")
     }
     
+    @Published var isInitiallyRefreshingUser = true
+    @Published var isInitiallyRefreshingPlaylists = true
+    @Published var isInitiallyRefreshingTags = true
+    
     @Published var isRefreshingUser = false
     @Published var isRefreshingPlaylists = false
     @Published var isRefreshingTags = false
@@ -128,6 +132,7 @@ class LiveUser: ObservableObject {
                 self.user = UserApi.fromJSON(user: json)
                 
                 self.isRefreshingUser = false
+                self.isInitiallyRefreshingUser = false
                 
                 if let success = onSuccess {
                     Logger.sys.debug("successfully refreshed user")
@@ -170,6 +175,7 @@ class LiveUser: ObservableObject {
                 self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
                 
                 self.isRefreshingPlaylists = false
+                self.isInitiallyRefreshingPlaylists = false
                 
                 if let success = onSuccess {
                     Logger.sys.debug("successfully refreshed playlists")
@@ -219,6 +225,7 @@ class LiveUser: ObservableObject {
                 self.tags = TagApi.fromJSON(tag: tags).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
                 
                 self.isRefreshingTags = false
+                self.isInitiallyRefreshingTags = false
                 
                 if let success = onSuccess {
                     Logger.sys.debug("successfully refreshed tags")

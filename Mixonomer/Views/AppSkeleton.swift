@@ -17,53 +17,62 @@ struct AppSkeleton: View {
     @State private var selection = 0 // Tab view selection
     
     var body: some View {
-        TabView {
-            
-            PlaylistList()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "music.note.list")
-                        Text("Playlists")
-                    }
+        
+        if self.liveUser.isInitiallyRefreshingUser
+            || self.liveUser.isInitiallyRefreshingPlaylists
+            || self.liveUser.isInitiallyRefreshingTags
+        {
+            LoadingScreen()
+                .onAppear {
+                    self.fetchAll()
                 }
-                .tag(0)
+        } else {
             
-            if liveUser.lastfm_connected() {
+            TabView {
                 
-                TagList()
+                PlaylistList()
                     .tabItem {
                         VStack {
-                            Image(systemName: "tag")
-                            Text("Tags")
+                            Image(systemName: "music.note.list")
+                            Text("Playlists")
                         }
                     }
-                    .tag(1)
-            }
-            
-            if let user = liveUser.user {
-                if user.type == .admin {
-                    AdminList()
-                        .tabItem( {
+                    .tag(0)
+                
+                if liveUser.lastfm_connected() {
+                    
+                    TagList()
+                        .tabItem {
                             VStack {
-                                Image(systemName: "person.badge.key.fill")
-                                Text("Admin")
+                                Image(systemName: "tag")
+                                Text("Tags")
                             }
-                        })
-                        .tag(2)
+                        }
+                        .tag(1)
                 }
-            }
-            
-            SettingsList()
-                .tabItem {
-                    VStack {
-                        Image(systemName: "slider.horizontal.3")
-                        Text("Settings")
+                
+                if let user = liveUser.user {
+                    if user.type == .admin {
+                        AdminList()
+                            .tabItem( {
+                                VStack {
+                                    Image(systemName: "person.badge.key.fill")
+                                    Text("Admin")
+                                }
+                            })
+                            .tag(2)
                     }
                 }
-                .tag(3)
-            
-        }.onAppear {
-            self.fetchAll()
+                
+                SettingsList()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "slider.horizontal.3")
+                            Text("Settings")
+                        }
+                    }
+                    .tag(3)
+            }
         }
     }
     
