@@ -27,21 +27,21 @@ struct PlaylistView: View {
     
     var trackChartStyle: ChartStyle {
         get {
-            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.4765, green: 0.5976, blue: 0.7578), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.4765, green: 0.5976, blue: 0.7578), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray, dropShadowColor: .gray)
             return _style
         }
     }
     
     var albumChartStyle: ChartStyle {
         get {
-            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.6367, green: 0.2968, blue: 0.4648), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.6367, green: 0.2968, blue: 0.4648), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray, dropShadowColor: .gray)
             return _style
         }
     }
     
     var artistChartStyle: ChartStyle {
         get {
-            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.3476, green: 0.5195, blue: 0.3359), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray)
+            let _style = ChartStyle(backgroundColor: .white, accentColor: Color(red: 0.3476, green: 0.5195, blue: 0.3359), gradientColor: GradientColors.bluPurpl, textColor: .black, legendTextColor: .gray, dropShadowColor: .gray)
             return _style
         }
     }
@@ -234,9 +234,11 @@ struct PlaylistView: View {
             
         }
         .navigationBarTitle(Text(playlist.name))
+#if os(iOS)
         .refreshable {
             self.refreshPlaylist()
         }
+#endif
     }
     
     func runPlaylist() {

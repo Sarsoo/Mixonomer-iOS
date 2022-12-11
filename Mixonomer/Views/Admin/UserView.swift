@@ -36,7 +36,7 @@ struct UserView: View {
                 HStack {
                     Text("Last.fm")
                     Spacer()
-                    Text(user.lastfm_username ?? "")
+                    Text(user.lastfm_username)
                         .foregroundColor(.gray)
                 }
             }

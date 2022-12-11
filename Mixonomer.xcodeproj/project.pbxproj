@@ -674,10 +674,12 @@
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mixonomer/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.sarsoo.Mixonomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -701,10 +703,12 @@
 				DEVELOPMENT_TEAM = 8UZ2659FDY;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Mixonomer/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.sarsoo.Mixonomer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
