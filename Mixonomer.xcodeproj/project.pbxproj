@@ -10,6 +10,9 @@
 		A10C8D29281302050018AE12 /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = A10C8D28281302050018AE12 /* ToastUI */; };
 		A11AC70628A188AE00645043 /* AuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11AC70528A188AE00645043 /* AuthApi.swift */; };
 		A13C54972928FD7C0034F233 /* ManagedInputList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A13C54962928FD7C0034F233 /* ManagedInputList.swift */; };
+		A157584E29698317007B80AE /* PlaylistOptionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A157584D29698317007B80AE /* PlaylistOptionsSection.swift */; };
+		A157585029698455007B80AE /* PlaylistInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A157584F29698455007B80AE /* PlaylistInputSection.swift */; };
+		A1575852296984A3007B80AE /* PlaylistStatsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1575851296984A3007B80AE /* PlaylistStatsSection.swift */; };
 		A15D257A293421350049055E /* StaticNotif.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15D2579293421350049055E /* StaticNotif.swift */; };
 		A15D257C293425390049055E /* NotificationsControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15D257B293425390049055E /* NotificationsControls.swift */; };
 		A15D257E29342E4F0049055E /* APNSHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15D257D29342E4F0049055E /* APNSHandler.swift */; };
@@ -76,6 +79,9 @@
 		A11AC70528A188AE00645043 /* AuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthApi.swift; sourceTree = "<group>"; };
 		A13C54962928FD7C0034F233 /* ManagedInputList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedInputList.swift; sourceTree = "<group>"; };
 		A146915A28118F940052999D /* Mixonomer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mixonomer.entitlements; sourceTree = "<group>"; };
+		A157584D29698317007B80AE /* PlaylistOptionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistOptionsSection.swift; sourceTree = "<group>"; };
+		A157584F29698455007B80AE /* PlaylistInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistInputSection.swift; sourceTree = "<group>"; };
+		A1575851296984A3007B80AE /* PlaylistStatsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistStatsSection.swift; sourceTree = "<group>"; };
 		A15D2579293421350049055E /* StaticNotif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticNotif.swift; sourceTree = "<group>"; };
 		A15D257B293425390049055E /* NotificationsControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsControls.swift; sourceTree = "<group>"; };
 		A15D257D29342E4F0049055E /* APNSHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APNSHandler.swift; sourceTree = "<group>"; };
@@ -153,6 +159,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A157584C296982F8007B80AE /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E98254C123F9FFF90056D9D3 /* PlaylistView.swift */,
+				A157584D29698317007B80AE /* PlaylistOptionsSection.swift */,
+				A157584F29698455007B80AE /* PlaylistInputSection.swift */,
+				A1575851296984A3007B80AE /* PlaylistStatsSection.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		A15D2578293421250049055E /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,7 +242,7 @@
 		E9E30C2E23FEACDE00574EEF /* Playlist */ = {
 			isa = PBXGroup;
 			children = (
-				E98254C123F9FFF90056D9D3 /* PlaylistView.swift */,
+				A157584C296982F8007B80AE /* View */,
 				E98254C923FA26600056D9D3 /* PlaylistRow.swift */,
 				E97AF46623FD650800635494 /* AddPlaylistSheet.swift */,
 				E97AF46823FD9E1B00635494 /* SpotInputList.swift */,
@@ -478,10 +495,12 @@
 				E9EA690D23F9A5430012C3E8 /* SceneDelegate.swift in Sources */,
 				E98254DB23FB64740056D9D3 /* Network.swift in Sources */,
 				E9CCD5BD2454C64300B5CD6C /* TagList.swift in Sources */,
+				A157585029698455007B80AE /* PlaylistInputSection.swift in Sources */,
 				E9E30C2A23FEAA3A00574EEF /* TagRow.swift in Sources */,
 				E9CCD5BB2454C57300B5CD6C /* PlaylistList.swift in Sources */,
 				A1DBCDA628A51869002CF730 /* AdminList.swift in Sources */,
 				E97AF46023FC85D600635494 /* PlaylistApi.swift in Sources */,
+				A157584E29698317007B80AE /* PlaylistOptionsSection.swift in Sources */,
 				A11AC70628A188AE00645043 /* AuthApi.swift in Sources */,
 				A1AF726F28A84F7D00D317C9 /* AdminApi.swift in Sources */,
 				A15D257E29342E4F0049055E /* APNSHandler.swift in Sources */,
@@ -493,6 +512,7 @@
 				E97AF46723FD650800635494 /* AddPlaylistSheet.swift in Sources */,
 				E971F8B9245462D500B543B6 /* Router.swift in Sources */,
 				E98254C223F9FFF90056D9D3 /* PlaylistView.swift in Sources */,
+				A1575852296984A3007B80AE /* PlaylistStatsSection.swift in Sources */,
 				E97AF46423FD4EEF00635494 /* LiveUser.swift in Sources */,
 				E97AF45623FC4E7800635494 /* User.swift in Sources */,
 				E98254D023FB00B60056D9D3 /* LoginScreen.swift in Sources */,
