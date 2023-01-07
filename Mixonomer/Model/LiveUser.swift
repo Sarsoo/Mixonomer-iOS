@@ -249,6 +249,16 @@ class LiveUser: ObservableObject {
         }
     }
     
+    func full_refresh() {
+        self.isInitiallyRefreshingUser = true
+        self.isInitiallyRefreshingPlaylists = true
+        self.isInitiallyRefreshingTags = true
+        
+        self.refresh_user()
+        self.refresh_playlists()
+        self.refresh_tags()
+    }
+    
     func check_network_response(response: AFDataResponse<Any>) -> Bool {
         return NetworkHelper.check_network_response(response: response, onTokenFail: {
             self.logout()

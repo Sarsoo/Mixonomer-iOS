@@ -109,6 +109,8 @@ struct LoginScreen: View {
                                 let token = json["token"].stringValue
                                 
                                 keychain["jwt"] = token
+                                
+                                self.liveUser.full_refresh()
                                 self.liveUser.loggedIn = true
                                 
                                 Logger.net.info("login succeeded (\(code))")
