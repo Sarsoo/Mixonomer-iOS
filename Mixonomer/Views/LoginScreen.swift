@@ -48,12 +48,20 @@ struct LoginScreen: View {
                     .textFieldStyle(.roundedBorder)
                 SecureField("Password", text: $password)
                     .textFieldStyle(.roundedBorder)
+                    .onSubmit {
+                        if screenMode == .Login {
+                            login()
+                        }
+                    }
             }
             
             if screenMode == .Register {
                 SecureField("Password Again", text: $password2)
                     .textFieldStyle(.roundedBorder)
                     .padding(.bottom, 20)
+                    .onSubmit {
+                        register()
+                    }
             }
             
             if screenMode == .None {
@@ -79,58 +87,7 @@ struct LoginScreen: View {
             
             if screenMode == .Login {
                 Button(action: {
-                    
-                    let keychain = Keychain(service: "xyz.sarsoo.music.login")
-                    
-                    keychain["username"] = username
-                    
-                    Logger.sys.debug("making login request")
-                    
-                    let api = AuthApi.token(username: username, password: password, expiry: 604800)
-                    RequestBuilder.buildRequest(apiRequest: api)
-                        .validate()
-                        .responseJSON { response in
-                            
-                            let code = response.response?.statusCode ?? -1
-                            
-                            switch code {
-                            case 200, 201:
-                                
-                                guard let data = response.data else {
-                                    Logger.net.error("failed to get API token from request")
-                                    return
-                                }
-                                
-                                guard let json = try? JSON(data: data) else {
-                                    Logger.parse.error("failed to parse API token")
-                                    return
-                                }
-                                
-                                let token = json["token"].stringValue
-                                
-                                keychain["jwt"] = token
-                                
-                                self.liveUser.full_refresh()
-                                self.liveUser.loggedIn = true
-                                
-                                Logger.net.info("login succeeded (\(code))")
-                            case _:
-                                
-                                keychain["username"] = nil
-                                keychain["jwt"] = nil
-                                
-                                toastText = "Login Failed"
-                                showingToast = true
-                                
-                                if let data = response.data {
-                                    Logger.net.info("login failed (\(code)): \(data)")
-                                    return
-                                }
-                                else {
-                                    Logger.net.info("login failed (\(code))")
-                                }
-                            }
-                        }
+                    login()
                 }) {
                     Text("Log In")
                 }
@@ -140,79 +97,7 @@ struct LoginScreen: View {
             
             if screenMode == .Register {
                 Button(action: {
-                    
-                    let keychain = Keychain(service: "xyz.sarsoo.music.login")
-                    
-                    keychain["username"] = username
-                    
-                    Logger.sys.debug("making register request")
-                    
-                    let api = AuthApi.register(username: username, password: password, password2: password2)
-                    RequestBuilder.buildRequest(apiRequest: api)
-                        .validate()
-                        .responseJSON { response in
-                            
-                            let registerCode = response.response?.statusCode ?? -1
-                            
-                            switch registerCode {
-                            case 200, 201:
-                                
-                                Logger.net.debug("register request succeeded, logging in")
-                                
-                                let token_api = AuthApi.token(username: username, password: password, expiry: 604800)
-                                RequestBuilder.buildRequest(apiRequest: token_api)
-                                    .validate()
-                                    .responseJSON { response in
-                                        
-                                        let loginCode = response.response?.statusCode ?? -1
-                                        
-                                        switch loginCode {
-                                        case 200, 201:
-                                            
-                                            guard let data = response.data else {
-                                                Logger.net.error("failed to get API token for register from login request")
-                                                return
-                                            }
-
-                                            guard let json = try? JSON(data: data) else {
-                                                Logger.parse.error("failed to parse API token for register from login request")
-                                                return
-                                            }
-                                                
-                                            let token = json["token"].stringValue
-                                            
-                                            keychain["jwt"] = token
-                                            self.liveUser.loggedIn = true
-                                            
-                                        case _:
-                                            
-                                            keychain["username"] = nil
-                                            keychain["jwt"] = nil
-                                            
-                                            toastText = "Token Generation Failed"
-                                            showingToast = true
-                                            
-                                            Logger.net.error("failed to login post-registration (\(loginCode)")
-                                        }
-                                    }
-                                
-                            case 400:
-                                Logger.net.info("register failed, passwords didn't match (400)")
-                                
-                            case 409:
-                                Logger.net.info("register failed, username already exists (409)")
-                                
-                            case _:
-                                
-                                Logger.net.info("register request failed (\(registerCode)")
-                                
-                                keychain["username"] = nil
-                                keychain["jwt"] = nil
-                                
-                                toastText = "Register Failed"
-                                showingToast = true
-                            }
-                        }
+                    register()
                 }) {
                     Text("Register")
                 }
@@ -232,6 +117,135 @@ struct LoginScreen: View {
         }
         .toastDimmedBackground(false)
         .padding()
+    }
+    
+    func login() {
+        let keychain = Keychain(service: "xyz.sarsoo.music.login")
+        
+        keychain["username"] = username
+        
+        Logger.sys.debug("making login request")
+        
+        let api = AuthApi.token(username: username, password: password, expiry: 604800)
+        RequestBuilder.buildRequest(apiRequest: api)
+            .validate()
+            .responseJSON { response in
+                
+                let code = response.response?.statusCode ?? -1
+                
+                switch code {
+                case 200, 201:
+                    
+                    guard let data = response.data else {
+                        Logger.net.error("failed to get API token from request")
+                        return
+                    }
+                    
+                    guard let json = try? JSON(data: data) else {
+                        Logger.parse.error("failed to parse API token")
+                        return
+                    }
+                    
+                    let token = json["token"].stringValue
+                    
+                    keychain["jwt"] = token
+                    
+                    self.liveUser.full_refresh()
+                    self.liveUser.loggedIn = true
+                    
+                    Logger.net.info("login succeeded (\(code))")
+                case _:
+                    
+                    keychain["username"] = nil
+                    keychain["jwt"] = nil
+                    
+                    toastText = "Login Failed"
+                    showingToast = true
+                    
+                    if let data = response.data {
+                        Logger.net.info("login failed (\(code)): \(data)")
+                        return
+                    }
+                    else {
+                        Logger.net.info("login failed (\(code))")
+                    }
+                }
+            }
+    }
+    
+    func register() {
+        let keychain = Keychain(service: "xyz.sarsoo.music.login")
+        
+        keychain["username"] = username
+        
+        Logger.sys.debug("making register request")
+        
+        let api = AuthApi.register(username: username, password: password, password2: password2)
+        RequestBuilder.buildRequest(apiRequest: api)
+            .validate()
+            .responseJSON { response in
+                
+                let registerCode = response.response?.statusCode ?? -1
+                
+                switch registerCode {
+                case 200, 201:
+                    
+                    Logger.net.debug("register request succeeded, logging in")
+                    
+                    let token_api = AuthApi.token(username: username, password: password, expiry: 604800)
+                    RequestBuilder.buildRequest(apiRequest: token_api)
+                        .validate()
+                        .responseJSON { response in
+                            
+                            let loginCode = response.response?.statusCode ?? -1
+                            
+                            switch loginCode {
+                            case 200, 201:
+                                
+                                guard let data = response.data else {
+                                    Logger.net.error("failed to get API token for register from login request")
+                                    return
+                                }
+
+                                guard let json = try? JSON(data: data) else {
+                                    Logger.parse.error("failed to parse API token for register from login request")
+                                    return
+                                }
+                                    
+                                let token = json["token"].stringValue
+                                
+                                keychain["jwt"] = token
+                                self.liveUser.loggedIn = true
+                                
+                            case _:
+                                
+                                keychain["username"] = nil
+                                keychain["jwt"] = nil
+                                
+                                toastText = "Token Generation Failed"
+                                showingToast = true
+                                
+                                Logger.net.error("failed to login post-registration (\(loginCode)")
+                            }
+                        }
+                    
+                case 400:
+                    Logger.net.info("register failed, passwords didn't match (400)")
+                    
+                case 409:
+                    Logger.net.info("register failed, username already exists (409)")
+                    
+                case _:
+                    
+                    Logger.net.info("register request failed (\(registerCode)")
+                    
+                    keychain["username"] = nil
+                    keychain["jwt"] = nil
+                    
+                    toastText = "Register Failed"
+                    showingToast = true
+                }
+            }
     }
 }
 
