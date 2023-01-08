@@ -27,7 +27,7 @@ struct PlaylistView: View {
     var body: some View {
         Form {
             
-            if liveUser.lastfm_connected() {
+            if liveUser.lastfm_connected {
                 PlaylistStatsSection(playlist: $playlist, showingToast: $showingToast, toastText: $toastText, toastSuccess: $toastSuccess)
             }
             

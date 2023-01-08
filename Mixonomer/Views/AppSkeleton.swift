@@ -18,9 +18,9 @@ struct AppSkeleton: View {
     
     var body: some View {
         
-        if self.liveUser.isInitiallyRefreshingUser
-            || self.liveUser.isInitiallyRefreshingPlaylists
-            || self.liveUser.isInitiallyRefreshingTags
+        if self.liveUser.isFullRefreshingUser
+            || self.liveUser.isFullRefreshingPlaylists
+            || self.liveUser.isFullRefreshingTags
         {
             LoadingScreen()
                 .onAppear {
@@ -39,7 +39,7 @@ struct AppSkeleton: View {
                     }
                     .tag(0)
                 
-                if liveUser.lastfm_connected() {
+                if liveUser.lastfm_connected {
                     
                     TagList()
                         .tabItem {

@@ -47,9 +47,9 @@ class LiveUser: ObservableObject {
         Logger.sys.debug("failed to get APNS token")
     }
     
-    @Published var isInitiallyRefreshingUser = true
-    @Published var isInitiallyRefreshingPlaylists = true
-    @Published var isInitiallyRefreshingTags = true
+    @Published var isFullRefreshingUser = true
+    @Published var isFullRefreshingPlaylists = true
+    @Published var isFullRefreshingTags = true
     
     @Published var isRefreshingUser = false
     @Published var isRefreshingPlaylists = false
@@ -71,8 +71,10 @@ class LiveUser: ObservableObject {
         self.user = user
     }
     
-    func lastfm_connected() -> Bool {
-        return username.count > 0
+    var lastfm_connected: Bool {
+        get {
+            return user.lastfm_username.count > 0
+        }
     }
     
     func logout() {
@@ -109,154 +111,188 @@ class LiveUser: ObservableObject {
     }
     
     func refresh_user(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
-        self.isRefreshingUser = true
         
-        Logger.sys.info("refreshing user")
-        
-        let api = UserApi.getUser
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        if !isRefreshingUser {
+            self.isRefreshingUser = true
             
-            if self.check_network_response(response: response) {
+            Logger.sys.info("refreshing user")
+            
+            let api = UserApi.getUser
+            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                 
-                guard let data = response.data else {
-                    Logger.net.error("error getting user")
-                    return
-                }
-
-                guard let json = try? JSON(data: data) else {
-                    Logger.parse.error("error parsing user")
-                    return
-                }
-                
-                // update state
-                self.user = UserApi.fromJSON(user: json)
-                
-                self.isRefreshingUser = false
-                self.isInitiallyRefreshingUser = false
-                
-                if let success = onSuccess {
-                    Logger.sys.debug("successfully refreshed user")
-                    success()
-                }
-                
-            } else {
-                
-                if let failure = onFailure {
-                    Logger.net.error("failed to refresh user")
-                    failure()
+                if self.check_network_response(response: response) {
+                    
+                    guard let data = response.data else {
+                        Logger.net.error("error getting user")
+                        return
+                    }
+                    
+                    guard let json = try? JSON(data: data) else {
+                        Logger.parse.error("error parsing user")
+                        return
+                    }
+                    
+                    // update state
+                    self.user = UserApi.fromJSON(user: json)
+                    
+                    self.isRefreshingUser = false
+                    self.isFullRefreshingUser = false
+                    
+                    if let success = onSuccess {
+                        Logger.sys.debug("successfully refreshed user")
+                        success()
+                    }
+                    
+                } else {
+                    
+                    if let failure = onFailure {
+                        Logger.net.error("failed to refresh user")
+                        failure()
+                    }
                 }
             }
+        }
+        else
+        {
+            Logger.sys.info("skipping refreshing user, already refreshing")
         }
     }
     
     func refresh_playlists(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
-        self.isRefreshingPlaylists = true
         
-        Logger.sys.info("refreshing playlists")
-
-        let api = PlaylistApi.getPlaylists
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        if !isRefreshingPlaylists {
+            self.isRefreshingPlaylists = true
             
-            if self.check_network_response(response: response) {
+            Logger.sys.info("refreshing playlists")
+            
+            let api = PlaylistApi.getPlaylists
+            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                 
-                guard let data = response.data else {
-                    Logger.net.error("error getting playlists from net request")
-                    return
-                }
-
-                guard let json = try? JSON(data: data) else {
-                    Logger.parse.error("error parsing playlists reponse")
-                    return
-                }
+                if self.check_network_response(response: response) {
                     
-                let playlists = json["playlists"].arrayValue
-                
-                // update state
-                self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-                
-                self.isRefreshingPlaylists = false
-                self.isInitiallyRefreshingPlaylists = false
-                
-                if let success = onSuccess {
-                    Logger.sys.debug("successfully refreshed playlists")
-                    success()
-                }
-                
-                let encoder = JSONEncoder()
-                do {
-                    UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
-                } catch {
-                    Logger.parse.error("error encoding playlists: \(error)")
-                }
-                
-            } else {
-                
-                if let failure = onFailure {
-                    Logger.net.error("failed to refresh playlists")
-                    failure()
+                    guard let data = response.data else {
+                        Logger.net.error("error getting playlists from net request")
+                        return
+                    }
+                    
+                    guard let json = try? JSON(data: data) else {
+                        Logger.parse.error("error parsing playlists reponse")
+                        return
+                    }
+                    
+                    let playlists = json["playlists"].arrayValue
+                    
+                    // update state
+                    self.playlists = PlaylistApi.fromJSON(playlist: playlists).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                    
+                    self.isRefreshingPlaylists = false
+                    self.isFullRefreshingPlaylists = false
+                    
+                    if let success = onSuccess {
+                        Logger.sys.debug("successfully refreshed playlists")
+                        success()
+                    }
+                    
+                    let encoder = JSONEncoder()
+                    do {
+                        UserDefaults.standard.set(String(data: try encoder.encode(playlists), encoding: .utf8), forKey: "playlists")
+                    } catch {
+                        Logger.parse.error("error encoding playlists: \(error)")
+                    }
+                    
+                } else {
+                    
+                    if let failure = onFailure {
+                        Logger.net.error("failed to refresh playlists")
+                        failure()
+                    }
                 }
             }
+        }
+        else
+        {
+            Logger.sys.info("skipping refreshing playlists, already refreshing")
         }
     }
     
     func refresh_tags(onSuccess: (() -> Void)? = nil, onFailure: (() -> Void)? = nil) {
-        self.isRefreshingTags = true
-
-        Logger.sys.info("refreshing tags")
         
-        let api = TagApi.getTags
-        RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
+        if !isRefreshingTags {
+            self.isRefreshingTags = true
             
-            if self.check_network_response(response: response) {
+            Logger.sys.info("refreshing tags")
+            
+            let api = TagApi.getTags
+            RequestBuilder.buildRequest(apiRequest: api).responseJSON{ response in
                 
-                guard let data = response.data else {
-                    Logger.net.error("error getting tags")
-                    return
-                }
-
-                guard let json = try? JSON(data: data) else {
-                    Logger.parse.error("error parsing tags response")
-                    return
-                }
+                if self.check_network_response(response: response) {
                     
-                let tags = json["tags"].arrayValue
-                
-                // update state
-                self.tags = TagApi.fromJSON(tag: tags).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
-                
-                self.isRefreshingTags = false
-                self.isInitiallyRefreshingTags = false
-                
-                if let success = onSuccess {
-                    Logger.sys.debug("successfully refreshed tags")
-                    success()
-                }
-                
-                let encoder = JSONEncoder()
-                do {
-                    UserDefaults.standard.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
-                } catch {
-                    Logger.parse.error("error encoding tags: \(error)")
-                }
-                
-            } else {
-                
-                if let failure = onFailure {
-                    Logger.net.error("failed to refresh tags")
-                    failure()
+                    guard let data = response.data else {
+                        Logger.net.error("error getting tags")
+                        return
+                    }
+                    
+                    guard let json = try? JSON(data: data) else {
+                        Logger.parse.error("error parsing tags response")
+                        return
+                    }
+                    
+                    let tags = json["tags"].arrayValue
+                    
+                    // update state
+                    self.tags = TagApi.fromJSON(tag: tags).sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
+                    
+                    self.isRefreshingTags = false
+                    self.isFullRefreshingTags = false
+                    
+                    if let success = onSuccess {
+                        Logger.sys.debug("successfully refreshed tags")
+                        success()
+                    }
+                    
+                    let encoder = JSONEncoder()
+                    do {
+                        UserDefaults.standard.set(String(data: try encoder.encode(tags), encoding: .utf8), forKey: "tags")
+                    } catch {
+                        Logger.parse.error("error encoding tags: \(error)")
+                    }
+                    
+                } else {
+                    
+                    if let failure = onFailure {
+                        Logger.net.error("failed to refresh tags")
+                        failure()
+                    }
                 }
             }
+        }
+        else
+        {
+            Logger.sys.info("skipping refreshing tags, already refreshing")
+        }
+    }
+    
+    var isFullRefreshing: Bool {
+        get {
+            return isFullRefreshingTags || isFullRefreshingPlaylists || isFullRefreshingUser
         }
     }
     
     func full_refresh() {
-        self.isInitiallyRefreshingUser = true
-        self.isInitiallyRefreshingPlaylists = true
-        self.isInitiallyRefreshingTags = true
         
-        self.refresh_user()
-        self.refresh_playlists()
-        self.refresh_tags()
+        if !isFullRefreshing {
+            self.isFullRefreshingUser = true
+            self.isFullRefreshingPlaylists = true
+            self.isFullRefreshingTags = true
+            
+            self.refresh_user()
+            self.refresh_playlists()
+            self.refresh_tags()
+        }
+        else
+        {
+            Logger.sys.info("skipping full refresh, already refreshing")
+        }
     }
     
     func check_network_response(response: AFDataResponse<Any>) -> Bool {
