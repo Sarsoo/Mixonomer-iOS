@@ -75,6 +75,7 @@ struct LoginScreen: View {
                     }
                     .buttonStyle(.bordered)
                     .padding(.trailing, 20.0)
+                    
                     Button(action: {
                         
                         screenMode = .Register
